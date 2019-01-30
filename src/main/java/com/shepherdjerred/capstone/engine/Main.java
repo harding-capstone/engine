@@ -9,6 +9,7 @@ public class Main {
     try {
       Integer.valueOf("Not an Integer");
     } catch (NumberFormatException e) {
+
       log.error("Can't convert to Integer!!", e);
     }
   }
