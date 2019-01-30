@@ -18,14 +18,72 @@
   <description>Game</description>
   <url>https://github.com/harding-capstone/engine</url>
 
+  <repositories>
+    <repository>
+      <id>capstone-snapshots</id>
+      <url>http://capstone.shepherdjerred.com:8081/repository/capstone-snapshots/</url>
+      <snapshots>
+        <enabled>true</enabled>
+        <updatePolicy>always</updatePolicy>
+      </snapshots>
+    </repository>
+    <repository>
+      <id>capstone-releases</id>
+      <url>http://capstone.shepherdjerred.com:8081/repository/capstone-releases/</url>
+      <snapshots>
+        <enabled>false</enabled>
+        <updatePolicy>always</updatePolicy>
+      </snapshots>
+    </repository>
+  </repositories>
+
   <scm>
     <connection>scm:git:https://github.com/harding-capstone/engine</connection>
     <developerConnection>scm:git:https://github.com/harding-capstone/engine</developerConnection>
     <url>https://github.com/harding-capstone/engine</url>
   </scm>
 
+  <profiles>
+    <profile>
+      <id>development</id>
+      <activation>
+        <activeByDefault>
+          true
+        </activeByDefault>
+      </activation>
+      <properties>
+        <buildType>development</buildType>
+        <sentryDsn>noop://localhost?async=false</sentryDsn>
+      </properties>
+    </profile>
+    <profile>
+      <id>release</id>
+      <activation>
+        <property>
+          <name>IS_RELEASE</name>
+          <value>true</value>
+        </property>
+      </activation>
+      <properties>
+        <buildType>release</buildType>
+        <sentryDsn>${env.SENTRY_DSN}</sentryDsn>
+      </properties>
+    </profile>
+  </profiles>
+
   <build>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <filtering>true</filtering>
+      </resource>
+    </resources>
     <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-resources-plugin</artifactId>
+        <version>3.1.0</version>
+      </plugin>
       <plugin>
         <groupId>org.jacoco</groupId>
         <artifactId>jacoco-maven-plugin</artifactId>

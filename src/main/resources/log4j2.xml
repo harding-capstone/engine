@@ -1,4 +1,4 @@
-<Configuration status="info">
+<Configuration status="info" packages="org.apache.logging.log4j.core,io.sentry.log4j2">
   <Appenders>
     <File name="FILE" fileName="engine.log">
       <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
@@ -6,11 +6,13 @@
     <Console name="STDOUT" target="SYSTEM_OUT">
       <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
     </Console>
+    <Sentry name="Sentry"/>
   </Appenders>
   <Loggers>
     <Root level="trace">
       <AppenderRef ref="FILE"/>
-      <AppenderRef ref="STDOUT"/>
+      <AppenderRef ref="STDOUT" level="INFO"/>
+      <AppenderRef ref="Sentry" level="WARN"/>
     </Root>
   </Loggers>
 </Configuration>
