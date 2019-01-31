@@ -209,7 +209,6 @@
         <executions>
           <execution>
             <id>build-windows-executable</id>
-            <phase>package</phase>
             <goals>
               <goal>launch4j</goal>
             </goals>
