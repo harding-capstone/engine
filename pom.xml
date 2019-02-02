@@ -22,6 +22,10 @@
     <game.name>Game Name</game.name>
     <executable.name>${game.name}.exe</executable.name>
     <executable.version>1.0.0.0</executable.version>
+    <doChecks>false</doChecks>
+    <sentryDsn>noop://localhost?async=false</sentryDsn>
+    <buildType>development</buildType>
+    <stayAlive>true</stayAlive>
   </properties>
 
   <repositories>
@@ -51,27 +55,7 @@
 
   <profiles>
     <profile>
-      <id>development</id>
-      <activation>
-        <activeByDefault>
-          true
-        </activeByDefault>
-      </activation>
-      <properties>
-        <doChecks>false</doChecks>
-        <buildType>development</buildType>
-        <sentryDsn>noop://localhost?async=false</sentryDsn>
-        <stayAlive>true</stayAlive>
-      </properties>
-    </profile>
-    <profile>
       <id>release</id>
-      <activation>
-        <property>
-          <name>IS_RELEASE</name>
-          <value>true</value>
-        </property>
-      </activation>
       <properties>
         <doChecks>true</doChecks>
         <buildType>release</buildType>
@@ -116,7 +100,7 @@
         <version>1.4</version>
         <executions>
           <execution>
-            <phase>verify</phase>
+            <phase>compile</phase>
             <goals>
               <goal>create</goal>
             </goals>
@@ -209,6 +193,7 @@
         <executions>
           <execution>
             <id>build-windows-executable</id>
+            <phase>none</phase>
             <goals>
               <goal>launch4j</goal>
             </goals>
