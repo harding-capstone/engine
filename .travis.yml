@@ -6,14 +6,15 @@ sudo: false
 notifications:
   email: false
   slack:
-    secure: ZKBVT5MkDEEf3SlMuKp5dLGJdkoyoZR3z0NJ+o8FsEKzMdN1N184RJsx8BfRLS6pLadEVfEtTCnKIxH//4aoRMYm/EZOENPrwtbYwkaA8LvAPTmQtY2qO89KDVa+ZZkLCG4Pya5b7nt/AdvEIofw129wzdRwE8xjvCiewC58fq9WxHr4MFkT2PPqZ1uTo1BmvhTFtQ8TgO9XcSrN5zoweceOG9Ek1vwdEJyzswB6CaTainI+9rPP68JKRlTX/kYAnFLPFrawdKZx383hTCmgNR0nE77vmY4oRsKuI9hqZK/GPD1tThgy7XjgSMl8EPguzgG/3Xp9evoFFKWIH8cz/pbJ4dgu1ZCnYyoC/tSv/BIEdlse2A0qLXmTJ2aezC9cuURUsX5Vb1t3lwvdY7k8fzo6BZf7+6duFcCTxUkm8tzFA+i+ux2MMZ3sMKcEug29bw3Xni6KeZcEbZZus2wKH+9qvq15R8EoNCh6emYnLLtmly1tJWjjGpJsNS9a6TQ48Ezk6iM/LCZWwocozL7N925lOyxT/msbUlHwyS5LAH9wiQzAdDZGEqCAaBYiXwtYhdT96TtzKbClPcFsGTHU7YQjhzhE7tmQYx0ODvHmcSg+4MZDcH3I7iv2lleuDTO14wOShR5Wy0UrLWkZVQiApq3ZmuV2cE8DwmndfYRMeZM=
+    secure: 056N5sQX4N9I9TzmJU9fP/Me+mt9kxzM3q1MRnAGGng7fIlRIh1KzYDz91TywW+fQ1Hk2A2zQQ9XNdqnxRjk4iTFP3kdhS/f7cv+op25Hj36Ljhf1wGn0XQyjF692fectzcX7AEPCoiYXjEQBnDu+QLsIG5dfDwJv+Dw737z/n+X49wwURfe8+aOBR9jNGLtU09r0ngbIT6p/QXJSB0UGNNH1DdfOzHf9CTg14CU4FyQqbnd6zeYK+r0cIXbb5T7J4lG8N0onLPJ4QFzMt/DsCgntgdnl9ecr4pSeZaTx3Lln3s3LepbYlA4ChcdnNpaObY05vX8FWQ1zaKsyKom6EwF0TyiERXuRLyRCXIOGx5utxu5SlLBEUOKcTRLEcHZOLbkpxqFdLvFuE7wTtV0lnN55lz8sJghqZRbxeYiFdVWYWB+opFvWry9RwE9iR4muuiD+g1D1+n+ANV0O8DlYUIl7vzNVX7v8M0iwzhjn+XgN2zKCjMAKy2CxsgVPEx0Hy37nW2Z4e/nt+ne6kKeyPk09mGj5kf6cpY/avGUwFcMn1zPHA+t/MMOuRbVmvHoqMlPA8CtYC++8WgKhhcU6DKhCp9ygNR44jo/qGMIbVcVYmFXqKUeKuHO+mwzigLPn5E3UTNnB6m5zuYAFwvaxuoeBPydqx+ddqSa0HQ+jFM=
 before_install:
 - curl -sL https://sentry.io/get-cli/ | bash
 after_success:
 - mvn jacoco:report coveralls:report
 deploy:
   provider: script
-  script: mvn deploy --settings travis-settings.xml -DskipTests=true -B; bash sentry-release.sh
+  script: mvn deploy --settings travis-settings.xml -DskipTests=true -P release -B;
+    bash sentry-release.sh
   on:
     jdk: oraclejdk11
 cache:

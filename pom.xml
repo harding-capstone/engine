@@ -98,15 +98,8 @@
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>buildnumber-maven-plugin</artifactId>
         <version>1.4</version>
-        <executions>
-          <execution>
-            <phase>compile</phase>
-            <goals>
-              <goal>create</goal>
-            </goals>
-          </execution>
-        </executions>
         <configuration>
+          <revisionOnScmFailure>Unknown</revisionOnScmFailure>
           <doCheck>${doChecks}</doCheck>
           <doUpdate>${doChecks}</doUpdate>
         </configuration>
