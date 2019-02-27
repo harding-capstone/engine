@@ -8,8 +8,10 @@ public class Main {
   public static void main(String[] args) {
     // Startup
     while (true) {
-      // Get input
-      // Do logic
+      // Get keyboard/mouse input
+      // Run client input
+      // Local game logic
+      // Send client events
       // Render
     }
     // Shutdown
