@@ -19,13 +19,15 @@
   <url>https://github.com/harding-capstone/engine</url>
 
   <properties>
-    <game.name>Game Name</game.name>
+    <game.name>Castle Casters</game.name>
     <executable.name>${game.name}.exe</executable.name>
     <executable.version>1.0.0.0</executable.version>
     <doChecks>false</doChecks>
     <sentryDsn>noop://localhost?async=false</sentryDsn>
     <buildType>development</buildType>
     <stayAlive>true</stayAlive>
+    <maven.javadoc.skip>true</maven.javadoc.skip>
+    <lwjgl.version>3.2.1</lwjgl.version>
   </properties>
 
   <repositories>
@@ -62,6 +64,39 @@
         <!--suppress UnresolvedMavenProperty -->
         <sentryDsn>${env.SENTRY_DSN}</sentryDsn>
         <stayAlive>false</stayAlive>
+      </properties>
+    </profile>
+    <profile>
+      <id>windows-profile</id>
+      <activation>
+        <os>
+          <family>Windows</family>
+        </os>
+      </activation>
+      <properties>
+        <native.target>natives-windows</native.target>
+      </properties>
+    </profile>
+    <profile>
+      <id>linux-profile</id>
+      <activation>
+        <os>
+          <family>Linux</family>
+        </os>
+      </activation>
+      <properties>
+        <native.target>natives-linux</native.target>
+      </properties>
+    </profile>
+    <profile>
+      <id>OSX-profile</id>
+      <activation>
+        <os>
+          <family>mac</family>
+        </os>
+      </activation>
+      <properties>
+        <native.target>natives-macos</native.target>
       </properties>
     </profile>
   </profiles>
@@ -116,6 +151,7 @@
             </manifest>
             <manifestEntries>
               <Implementation-Build>${buildNumber}</Implementation-Build>
+              <Multi-Release>true</Multi-Release>
             </manifestEntries>
           </archive>
           <descriptorRefs>
@@ -136,18 +172,6 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
         <version>3.1.1</version>
-        <configuration>
-          <archive>
-            <manifest>
-              <addClasspath>true</addClasspath>
-              <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-              <mainClass>com.shepherdjerred.capstone.engine.Main</mainClass>
-            </manifest>
-            <manifestEntries>
-              <Implementation-Build>${buildNumber}</Implementation-Build>
-            </manifestEntries>
-          </archive>
-        </configuration>
       </plugin>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
@@ -172,6 +196,7 @@
               <executable>java</executable>
               <workingDirectory>./target/</workingDirectory>
               <arguments>
+                <argument>-XstartOnFirstThread</argument>
                 <argument>-jar</argument>
                 <argument>${project.build.finalName}-jar-with-dependencies.jar</argument>
               </arguments>
@@ -186,12 +211,11 @@
         <executions>
           <execution>
             <id>build-windows-executable</id>
-            <phase>none</phase>
             <goals>
               <goal>launch4j</goal>
             </goals>
             <configuration>
-              <headerType>gui</headerType>
+              <headerType>console</headerType>
               <outfile>target/${executable.name}</outfile>
               <jar>target/${project.build.finalName}-jar-with-dependencies.jar</jar>
               <errTitle>${game.name}</errTitle>
@@ -205,10 +229,6 @@
               <jre>
                 <minVersion>11</minVersion>
               </jre>
-              <splash>
-                <file>src/main/resources/executable/splash.bmp</file>
-                <timeout>30</timeout>
-              </splash>
               <versionInfo>
                 <fileVersion>${executable.version}</fileVersion>
                 <txtFileVersion>${executable.version}</txtFileVersion>
@@ -250,6 +270,21 @@
       <version>1.0.0-SNAPSHOT</version>
     </dependency>
     <dependency>
+      <groupId>com.shepherdjerred.capstone</groupId>
+      <artifactId>server</artifactId>
+      <version>1.0.0-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>com.shepherdjerred.capstone</groupId>
+      <artifactId>common</artifactId>
+      <version>1.0.0-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>com.shepherdjerred.capstone</groupId>
+      <artifactId>events</artifactId>
+      <version>1.0.0-SNAPSHOT</version>
+    </dependency>
+    <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
     </dependency>
@@ -263,9 +298,40 @@
       <version>1.7.16</version>
     </dependency>
     <dependency>
-      <groupId>com.google.inject</groupId>
-      <artifactId>guice</artifactId>
-      <version>4.2.2</version>
+      <groupId>org.lwjgl</groupId>
+      <artifactId>lwjgl</artifactId>
+      <version>${lwjgl.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.lwjgl</groupId>
+      <artifactId>lwjgl-glfw</artifactId>
+      <version>${lwjgl.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.lwjgl</groupId>
+      <artifactId>lwjgl-opengl</artifactId>
+      <version>${lwjgl.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.lwjgl</groupId>
+      <artifactId>lwjgl</artifactId>
+      <version>${lwjgl.version}</version>
+      <classifier>${native.target}</classifier>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.lwjgl</groupId>
+      <artifactId>lwjgl-glfw</artifactId>
+      <version>${lwjgl.version}</version>
+      <classifier>${native.target}</classifier>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.lwjgl</groupId>
+      <artifactId>lwjgl-opengl</artifactId>
+      <version>${lwjgl.version}</version>
+      <classifier>${native.target}</classifier>
+      <scope>runtime</scope>
     </dependency>
   </dependencies>
 </project>
