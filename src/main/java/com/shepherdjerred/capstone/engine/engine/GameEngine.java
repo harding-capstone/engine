@@ -24,12 +24,15 @@ public class GameEngine implements Runnable {
   }
 
   public void start() {
-    String osName = System.getProperty("os.name");
-    if (osName.contains("Mac")) {
+    if (isOperatingSystemMacOs()) {
       gameLoopThread.run();
     } else {
       gameLoopThread.start();
     }
+  }
+
+  private boolean isOperatingSystemMacOs() {
+    return System.getProperty("os.name").contains("Mac");
   }
 
   @Override
@@ -38,7 +41,9 @@ public class GameEngine implements Runnable {
       initialize();
       gameLoop();
     } catch (Exception e) {
-      log.error(e);
+      log.catching(e);
+    } finally {
+      cleanup();
     }
   }
 
@@ -51,18 +56,18 @@ public class GameEngine implements Runnable {
   private void gameLoop() {
     float elapsedTime;
     float accumulator = 0f;
-    float interval = 1f / targetUps;
+    float updateInterval = 1f / targetUps;
 
-    boolean running = true;
-    while (running && !window.windowShouldClose()) {
+    boolean isRunning = true;
+    while (isRunning && !window.windowShouldClose()) {
       elapsedTime = timer.getElapsedTime();
       accumulator += elapsedTime;
 
-      input();
+      handleInput();
 
-      while (accumulator >= interval) {
-        update(interval);
-        accumulator -= interval;
+      while (accumulator >= updateInterval) {
+        updateGameState(updateInterval);
+        accumulator -= updateInterval;
       }
 
       render();
@@ -84,16 +89,20 @@ public class GameEngine implements Runnable {
     }
   }
 
-  private void input() {
-    gameLogic.input(window);
+  private void handleInput() {
+    gameLogic.handleInput(window);
   }
 
-  private void update(float interval) {
-    gameLogic.update(interval);
+  private void updateGameState(float interval) {
+    gameLogic.updateGameState(interval);
   }
 
   private void render() {
     gameLogic.render(window);
     window.update();
+  }
+
+  private void cleanup() {
+    gameLogic.cleanup();
   }
 }

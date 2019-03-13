@@ -4,9 +4,11 @@ public interface GameLogic {
 
   void init() throws Exception;
 
-  void input(Window window);
+  void handleInput(Window window);
 
-  void update(float interval);
+  void updateGameState(float interval);
 
   void render(Window window);
+
+  void cleanup();
 }

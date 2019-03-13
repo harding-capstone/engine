@@ -34,26 +34,23 @@ import static org.lwjgl.system.MemoryUtil.NULL;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.log4j.Log4j2;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 
+@Log4j2
 public class Window {
 
   private final String title;
-
   @Getter
   private int width;
-
   @Getter
   private int height;
-
   private long windowHandle;
-
   @Getter
   @Setter
   private boolean resized;
-
   @Getter
   private boolean isVsyncEnabled;
 
