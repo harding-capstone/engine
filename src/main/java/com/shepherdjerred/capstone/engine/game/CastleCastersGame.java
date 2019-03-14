@@ -18,34 +18,53 @@ public class CastleCastersGame implements GameLogic {
     renderer = new Renderer();
   }
 
-  @Override
-  public void init() throws Exception {
-    renderer.init();
+  private Mesh triangleMesh() {
+    float[] positions = new float[]{
+        -0.5f,  0.5f, -.05f,
+        -0.5f, -0.5f, -.05f,
+        0.5f, -0.5f, -.05f,
+        0.5f,  0.5f, -.05f,
+    };
+    float[] colours = new float[]{
+        0.5f, 0.0f, 0.0f,
+        0.0f, 0.5f, 0.0f,
+        0.0f, 0.0f, 0.5f,
+        0.0f, 0.5f, 0.5f,
+    };
+    int[] indices = new int[]{
+        0, 1, 3, 3, 1, 2,
+    };
+    return new Mesh(positions, colours, indices);
+  }
 
+  private Mesh triforceMesh() {
     var vertices = new float[] {
-        0f, .5f, 0f,
-        .25f, .25f, 0f,
-        -.25f, .25f, 0f,
-        .25f, .25f, 0f,
-        .5f, 0f, 0f,
-        0f, 0f, 0f,
-        -.25f, .25f, 0f,
-        0f, 0f, 0f,
-        -.5f, 0f, 0f
+        300f, 500f, 0f, // top top
+        400f, 400f, 0f, // top right && right top
+        200, 400f, 0f, // top left && left top
+        300f, 300f, 0f, // left right && right left
+        500f, 300f, 0f, // right right
+        100, 300f, 0f // left left
     };
-    float[] colors = new float[] {
-        0.5f, 0.0f, 0.0f,
-        0.0f, 0.5f, 0.0f,
-        0.0f, 0.0f, 0.5f,
-        0.0f, 0.5f, 0.5f,
-        0.5f, 0.0f, 0.0f,
-        0.0f, 0.5f, 0.0f,
-        0.0f, 0.0f, 0.5f,
-        0.0f, 0.5f, 0.5f,
-        0.5f, 0.0f, 0.0f,
-    };
-    int[] indices = new int[] {0, 1, 2, 3, 4, 5, 6, 7, 8};
-    mesh = new Mesh(vertices, colors, indices);
+    float[] colors = new float[9 * 3];
+    float baseRed = .77f;
+    float baseGreen = .66f;
+    float baseBlue = .34f;
+
+    for (int i = 0; i < 9; i++) {
+      colors[i * 3] = baseRed + i * .05f;
+      colors[i * 3 + 1] = baseGreen + i * .05f;
+      colors[i * 3 + 2] = baseBlue + i * .05f;
+    }
+
+    int[] indices = new int[] {0, 1, 2, 2, 5, 3, 1, 3, 4};
+    return new Mesh(vertices, colors, indices);
+  }
+
+  @Override
+  public void init(Window window) throws Exception {
+    renderer.init(window);
+    mesh = triforceMesh();
   }
 
   @Override
@@ -71,7 +90,6 @@ public class CastleCastersGame implements GameLogic {
 
   @Override
   public void render(Window window) {
-
     window.setClearColor(color, color, color, 0.0f);
     renderer.render(window, mesh);
   }

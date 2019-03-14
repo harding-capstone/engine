@@ -1,24 +1,68 @@
 package com.shepherdjerred.capstone.engine.engine.graphics;
 
-import static org.lwjgl.opengl.GL20.*;
+import static org.lwjgl.opengl.GL20.GL_COMPILE_STATUS;
+import static org.lwjgl.opengl.GL20.GL_FRAGMENT_SHADER;
+import static org.lwjgl.opengl.GL20.GL_LINK_STATUS;
+import static org.lwjgl.opengl.GL20.GL_VALIDATE_STATUS;
+import static org.lwjgl.opengl.GL20.GL_VERTEX_SHADER;
+import static org.lwjgl.opengl.GL20.glAttachShader;
+import static org.lwjgl.opengl.GL20.glCompileShader;
+import static org.lwjgl.opengl.GL20.glCreateProgram;
+import static org.lwjgl.opengl.GL20.glCreateShader;
+import static org.lwjgl.opengl.GL20.glDeleteProgram;
+import static org.lwjgl.opengl.GL20.glDetachShader;
+import static org.lwjgl.opengl.GL20.glGetProgramInfoLog;
+import static org.lwjgl.opengl.GL20.glGetProgrami;
+import static org.lwjgl.opengl.GL20.glGetShaderInfoLog;
+import static org.lwjgl.opengl.GL20.glGetShaderi;
+import static org.lwjgl.opengl.GL20.glGetUniformLocation;
+import static org.lwjgl.opengl.GL20.glLinkProgram;
+import static org.lwjgl.opengl.GL20.glShaderSource;
+import static org.lwjgl.opengl.GL20.glUniformMatrix4fv;
+import static org.lwjgl.opengl.GL20.glUseProgram;
+import static org.lwjgl.opengl.GL20.glValidateProgram;
 
 import java.io.IOException;
+import java.nio.FloatBuffer;
+import java.util.HashMap;
+import java.util.Map;
 import lombok.extern.log4j.Log4j2;
+import org.joml.Matrix4f;
+import org.lwjgl.system.MemoryStack;
 
 @Log4j2
 public class ShaderProgram {
 
+  private final Map<String, Integer> uniforms;
   private final ShaderLoader shaderLoader;
   private final int programId;
   private int vertexShaderId;
   private int fragmentShaderId;
 
-  public ShaderProgram(ShaderLoader shaderLoader) throws Exception {
+  public ShaderProgram(ShaderLoader shaderLoader) {
     programId = glCreateProgram();
     if (programId == 0) {
-      throw new Exception("Could not create Shader");
+      throw new RuntimeException("Could not create Shader");
     }
     this.shaderLoader = shaderLoader;
+    uniforms = new HashMap<>();
+  }
+
+  public void createUniform(String name) {
+    int uniformLocation = glGetUniformLocation(programId, name);
+    if (uniformLocation < 0) {
+      throw new RuntimeException("Could not create uniform:" + name);
+    }
+    uniforms.put(name, uniformLocation);
+  }
+
+  public void setMatrixUniform(String uniformName, Matrix4f value) {
+    // Dump the matrix into a float buffer
+    try (MemoryStack stack = MemoryStack.stackPush()) {
+      FloatBuffer fb = stack.mallocFloat(16);
+      value.get(fb);
+      glUniformMatrix4fv(uniforms.get(uniformName), false, fb);
+    }
   }
 
   private String loadShaderCode(String shaderName) throws IOException {
@@ -37,14 +81,15 @@ public class ShaderProgram {
     var shaderCode = loadShaderCode(shaderName);
     int shaderId = glCreateShader(shaderType);
     if (shaderId == 0) {
-      throw new Exception("Error creating shader. Type: " + shaderType);
+      throw new RuntimeException("Error creating shader. Type: " + shaderType);
     }
 
     glShaderSource(shaderId, shaderCode);
     glCompileShader(shaderId);
 
     if (glGetShaderi(shaderId, GL_COMPILE_STATUS) == 0) {
-      throw new Exception("Error compiling Shader code: " + glGetShaderInfoLog(shaderId, 1024));
+      throw new RuntimeException(
+          "Error compiling Shader code: " + glGetShaderInfoLog(shaderId, 1024));
     }
 
     glAttachShader(programId, shaderId);
@@ -55,7 +100,8 @@ public class ShaderProgram {
   public void link() throws Exception {
     glLinkProgram(programId);
     if (glGetProgrami(programId, GL_LINK_STATUS) == 0) {
-      throw new Exception("Error linking Shader code: " + glGetProgramInfoLog(programId, 1024));
+      throw new RuntimeException(
+          "Error linking Shader code: " + glGetProgramInfoLog(programId, 1024));
     }
 
     if (vertexShaderId != 0) {

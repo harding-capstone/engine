@@ -48,9 +48,9 @@ public class Mesh {
       glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0);
 
       // Colour VBO
+      colorVboId = glGenBuffers();
       colorBuffer = MemoryUtil.memAllocFloat(colors.length);
       colorBuffer.put(colors).flip();
-      colorVboId = glGenBuffers();
       glBindBuffer(GL_ARRAY_BUFFER, colorVboId);
       glBufferData(GL_ARRAY_BUFFER, colorBuffer, GL_STATIC_DRAW);
       glVertexAttribPointer(1, 3, GL_FLOAT, false, 0, 0);

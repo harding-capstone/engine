@@ -334,5 +334,10 @@
       <classifier>${native.target}</classifier>
       <scope>runtime</scope>
     </dependency>
+    <dependency>
+      <groupId>org.joml</groupId>
+      <artifactId>joml</artifactId>
+      <version>1.9.13</version>
+    </dependency>
   </dependencies>
 </project>

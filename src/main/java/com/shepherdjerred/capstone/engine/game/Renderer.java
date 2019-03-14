@@ -15,17 +15,29 @@ import com.shepherdjerred.capstone.engine.engine.Window;
 import com.shepherdjerred.capstone.engine.engine.graphics.ClasspathShaderLoader;
 import com.shepherdjerred.capstone.engine.engine.graphics.Mesh;
 import com.shepherdjerred.capstone.engine.engine.graphics.ShaderProgram;
+import lombok.extern.log4j.Log4j2;
+import org.joml.Matrix4f;
 
+@Log4j2
 public class Renderer {
 
   private ShaderProgram shaderProgram;
+  private Matrix4f projectionMatrix;
 
-  public void init() throws Exception {
+  public void init(Window window) throws Exception {
     var shaderLoader = new ClasspathShaderLoader("/shaders");
     shaderProgram = new ShaderProgram(shaderLoader);
     shaderProgram.createVertexShader("vertex.glsl");
     shaderProgram.createFragmentShader("fragment.glsl");
     shaderProgram.link();
+
+    shaderProgram.createUniform("projectionMatrix");
+
+    var fov = (float) Math.toRadians(60);
+    var aspectRatio = (float) window.getWidth() / window.getHeight();
+//    projectionMatrix = new Matrix4f().perspective(fov, aspectRatio, 0.01f, 1000);
+    projectionMatrix = new Matrix4f().ortho2D(0, window.getWidth(), window.getHeight(), 0);
+    log.info(projectionMatrix);
   }
 
   public void render(Window window, Mesh mesh) {
@@ -37,6 +49,8 @@ public class Renderer {
     }
 
     shaderProgram.bind();
+    // TODO should this be done every render? probably not
+    shaderProgram.setMatrixUniform("projectionMatrix", projectionMatrix);
 
     // Bind to the VAO
     glBindVertexArray(mesh.getVaoId());
