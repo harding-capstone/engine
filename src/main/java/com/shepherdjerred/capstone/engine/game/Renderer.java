@@ -7,8 +7,8 @@ import static org.lwjgl.opengl.GL11.glViewport;
 
 import com.shepherdjerred.capstone.engine.engine.GameItem;
 import com.shepherdjerred.capstone.engine.engine.Window;
-import com.shepherdjerred.capstone.engine.engine.graphics.ClasspathShaderLoader;
-import com.shepherdjerred.capstone.engine.engine.graphics.ShaderProgram;
+import com.shepherdjerred.capstone.engine.engine.graphics.shader.ClasspathShaderLoader;
+import com.shepherdjerred.capstone.engine.engine.graphics.shader.ShaderProgram;
 import com.shepherdjerred.capstone.engine.engine.graphics.Transformation;
 import java.util.List;
 import lombok.extern.log4j.Log4j2;
