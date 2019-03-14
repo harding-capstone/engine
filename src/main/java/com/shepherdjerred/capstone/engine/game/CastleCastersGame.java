@@ -78,8 +78,8 @@ public class CastleCastersGame implements GameLogic {
   @Override
   public void init(Window window) throws Exception {
     renderer.init(window);
-    gameItems.add(new GameItem(squareMesh()));
-    gameItems.add(new GameItem(triforceMesh()));
+    gameItems.add(new GameItem(300, 300, squareMesh()));
+    gameItems.add(new GameItem(200, 200, triforceMesh()));
   }
 
   @Override
@@ -90,19 +90,26 @@ public class CastleCastersGame implements GameLogic {
     scaleInc = 0;
     if (window.isKeyPressed(GLFW_KEY_UP)) {
       displyInc = 1;
-    } else if (window.isKeyPressed(GLFW_KEY_DOWN)) {
+    }
+    if (window.isKeyPressed(GLFW_KEY_DOWN)) {
       displyInc = -1;
-    } else if (window.isKeyPressed(GLFW_KEY_LEFT)) {
+    }
+    if (window.isKeyPressed(GLFW_KEY_LEFT)) {
       displxInc = -1;
-    } else if (window.isKeyPressed(GLFW_KEY_RIGHT)) {
+    }
+    if (window.isKeyPressed(GLFW_KEY_RIGHT)) {
       displxInc = 1;
-    } else if (window.isKeyPressed(GLFW_KEY_A)) {
+    }
+    if (window.isKeyPressed(GLFW_KEY_A)) {
       rotateInc = -1;
-    } else if (window.isKeyPressed(GLFW_KEY_Q)) {
+    }
+    if (window.isKeyPressed(GLFW_KEY_Q)) {
       rotateInc = 1;
-    } else if (window.isKeyPressed(GLFW_KEY_Z)) {
+    }
+    if (window.isKeyPressed(GLFW_KEY_Z)) {
       scaleInc = -1;
-    } else if (window.isKeyPressed(GLFW_KEY_X)) {
+    }
+    if (window.isKeyPressed(GLFW_KEY_X)) {
       scaleInc = 1;
     }
   }

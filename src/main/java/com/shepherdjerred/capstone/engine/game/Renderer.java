@@ -49,7 +49,9 @@ public class Renderer {
         transformation.getProjectionMatrix(width, height));
 
     gameItems.forEach(gameItem -> {
-      var worldMatrix = transformation.getModelMatrix(gameItem.getPosition(),
+      var worldMatrix = transformation.getModelMatrix(gameItem.getWidth(),
+          gameItem.getHeight(),
+          gameItem.getPosition(),
           gameItem.getRotation(),
           gameItem.getScale());
       shaderProgram.setMatrixUniform("worldMatrix", worldMatrix);
