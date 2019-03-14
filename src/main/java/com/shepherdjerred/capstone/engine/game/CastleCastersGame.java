@@ -34,10 +34,10 @@ public class CastleCastersGame implements GameLogic {
 
   private Mesh squareMesh() {
     float[] positions = new float[] {
-        300f, 300f, 0f,
-        300f, 600f, 0f,
-        600f, 300f, 0f,
-        600f, 600f, 0f
+        0f, 0f, 0f,
+        0f, 10f, 0f,
+        10f, 0f, 0f,
+        10f, 10f, 0f
     };
     float[] colours = new float[] {
         0.5f, 0.0f, 0.0f,
@@ -78,8 +78,8 @@ public class CastleCastersGame implements GameLogic {
   @Override
   public void init(Window window) throws Exception {
     renderer.init(window);
-    gameItems.add(new GameItem(300, 300, squareMesh()));
-    gameItems.add(new GameItem(200, 200, triforceMesh()));
+    gameItems.add(new GameItem(squareMesh()));
+    gameItems.add(new GameItem(triforceMesh()));
   }
 
   @Override
@@ -89,10 +89,10 @@ public class CastleCastersGame implements GameLogic {
     rotateInc = 0;
     scaleInc = 0;
     if (window.isKeyPressed(GLFW_KEY_UP)) {
-      displyInc = 1;
+      displyInc = -1;
     }
     if (window.isKeyPressed(GLFW_KEY_DOWN)) {
-      displyInc = -1;
+      displyInc = 1;
     }
     if (window.isKeyPressed(GLFW_KEY_LEFT)) {
       displxInc = -1;
@@ -119,13 +119,13 @@ public class CastleCastersGame implements GameLogic {
     for (GameItem gameItem : gameItems) {
       // Update position
       var itemPos = gameItem.getPosition();
-      float posx = itemPos.getX() + displxInc * 3;
-      float posy = itemPos.getY() + displyInc * 3;
+      float posx = itemPos.getX() + displxInc * 9;
+      float posy = itemPos.getY() + displyInc * 9;
       gameItem.setPosition(new Coordinate(posx, posy, itemPos.getZ()));
 
       // Update scale
       float scale = gameItem.getScale();
-      scale += scaleInc * 0.05f;
+      scale += scaleInc * 0.5f;
       if (scale < 0) {
         scale = 0;
       }
@@ -148,8 +148,6 @@ public class CastleCastersGame implements GameLogic {
   @Override
   public void cleanup() {
     renderer.cleanup();
-    gameItems.forEach(gameItem -> {
-      gameItem.getMesh().cleanup();
-    });
+    gameItems.forEach(gameItem -> gameItem.getMesh().cleanup());
   }
 }

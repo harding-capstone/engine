@@ -10,8 +10,6 @@ import lombok.Setter;
 @RequiredArgsConstructor
 public class GameItem {
 
-  private final int width;
-  private final int height;
   private final Mesh mesh;
   private float scale = 1;
   private float rotation = 0;

@@ -2,24 +2,28 @@ package com.shepherdjerred.capstone.engine.engine.graphics;
 
 import com.shepherdjerred.capstone.engine.engine.Coordinate;
 import org.joml.Matrix4f;
+import org.joml.Vector3f;
 
 public class Transformation {
 
+  // https://gamedev.stackexchange.com/questions/59161/is-opengl-appropriate-for-2d-games
+  // https://en.wikibooks.org/wiki/OpenGL_Programming/Modern_OpenGL_Tutorial_2D
   public Matrix4f getProjectionMatrix(float width, float height) {
     return new Matrix4f().ortho2D(0, width, height, 0);
   }
 
+  // TODO rotation should be done around the center of the object, not the origin
   // https://learnopengl.com/In-Practice/2D-Game/Rendering-Sprites
-  public Matrix4f getModelMatrix(int width,
-      int height,
-      Coordinate offset,
-      float rotate,
+  // https://learnopengl.com/Getting-started/Transformations
+  public Matrix4f getModelMatrix(Coordinate offset,
+      float rotation,
       float scale) {
+    var rotationTranslateVector = new Vector3f(scale * .5f, scale * .5f, 0);
     return new Matrix4f()
         .translate(offset.getX(), offset.getY(), 0)
-        .translate(width * .5f, height * .5f, 0)
-        .rotate((float) Math.toRadians(rotate), 0, 0, 1)
-        .translate(width * -.5f, height * -.5f, 0)
-        .scale(scale, scale, 0);
+        .translate(rotationTranslateVector)
+        .rotate((float) Math.toRadians(rotation), 0, 0, 1)
+        .translate(rotationTranslateVector.negate())
+        .scale(scale, scale, 1);
   }
 }
