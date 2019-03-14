@@ -1,50 +1,64 @@
 package com.shepherdjerred.capstone.engine.game;
 
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_A;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_DOWN;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_LEFT;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_Q;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_RIGHT;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_UP;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_X;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_Z;
 
+import com.shepherdjerred.capstone.engine.engine.Coordinate;
+import com.shepherdjerred.capstone.engine.engine.GameItem;
 import com.shepherdjerred.capstone.engine.engine.GameLogic;
 import com.shepherdjerred.capstone.engine.engine.Window;
 import com.shepherdjerred.capstone.engine.engine.graphics.Mesh;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CastleCastersGame implements GameLogic {
 
-  private int direction = 0;
-  private float color = 0.0f;
   private final Renderer renderer;
-  private Mesh mesh;
+  private final List<GameItem> gameItems;
+
+  private int displxInc = 0;
+  private int displyInc = 0;
+  private int rotateInc = 0;
+  private int scaleInc = 0;
 
   public CastleCastersGame() {
     renderer = new Renderer();
+    gameItems = new ArrayList<>();
   }
 
-  private Mesh triangleMesh() {
-    float[] positions = new float[]{
-        -0.5f,  0.5f, -.05f,
-        -0.5f, -0.5f, -.05f,
-        0.5f, -0.5f, -.05f,
-        0.5f,  0.5f, -.05f,
+  private Mesh squareMesh() {
+    float[] positions = new float[] {
+        300f, 300f, 0f,
+        300f, 600f, 0f,
+        600f, 300f, 0f,
+        600f, 600f, 0f
     };
-    float[] colours = new float[]{
+    float[] colours = new float[] {
         0.5f, 0.0f, 0.0f,
         0.0f, 0.5f, 0.0f,
         0.0f, 0.0f, 0.5f,
-        0.0f, 0.5f, 0.5f,
+        0.0f, 0.5f, 0.5f
     };
-    int[] indices = new int[]{
-        0, 1, 3, 3, 1, 2,
+    int[] indices = new int[] {
+        0, 1, 2, 1, 2, 3
     };
     return new Mesh(positions, colours, indices);
   }
 
   private Mesh triforceMesh() {
     var vertices = new float[] {
-        300f, 500f, 0f, // top top
-        400f, 400f, 0f, // top right && right top
-        200, 400f, 0f, // top left && left top
-        300f, 300f, 0f, // left right && right left
-        500f, 300f, 0f, // right right
-        100, 300f, 0f // left left
+        300, 0, 0, // top top
+        400, 100, 0, // top right && right top
+        200, 100, 0, // top left && left top
+        300, 200, 0, // left right && right left
+        500, 200, 0, // right right
+        100, 200, 0 // left left
     };
     float[] colors = new float[9 * 3];
     float baseRed = .77f;
@@ -64,39 +78,71 @@ public class CastleCastersGame implements GameLogic {
   @Override
   public void init(Window window) throws Exception {
     renderer.init(window);
-    mesh = triforceMesh();
+    gameItems.add(new GameItem(squareMesh()));
+    gameItems.add(new GameItem(triforceMesh()));
   }
 
   @Override
   public void handleInput(Window window) {
+    displyInc = 0;
+    displxInc = 0;
+    rotateInc = 0;
+    scaleInc = 0;
     if (window.isKeyPressed(GLFW_KEY_UP)) {
-      direction = 1;
+      displyInc = 1;
     } else if (window.isKeyPressed(GLFW_KEY_DOWN)) {
-      direction = -1;
-    } else {
-      direction = 0;
+      displyInc = -1;
+    } else if (window.isKeyPressed(GLFW_KEY_LEFT)) {
+      displxInc = -1;
+    } else if (window.isKeyPressed(GLFW_KEY_RIGHT)) {
+      displxInc = 1;
+    } else if (window.isKeyPressed(GLFW_KEY_A)) {
+      rotateInc = -1;
+    } else if (window.isKeyPressed(GLFW_KEY_Q)) {
+      rotateInc = 1;
+    } else if (window.isKeyPressed(GLFW_KEY_Z)) {
+      scaleInc = -1;
+    } else if (window.isKeyPressed(GLFW_KEY_X)) {
+      scaleInc = 1;
     }
   }
 
   @Override
   public void updateGameState(float interval) {
-    color += direction * 0.01f;
-    if (color > 1) {
-      color = 1.0f;
-    } else if (color < 0) {
-      color = 0.0f;
+    for (GameItem gameItem : gameItems) {
+      // Update position
+      var itemPos = gameItem.getPosition();
+      float posx = itemPos.getX() + displxInc * 3;
+      float posy = itemPos.getY() + displyInc * 3;
+      gameItem.setPosition(new Coordinate(posx, posy, itemPos.getZ()));
+
+      // Update scale
+      float scale = gameItem.getScale();
+      scale += scaleInc * 0.05f;
+      if (scale < 0) {
+        scale = 0;
+      }
+      gameItem.setScale(scale);
+
+      // Update rotation angle
+      float rotation = gameItem.getRotation() + rotateInc;
+      if (rotation > 360) {
+        rotation = 0;
+      }
+      gameItem.setRotation(rotation);
     }
   }
 
   @Override
   public void render(Window window) {
-    window.setClearColor(color, color, color, 0.0f);
-    renderer.render(window, mesh);
+    renderer.render(window, gameItems);
   }
 
   @Override
   public void cleanup() {
     renderer.cleanup();
-    mesh.cleanup();
+    gameItems.forEach(gameItem -> {
+      gameItem.getMesh().cleanup();
+    });
   }
 }

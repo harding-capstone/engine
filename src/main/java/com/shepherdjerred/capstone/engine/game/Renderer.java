@@ -2,27 +2,22 @@ package com.shepherdjerred.capstone.engine.game;
 
 import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
-import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
-import static org.lwjgl.opengl.GL11.GL_UNSIGNED_INT;
 import static org.lwjgl.opengl.GL11.glClear;
-import static org.lwjgl.opengl.GL11.glDrawElements;
 import static org.lwjgl.opengl.GL11.glViewport;
-import static org.lwjgl.opengl.GL20.glDisableVertexAttribArray;
-import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
-import static org.lwjgl.opengl.GL30.glBindVertexArray;
 
+import com.shepherdjerred.capstone.engine.engine.GameItem;
 import com.shepherdjerred.capstone.engine.engine.Window;
 import com.shepherdjerred.capstone.engine.engine.graphics.ClasspathShaderLoader;
-import com.shepherdjerred.capstone.engine.engine.graphics.Mesh;
 import com.shepherdjerred.capstone.engine.engine.graphics.ShaderProgram;
+import com.shepherdjerred.capstone.engine.engine.graphics.Transformation;
+import java.util.List;
 import lombok.extern.log4j.Log4j2;
-import org.joml.Matrix4f;
 
 @Log4j2
 public class Renderer {
 
   private ShaderProgram shaderProgram;
-  private Matrix4f projectionMatrix;
+  private Transformation transformation;
 
   public void init(Window window) throws Exception {
     var shaderLoader = new ClasspathShaderLoader("/shaders");
@@ -32,15 +27,13 @@ public class Renderer {
     shaderProgram.link();
 
     shaderProgram.createUniform("projectionMatrix");
+    shaderProgram.createUniform("worldMatrix");
 
-    var fov = (float) Math.toRadians(60);
-    var aspectRatio = (float) window.getWidth() / window.getHeight();
-//    projectionMatrix = new Matrix4f().perspective(fov, aspectRatio, 0.01f, 1000);
-    projectionMatrix = new Matrix4f().ortho2D(0, window.getWidth(), window.getHeight(), 0);
-    log.info(projectionMatrix);
+    window.setClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+    transformation = new Transformation();
   }
 
-  public void render(Window window, Mesh mesh) {
+  public void render(Window window, List<GameItem> gameItems) {
     clear();
 
     if (window.isResized()) {
@@ -48,19 +41,20 @@ public class Renderer {
       window.setResized(false);
     }
 
+    var width = window.getWidth();
+    var height = window.getHeight();
+
     shaderProgram.bind();
-    // TODO should this be done every render? probably not
-    shaderProgram.setMatrixUniform("projectionMatrix", projectionMatrix);
+    shaderProgram.setMatrixUniform("projectionMatrix",
+        transformation.getProjectionMatrix(width, height));
 
-    // Bind to the VAO
-    glBindVertexArray(mesh.getVaoId());
-    glEnableVertexAttribArray(0);
-    glEnableVertexAttribArray(1);
-    glDrawElements(GL_TRIANGLES, mesh.getNumberOfVerticies(), GL_UNSIGNED_INT, 0);
-
-    // Restore state
-    glDisableVertexAttribArray(0);
-    glBindVertexArray(0);
+    gameItems.forEach(gameItem -> {
+      var worldMatrix = transformation.getModelMatrix(gameItem.getPosition(),
+          gameItem.getRotation(),
+          gameItem.getScale());
+      shaderProgram.setMatrixUniform("worldMatrix", worldMatrix);
+      gameItem.getMesh().render();
+    });
 
     shaderProgram.unbind();
   }
