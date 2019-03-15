@@ -4,7 +4,7 @@ public interface GameLogic {
 
   void init(Window window) throws Exception;
 
-  void handleInput(Window window);
+  void handleInput(Window window, Mouse mouse);
 
   void updateGameState(float interval);
 

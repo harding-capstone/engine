@@ -12,6 +12,7 @@ import static org.lwjgl.glfw.GLFW.GLFW_KEY_Z;
 import com.shepherdjerred.capstone.engine.engine.Coordinate;
 import com.shepherdjerred.capstone.engine.engine.GameItem;
 import com.shepherdjerred.capstone.engine.engine.GameLogic;
+import com.shepherdjerred.capstone.engine.engine.Mouse;
 import com.shepherdjerred.capstone.engine.engine.Window;
 import com.shepherdjerred.capstone.engine.engine.graphics.Mesh;
 import com.shepherdjerred.capstone.engine.engine.graphics.texture.Texture;
@@ -23,10 +24,10 @@ public class CastleCastersGame implements GameLogic {
   private final Renderer renderer;
   private final List<GameItem> gameItems;
 
-  private int displxInc = 0;
-  private int displyInc = 0;
-  private int rotateInc = 0;
-  private int scaleInc = 0;
+  private int translateX = 0;
+  private int translateY = 0;
+  private int rotate = 0;
+  private int scale = 0;
 
   public CastleCastersGame() {
     renderer = new Renderer();
@@ -38,10 +39,10 @@ public class CastleCastersGame implements GameLogic {
         "/Users/jerred/IdeaProjects/capstone/engine/src/main/resources/textures/front_fire.png");
 
     var pos = new float[] {
-        64, 64, 0,
-        64, 96, 0,
-        96, 64, 0,
-        96, 96, 0
+        0, 0, 0,
+        0, 32, 0,
+        32, 0, 0,
+        32, 32, 0
     };
 
     var tex = new float[] {
@@ -67,10 +68,10 @@ public class CastleCastersGame implements GameLogic {
         "/Users/jerred/IdeaProjects/capstone/engine/src/main/resources/textures/wall_frost.png");
 
     var pos = new float[] {
-        32, 32, 0,
-        32, 64, 0,
-        64, 32, 0,
-        64, 64, 0
+        0, 0, 0,
+        0, 32, 0,
+        32, 0, 0,
+        32, 32, 0
     };
 
     var tex = new float[] {
@@ -124,39 +125,55 @@ public class CastleCastersGame implements GameLogic {
   public void init(Window window) throws Exception {
     renderer.init(window);
     gameItems.add(createTexturedSquare());
-    gameItems.add(createWall());
-    gameItems.add(createWizard());
+
+    var wall = createWall();
+    gameItems.add(wall);
+
+    var wizard = createWizard();
+    gameItems.add(wizard);
+
+    var offsetSquare = createTexturedSquare();
+    offsetSquare.setPosition(new Coordinate(200, 200, 0));
+    gameItems.add(offsetSquare);
   }
 
   @Override
-  public void handleInput(Window window) {
-    displyInc = 0;
-    displxInc = 0;
-    rotateInc = 0;
-    scaleInc = 0;
+  public void handleInput(Window window, Mouse mouse) {
+    translateY = 0;
+    translateX = 0;
+    rotate = 0;
+    scale = 0;
+    translateX += mouse.getDisplVec().y;
+    translateY += mouse.getDisplVec().x;
+    if (mouse.isLeftButtonPressed()) {
+      scale += 1;
+    }
+    if (mouse.isRightButtonPressed()) {
+      scale += -1;
+    }
     if (window.isKeyPressed(GLFW_KEY_UP)) {
-      displyInc = -1;
+      translateY += -1;
     }
     if (window.isKeyPressed(GLFW_KEY_DOWN)) {
-      displyInc = 1;
+      translateY += 1;
     }
     if (window.isKeyPressed(GLFW_KEY_LEFT)) {
-      displxInc = -1;
+      translateX += -1;
     }
     if (window.isKeyPressed(GLFW_KEY_RIGHT)) {
-      displxInc = 1;
+      translateX += 1;
     }
     if (window.isKeyPressed(GLFW_KEY_A)) {
-      rotateInc = -1;
+      rotate += -1;
     }
     if (window.isKeyPressed(GLFW_KEY_Q)) {
-      rotateInc = 1;
+      rotate += 1;
     }
     if (window.isKeyPressed(GLFW_KEY_Z)) {
-      scaleInc = -1;
+      scale += -1;
     }
     if (window.isKeyPressed(GLFW_KEY_X)) {
-      scaleInc = 1;
+      scale += 1;
     }
   }
 
@@ -165,20 +182,20 @@ public class CastleCastersGame implements GameLogic {
     for (GameItem gameItem : gameItems) {
       // Update position
       var itemPos = gameItem.getPosition();
-      float posx = itemPos.getX() + displxInc * 9;
-      float posy = itemPos.getY() + displyInc * 9;
+      float posx = itemPos.getX() + translateX * 9;
+      float posy = itemPos.getY() + translateY * 9;
       gameItem.setPosition(new Coordinate(posx, posy, itemPos.getZ()));
 
       // Update scale
       float scale = gameItem.getScale();
-      scale += scaleInc * 0.5f;
+      scale += this.scale * 0.5f;
       if (scale < 0) {
         scale = 0;
       }
       gameItem.setScale(scale);
 
       // Update rotation angle
-      float rotation = gameItem.getRotation() + rotateInc;
+      float rotation = gameItem.getRotation() + rotate;
       if (rotation > 360) {
         rotation = 0;
       }

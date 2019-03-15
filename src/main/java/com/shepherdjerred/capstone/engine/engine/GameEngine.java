@@ -11,6 +11,7 @@ public class GameEngine implements Runnable {
   private final Thread gameLoopThread;
   private final Timer timer;
   private final GameLogic gameLogic;
+  private final Mouse mouse;
 
   public GameEngine(String windowTitle,
       int windowWidth,
@@ -21,6 +22,7 @@ public class GameEngine implements Runnable {
     window = new Window(windowTitle, windowWidth, windowHeight, isVsyncEnabled);
     this.gameLogic = gameLogic;
     timer = new Timer();
+    mouse = new Mouse();
   }
 
   public void start() {
@@ -50,6 +52,7 @@ public class GameEngine implements Runnable {
   private void initialize() throws Exception {
     window.init();
     timer.init();
+    mouse.init(window);
     gameLogic.init(window);
   }
 
@@ -90,7 +93,8 @@ public class GameEngine implements Runnable {
   }
 
   private void handleInput() {
-    gameLogic.handleInput(window);
+    mouse.updatePosition();
+    gameLogic.handleInput(window, mouse);
   }
 
   private void updateGameState(float interval) {

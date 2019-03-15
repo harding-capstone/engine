@@ -47,6 +47,7 @@ public class Window {
   private int width;
   @Getter
   private int height;
+  @Getter
   private long windowHandle;
   @Getter
   @Setter
