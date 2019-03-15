@@ -28,6 +28,7 @@ public class Renderer {
 
     shaderProgram.createUniform("projectionMatrix");
     shaderProgram.createUniform("modelMatrix");
+    shaderProgram.createUniform("texture_sampler");
 
     window.setClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     transformation = new Transformation();
@@ -45,14 +46,15 @@ public class Renderer {
     var height = window.getHeight();
 
     shaderProgram.bind();
-    shaderProgram.setMatrixUniform("projectionMatrix",
+    shaderProgram.setUniform("texture_sampler", 0);
+    shaderProgram.setUniform("projectionMatrix",
         transformation.getProjectionMatrix(width, height));
 
     gameItems.forEach(gameItem -> {
       var modelMatrix = transformation.getModelMatrix(gameItem.getPosition(),
           gameItem.getRotation(),
           gameItem.getScale());
-      shaderProgram.setMatrixUniform("modelMatrix", modelMatrix);
+      shaderProgram.setUniform("modelMatrix", modelMatrix);
       gameItem.getMesh().render();
     });
 

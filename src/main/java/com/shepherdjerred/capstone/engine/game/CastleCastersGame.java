@@ -14,6 +14,7 @@ import com.shepherdjerred.capstone.engine.engine.GameItem;
 import com.shepherdjerred.capstone.engine.engine.GameLogic;
 import com.shepherdjerred.capstone.engine.engine.Window;
 import com.shepherdjerred.capstone.engine.engine.graphics.Mesh;
+import com.shepherdjerred.capstone.engine.engine.graphics.texture.Texture;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,54 +33,38 @@ public class CastleCastersGame implements GameLogic {
     gameItems = new ArrayList<>();
   }
 
-  private Mesh squareMesh() {
-    float[] positions = new float[] {
-        0f, 0f, 0f,
-        0f, 10f, 0f,
-        10f, 0f, 0f,
-        10f, 10f, 0f
-    };
-    float[] colours = new float[] {
-        0.5f, 0.0f, 0.0f,
-        0.0f, 0.5f, 0.0f,
-        0.0f, 0.0f, 0.5f,
-        0.0f, 0.5f, 0.5f
-    };
-    int[] indices = new int[] {
-        0, 1, 2, 1, 2, 3
-    };
-    return new Mesh(positions, colours, indices);
-  }
+  private GameItem createTexturedSquare() throws Exception {
+    var texture = new Texture("/Users/jerred/IdeaProjects/capstone/engine/src/main/resources/textures/grass.png");
 
-  private Mesh triforceMesh() {
-    var vertices = new float[] {
-        300, 0, 0, // top top
-        400, 100, 0, // top right && right top
-        200, 100, 0, // top left && left top
-        300, 200, 0, // left right && right left
-        500, 200, 0, // right right
-        100, 200, 0 // left left
+    var pos = new float[] {
+        0, 0, 0,
+        0, 32, 0,
+        32, 0, 0,
+        32, 32, 0
     };
-    float[] colors = new float[9 * 3];
-    float baseRed = .77f;
-    float baseGreen = .66f;
-    float baseBlue = .34f;
 
-    for (int i = 0; i < 9; i++) {
-      colors[i * 3] = baseRed + i * .05f;
-      colors[i * 3 + 1] = baseGreen + i * .05f;
-      colors[i * 3 + 2] = baseBlue + i * .05f;
-    }
+    var tex = new float[] {
+        0, 0,
+        0, 1,
+        1, 0,
+        1, 1,
+        0, 1,
+        1, 0
+    };
 
-    int[] indices = new int[] {0, 1, 2, 2, 5, 3, 1, 3, 4};
-    return new Mesh(vertices, colors, indices);
+    var ind = new int[] {
+        0, 1, 2,
+        3, 1, 2
+    };
+
+    var mesh = new Mesh(pos, tex, ind, texture);
+    return new GameItem(mesh);
   }
 
   @Override
   public void init(Window window) throws Exception {
     renderer.init(window);
-    gameItems.add(new GameItem(squareMesh()));
-    gameItems.add(new GameItem(triforceMesh()));
+    gameItems.add(createTexturedSquare());
   }
 
   @Override

@@ -20,7 +20,7 @@ public class Main {
     }
   }
 
-  private static void init() throws Exception {
+  private static void init() {
     var settings = getSettings();
     GameLogic logic = new CastleCastersGame();
     GameEngine engine = new GameEngine(settings.getGameName(),

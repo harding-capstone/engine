@@ -1,7 +1,10 @@
 package com.shepherdjerred.capstone.engine.engine.graphics.texture;
 
+import static org.lwjgl.opengl.GL11.GL_NEAREST;
 import static org.lwjgl.opengl.GL11.GL_RGBA;
 import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_MAG_FILTER;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_MIN_FILTER;
 import static org.lwjgl.opengl.GL11.GL_UNPACK_ALIGNMENT;
 import static org.lwjgl.opengl.GL11.GL_UNSIGNED_BYTE;
 import static org.lwjgl.opengl.GL11.glBindTexture;
@@ -9,21 +12,20 @@ import static org.lwjgl.opengl.GL11.glDeleteTextures;
 import static org.lwjgl.opengl.GL11.glGenTextures;
 import static org.lwjgl.opengl.GL11.glPixelStorei;
 import static org.lwjgl.opengl.GL11.glTexImage2D;
-import static org.lwjgl.opengl.GL30.glGenerateMipmap;
+import static org.lwjgl.opengl.GL11.glTexParameteri;
 import static org.lwjgl.stb.STBImage.stbi_failure_reason;
 import static org.lwjgl.stb.STBImage.stbi_image_free;
 import static org.lwjgl.stb.STBImage.stbi_load;
 
-import java.io.File;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
-import java.nio.file.Paths;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.extern.log4j.Log4j2;
 import org.lwjgl.system.MemoryStack;
 
+@Log4j2
 @AllArgsConstructor
 public class Texture {
 
@@ -31,14 +33,14 @@ public class Texture {
   private final int id;
 
   public Texture(String fileName) throws Exception {
-    this(loadTexture(fileName));
+    id = loadTexture(fileName);
   }
 
   public void bind() {
     glBindTexture(GL_TEXTURE_2D, id);
   }
 
-  private static int loadTexture(String fileName) throws RuntimeException, URISyntaxException {
+  private int loadTexture(String filePath) throws RuntimeException, URISyntaxException {
     int width;
     int height;
     ByteBuffer buf;
@@ -48,13 +50,9 @@ public class Texture {
       IntBuffer h = stack.mallocInt(1);
       IntBuffer channels = stack.mallocInt(1);
 
-      URL url = Texture.class.getResource(fileName);
-      File file = Paths.get(url.toURI()).toFile();
-      String filePath = file.getAbsolutePath();
       buf = stbi_load(filePath, w, h, channels, 4);
       if (buf == null) {
-        throw new RuntimeException(
-            "Image file [" + filePath + "] not loaded: " + stbi_failure_reason());
+        throw new RuntimeException("Texture " + filePath + " not loaded: " + stbi_failure_reason());
       }
 
       /* Get width and height of image */
@@ -70,14 +68,14 @@ public class Texture {
     // Tell OpenGL how to unpack the RGBA bytes. Each component is 1 byte size
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
-    //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
     // Upload the texture data
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0,
         GL_RGBA, GL_UNSIGNED_BYTE, buf);
     // Generate Mip Map
-    glGenerateMipmap(GL_TEXTURE_2D);
+//    glGenerateMipmap(GL_TEXTURE_2D);
 
     stbi_image_free(buf);
 
