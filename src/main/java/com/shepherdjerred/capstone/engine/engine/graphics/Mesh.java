@@ -96,7 +96,7 @@ public class Mesh {
     // Activate firs texture bank
     glActiveTexture(GL_TEXTURE0);
     // Bind the texture
-    glBindTexture(GL_TEXTURE_2D, texture.getId());
+    glBindTexture(GL_TEXTURE_2D, texture.getOpenGlTextureId());
 
     // Bind to the VAO
     glBindVertexArray(vaoId);

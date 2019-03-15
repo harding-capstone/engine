@@ -9,20 +9,23 @@ import static org.lwjgl.glfw.GLFW.GLFW_KEY_UP;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_X;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_Z;
 
-import com.shepherdjerred.capstone.engine.engine.Coordinate;
 import com.shepherdjerred.capstone.engine.engine.GameItem;
 import com.shepherdjerred.capstone.engine.engine.GameLogic;
 import com.shepherdjerred.capstone.engine.engine.Mouse;
 import com.shepherdjerred.capstone.engine.engine.Window;
+import com.shepherdjerred.capstone.engine.engine.graphics.Coordinate;
 import com.shepherdjerred.capstone.engine.engine.graphics.Mesh;
-import com.shepherdjerred.capstone.engine.engine.graphics.texture.Texture;
+import com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName;
+import com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureLoader;
+import com.shepherdjerred.capstone.engine.engine.graphics.texture.locator.PathBasedTextureFileLocator;
 import java.util.ArrayList;
 import java.util.List;
 
 public class CastleCastersGame implements GameLogic {
 
   private final Renderer renderer;
-  private final List<GameItem> gameItems;
+  private List<GameItem> gameItems;
+  private TextureLoader textureLoader;
 
   private int translateX = 0;
   private int translateY = 0;
@@ -32,11 +35,13 @@ public class CastleCastersGame implements GameLogic {
   public CastleCastersGame() {
     renderer = new Renderer();
     gameItems = new ArrayList<>();
+    var textureLocator = new PathBasedTextureFileLocator(
+        "/Users/jerred/IdeaProjects/capstone/engine/src/main/resources/textures/");
+    textureLoader = new TextureLoader(textureLocator);
   }
 
-  private GameItem createWizard() throws Exception {
-    var texture = new Texture(
-        "/Users/jerred/IdeaProjects/capstone/engine/src/main/resources/textures/front_fire.png");
+  private GameItem createWizard() {
+    var texture = textureLoader.loadTexture(TextureName.FIRE_WIZARD_FRONT);
 
     var pos = new float[] {
         0, 0, 0,
@@ -63,9 +68,8 @@ public class CastleCastersGame implements GameLogic {
     return new GameItem(mesh);
   }
 
-  private GameItem createWall() throws Exception {
-    var texture = new Texture(
-        "/Users/jerred/IdeaProjects/capstone/engine/src/main/resources/textures/wall_frost.png");
+  private GameItem createWall() {
+    var texture = textureLoader.loadTexture(TextureName.FROST_WALL);
 
     var pos = new float[] {
         0, 0, 0,
@@ -92,9 +96,8 @@ public class CastleCastersGame implements GameLogic {
     return new GameItem(mesh);
   }
 
-  private GameItem createTexturedSquare() throws Exception {
-    var texture = new Texture(
-        "/Users/jerred/IdeaProjects/capstone/engine/src/main/resources/textures/grass.png");
+  private GameItem createTexturedSquare() {
+    var texture = textureLoader.loadTexture(TextureName.GRASS);
 
     var pos = new float[] {
         0, 0, 0,
@@ -143,14 +146,43 @@ public class CastleCastersGame implements GameLogic {
     translateX = 0;
     rotate = 0;
     scale = 0;
-    translateX += mouse.getDisplVec().y;
-    translateY += mouse.getDisplVec().x;
+//    translateX += mouse.getDisplVec().y;
+//    translateY += mouse.getDisplVec().x;
+//    if (mouse.isLeftButtonPressed()) {
+//      scale += 1;
+//    }
+//    if (mouse.isRightButtonPressed()) {
+//      scale += -1;
+//    }
     if (mouse.isLeftButtonPressed()) {
-      scale += 1;
+      try {
+        var newItem = createWizard();
+        newItem.setPosition(new Coordinate((float) mouse.getCurrentPos().x,
+            (float) mouse.getCurrentPos().y,
+            0));
+        gameItems.add(newItem);
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
     }
+
     if (mouse.isRightButtonPressed()) {
-      scale += -1;
+      var newGameItems = new ArrayList<>(gameItems);
+      for (GameItem gameItem : gameItems) {
+        var mouseX = mouse.getCurrentPos().x;
+        var mouseY = mouse.getCurrentPos().y;
+        var itemX = gameItem.getPosition().getX();
+        var itemY = gameItem.getPosition().getY();
+        if (Math.abs(itemX - mouseX) < 5) {
+          newGameItems.remove(gameItem);
+        }
+        if (Math.abs(itemY - mouseY) < 5) {
+          newGameItems.remove(gameItem);
+        }
+      }
+      gameItems = newGameItems;
     }
+
     if (window.isKeyPressed(GLFW_KEY_UP)) {
       translateY += -1;
     }

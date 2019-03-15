@@ -3,8 +3,8 @@ package com.shepherdjerred.capstone.engine;
 import com.shepherdjerred.capstone.engine.engine.GameEngine;
 import com.shepherdjerred.capstone.engine.engine.GameLogic;
 import com.shepherdjerred.capstone.engine.game.CastleCastersGame;
-import com.shepherdjerred.capstone.engine.storage.Settings;
-import com.shepherdjerred.capstone.engine.storage.StaticSettings;
+import com.shepherdjerred.capstone.engine.settings.EngineSettings;
+import com.shepherdjerred.capstone.engine.settings.ImmutableEngineSettings;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
@@ -23,15 +23,11 @@ public class Main {
   private static void init() {
     var settings = getSettings();
     GameLogic logic = new CastleCastersGame();
-    GameEngine engine = new GameEngine(settings.getGameName(),
-        1024,
-        768,
-        settings.isVsyncEnabled(),
-        logic);
+    GameEngine engine = new GameEngine(logic, settings);
     engine.start();
   }
 
-  private static Settings getSettings() {
-    return new StaticSettings("Castle Casters", true);
+  private static EngineSettings getSettings() {
+    return new ImmutableEngineSettings("Castle Casters", 1024, 768, true, false);
   }
 }

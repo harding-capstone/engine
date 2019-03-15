@@ -1,25 +1,26 @@
 package com.shepherdjerred.capstone.engine.engine;
 
+import com.shepherdjerred.capstone.engine.settings.EngineSettings;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 public class GameEngine implements Runnable {
 
-  private final int targetFps = 60;
-  private final int targetUps = 20;
+  private final int targetFramesPerSecond = 60;
+  private final int targetUpdatesPerSecond = 20;
   private final Window window;
   private final Thread gameLoopThread;
   private final Timer timer;
   private final GameLogic gameLogic;
   private final Mouse mouse;
 
-  public GameEngine(String windowTitle,
-      int windowWidth,
-      int windowHeight,
-      boolean isVsyncEnabled,
-      GameLogic gameLogic) {
+  public GameEngine(GameLogic gameLogic, EngineSettings engineSettings) {
     gameLoopThread = new Thread(this, "GAME_LOOP_THREAD");
-    window = new Window(windowTitle, windowWidth, windowHeight, isVsyncEnabled);
+    window = new Window(engineSettings.getWindowTitle(),
+        engineSettings.getWindowWidth(),
+        engineSettings.getWindowHeight(),
+        engineSettings.isVsyncEnabled(),
+        engineSettings.isWireframeEnabled());
     this.gameLogic = gameLogic;
     timer = new Timer();
     mouse = new Mouse();
@@ -59,7 +60,7 @@ public class GameEngine implements Runnable {
   private void gameLoop() {
     float elapsedTime;
     float accumulator = 0f;
-    float updateInterval = 1f / targetUps;
+    float updateInterval = 1f / targetUpdatesPerSecond;
 
     boolean isRunning = true;
     while (isRunning && !window.windowShouldClose()) {
@@ -82,7 +83,7 @@ public class GameEngine implements Runnable {
   }
 
   private void sync() {
-    float loopSlot = 1f / targetFps;
+    float loopSlot = 1f / targetFramesPerSecond;
     double endTime = timer.getLastLoopTime() + loopSlot;
     while (timer.getTime() < endTime) {
       try {

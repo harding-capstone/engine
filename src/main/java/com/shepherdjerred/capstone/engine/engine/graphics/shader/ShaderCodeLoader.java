@@ -2,7 +2,7 @@ package com.shepherdjerred.capstone.engine.engine.graphics.shader;
 
 import java.io.IOException;
 
-public interface ShaderLoader {
+public interface ShaderCodeLoader {
 
-  String loadShaderCode(String shaderName) throws IOException;
+  String getShaderCode(String shaderName) throws IOException;
 }

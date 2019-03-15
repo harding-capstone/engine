@@ -34,44 +34,45 @@ import org.lwjgl.system.MemoryStack;
 @Log4j2
 public class ShaderProgram {
 
-  private final Map<String, Integer> uniforms;
-  private final ShaderLoader shaderLoader;
-  private final int programId;
+
+  private final ShaderCodeLoader shaderCodeLoader;
+  private final Map<ShaderUniform, Integer> uniformIdMap;
+  private final int shaderProgramId;
   private int vertexShaderId;
   private int fragmentShaderId;
 
-  public ShaderProgram(ShaderLoader shaderLoader) {
-    programId = glCreateProgram();
-    if (programId == 0) {
+  public ShaderProgram(ShaderCodeLoader shaderCodeLoader) {
+    this.shaderCodeLoader = shaderCodeLoader;
+    shaderProgramId = glCreateProgram();
+    if (shaderProgramId == 0) {
       throw new RuntimeException("Could not create Shader");
     }
-    this.shaderLoader = shaderLoader;
-    uniforms = new HashMap<>();
+    uniformIdMap = new HashMap<>();
   }
 
-  public void createUniform(String name) {
-    int uniformLocation = glGetUniformLocation(programId, name);
-    if (uniformLocation < 0) {
-      throw new RuntimeException("Could not create uniform:" + name);
+
+  public void createUniform(ShaderUniform uniform) {
+    int uniformId = glGetUniformLocation(shaderProgramId, uniform.getName());
+    if (uniformId < 0) {
+      throw new RuntimeException("Could not create uniform:" + uniform);
     }
-    uniforms.put(name, uniformLocation);
+    uniformIdMap.put(uniform, uniformId);
   }
 
-  public void setUniform(String uniformName, int value) {
-    glUniform1i(uniforms.get(uniformName), value);
+  public void setUniform(ShaderUniform uniform, int value) {
+    glUniform1i(uniformIdMap.get(uniform), value);
   }
 
-  public void setUniform(String uniformName, Matrix4f value) {
-    // Dump the matrix into a float buffer
+  public void setUniform(ShaderUniform uniform, Matrix4f value) {
     try (MemoryStack stack = MemoryStack.stackPush()) {
       FloatBuffer fb = stack.mallocFloat(16);
       value.get(fb);
-      glUniformMatrix4fv(uniforms.get(uniformName), false, fb);
+      glUniformMatrix4fv(uniformIdMap.get(uniform), false, fb);
     }
   }
 
   private String loadShaderCode(String shaderName) throws IOException {
-    return shaderLoader.loadShaderCode(shaderName);
+    return shaderCodeLoader.getShaderCode(shaderName);
   }
 
   public void createVertexShader(String shaderName) throws Exception {
@@ -97,33 +98,33 @@ public class ShaderProgram {
           "Error compiling Shader code: " + glGetShaderInfoLog(shaderId, 1024));
     }
 
-    glAttachShader(programId, shaderId);
+    glAttachShader(shaderProgramId, shaderId);
 
     return shaderId;
   }
 
   public void link() {
-    glLinkProgram(programId);
-    if (glGetProgrami(programId, GL_LINK_STATUS) == 0) {
+    glLinkProgram(shaderProgramId);
+    if (glGetProgrami(shaderProgramId, GL_LINK_STATUS) == 0) {
       throw new RuntimeException(
-          "Error linking Shader code: " + glGetProgramInfoLog(programId, 1024));
+          "Error linking Shader code: " + glGetProgramInfoLog(shaderProgramId, 1024));
     }
 
     if (vertexShaderId != 0) {
-      glDetachShader(programId, vertexShaderId);
+      glDetachShader(shaderProgramId, vertexShaderId);
     }
     if (fragmentShaderId != 0) {
-      glDetachShader(programId, fragmentShaderId);
+      glDetachShader(shaderProgramId, fragmentShaderId);
     }
 
-    glValidateProgram(programId);
-    if (glGetProgrami(programId, GL_VALIDATE_STATUS) == 0) {
-      log.warn("Warning validating Shader code: " + glGetProgramInfoLog(programId, 1024));
+    glValidateProgram(shaderProgramId);
+    if (glGetProgrami(shaderProgramId, GL_VALIDATE_STATUS) == 0) {
+      log.warn("Warning validating Shader code: " + glGetProgramInfoLog(shaderProgramId, 1024));
     }
   }
 
   public void bind() {
-    glUseProgram(programId);
+    glUseProgram(shaderProgramId);
   }
 
   public void unbind() {
@@ -132,8 +133,8 @@ public class ShaderProgram {
 
   public void cleanup() {
     unbind();
-    if (programId != 0) {
-      glDeleteProgram(programId);
+    if (shaderProgramId != 0) {
+      glDeleteProgram(shaderProgramId);
     }
   }
 }

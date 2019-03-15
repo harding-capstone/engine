@@ -1,6 +1,5 @@
 package com.shepherdjerred.capstone.engine.engine.graphics;
 
-import com.shepherdjerred.capstone.engine.engine.Coordinate;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 

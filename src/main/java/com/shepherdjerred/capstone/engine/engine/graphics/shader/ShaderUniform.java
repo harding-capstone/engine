@@ -1,0 +1,14 @@
+package com.shepherdjerred.capstone.engine.engine.graphics.shader;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@Getter
+@AllArgsConstructor
+public enum ShaderUniform {
+  TEXTURE_SAMPLER("texture_sampler"),
+  PROJECTION_MATRIX("projectionMatrix"),
+  MODEL_MATRIX("modelMatrix");
+
+  private final String name;
+}

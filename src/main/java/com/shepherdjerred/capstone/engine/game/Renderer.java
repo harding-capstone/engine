@@ -12,9 +12,10 @@ import static org.lwjgl.opengl.GL11C.GL_SRC_ALPHA;
 
 import com.shepherdjerred.capstone.engine.engine.GameItem;
 import com.shepherdjerred.capstone.engine.engine.Window;
-import com.shepherdjerred.capstone.engine.engine.graphics.shader.ClasspathShaderLoader;
+import com.shepherdjerred.capstone.engine.engine.graphics.shader.ClasspathShaderCodeLoader;
 import com.shepherdjerred.capstone.engine.engine.graphics.shader.ShaderProgram;
 import com.shepherdjerred.capstone.engine.engine.graphics.Transformation;
+import com.shepherdjerred.capstone.engine.engine.graphics.shader.ShaderUniform;
 import java.util.List;
 import lombok.extern.log4j.Log4j2;
 
@@ -25,15 +26,15 @@ public class Renderer {
   private Transformation transformation;
 
   public void init(Window window) throws Exception {
-    var shaderLoader = new ClasspathShaderLoader("/shaders");
+    var shaderLoader = new ClasspathShaderCodeLoader("/shaders/");
     shaderProgram = new ShaderProgram(shaderLoader);
     shaderProgram.createVertexShader("vertex.glsl");
     shaderProgram.createFragmentShader("fragment.glsl");
     shaderProgram.link();
 
-    shaderProgram.createUniform("projectionMatrix");
-    shaderProgram.createUniform("modelMatrix");
-    shaderProgram.createUniform("texture_sampler");
+    shaderProgram.createUniform(ShaderUniform.PROJECTION_MATRIX);
+    shaderProgram.createUniform(ShaderUniform.MODEL_MATRIX);
+    shaderProgram.createUniform(ShaderUniform.TEXTURE_SAMPLER);
 
     window.setClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     transformation = new Transformation();
@@ -54,15 +55,15 @@ public class Renderer {
     var height = window.getHeight();
 
     shaderProgram.bind();
-    shaderProgram.setUniform("texture_sampler", 0);
-    shaderProgram.setUniform("projectionMatrix",
+    shaderProgram.setUniform(ShaderUniform.TEXTURE_SAMPLER, 0);
+    shaderProgram.setUniform(ShaderUniform.PROJECTION_MATRIX,
         transformation.getProjectionMatrix(width, height));
 
     gameItems.forEach(gameItem -> {
       var modelMatrix = transformation.getModelMatrix(gameItem.getPosition(),
           gameItem.getRotation(),
           gameItem.getScale());
-      shaderProgram.setUniform("modelMatrix", modelMatrix);
+      shaderProgram.setUniform(ShaderUniform.MODEL_MATRIX, modelMatrix);
       gameItem.getMesh().render();
     });
 

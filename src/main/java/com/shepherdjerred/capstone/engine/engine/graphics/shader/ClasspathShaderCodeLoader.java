@@ -10,15 +10,15 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 @ToString
 @AllArgsConstructor
-public class ClasspathShaderLoader implements ShaderLoader {
+public class ClasspathShaderCodeLoader implements ShaderCodeLoader {
 
   private final String basePath;
 
   @Override
-  public String loadShaderCode(String shaderName) throws IOException {
-    var stream = this.getClass().getResourceAsStream(basePath + "/" + shaderName);
+  public String getShaderCode(String shaderFileName) throws IOException {
+    var stream = this.getClass().getResourceAsStream(basePath + shaderFileName);
     if (stream == null) {
-      throw new FileNotFoundException(shaderName);
+      throw new FileNotFoundException(shaderFileName);
     }
     var bytes = stream.readAllBytes();
     stream.close();

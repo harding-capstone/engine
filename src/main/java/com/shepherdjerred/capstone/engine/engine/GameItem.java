@@ -1,5 +1,6 @@
 package com.shepherdjerred.capstone.engine.engine;
 
+import com.shepherdjerred.capstone.engine.engine.graphics.Coordinate;
 import com.shepherdjerred.capstone.engine.engine.graphics.Mesh;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

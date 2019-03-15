@@ -28,8 +28,11 @@ import static org.lwjgl.glfw.GLFW.glfwSwapInterval;
 import static org.lwjgl.glfw.GLFW.glfwWindowHint;
 import static org.lwjgl.glfw.GLFW.glfwWindowShouldClose;
 import static org.lwjgl.opengl.GL11.GL_FALSE;
+import static org.lwjgl.opengl.GL11.GL_FRONT_AND_BACK;
+import static org.lwjgl.opengl.GL11.GL_LINE;
 import static org.lwjgl.opengl.GL11.GL_TRUE;
 import static org.lwjgl.opengl.GL11.glClearColor;
+import static org.lwjgl.opengl.GL11.glPolygonMode;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
 import lombok.Getter;
@@ -54,13 +57,15 @@ public class Window {
   private boolean resized;
   @Getter
   private boolean isVsyncEnabled;
+  private boolean isWireframe;
 
-  public Window(String title, int width, int height, boolean isVsyncEnabled) {
+  public Window(String title, int width, int height, boolean isVsyncEnabled, boolean isWireframe) {
     this.title = title;
     this.width = width;
     this.height = height;
     this.isVsyncEnabled = isVsyncEnabled;
     this.resized = false;
+    this.isWireframe = isWireframe;
   }
 
   public void init() {
@@ -122,6 +127,10 @@ public class Window {
     glfwShowWindow(windowHandle);
 
     GL.createCapabilities();
+
+    if (isWireframe) {
+      glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    }
 
     // Set the clear color
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
