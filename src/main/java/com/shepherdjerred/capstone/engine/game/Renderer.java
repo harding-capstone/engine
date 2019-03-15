@@ -14,7 +14,7 @@ import com.shepherdjerred.capstone.engine.engine.GameItem;
 import com.shepherdjerred.capstone.engine.engine.Window;
 import com.shepherdjerred.capstone.engine.engine.graphics.shader.ClasspathShaderCodeLoader;
 import com.shepherdjerred.capstone.engine.engine.graphics.shader.ShaderProgram;
-import com.shepherdjerred.capstone.engine.engine.graphics.Transformation;
+import com.shepherdjerred.capstone.engine.engine.graphics.Matrices;
 import com.shepherdjerred.capstone.engine.engine.graphics.shader.ShaderUniform;
 import java.util.List;
 import lombok.extern.log4j.Log4j2;
@@ -23,7 +23,7 @@ import lombok.extern.log4j.Log4j2;
 public class Renderer {
 
   private ShaderProgram shaderProgram;
-  private Transformation transformation;
+  private Matrices matrices;
 
   public void init(Window window) throws Exception {
     var shaderLoader = new ClasspathShaderCodeLoader("/shaders/");
@@ -37,7 +37,7 @@ public class Renderer {
     shaderProgram.createUniform(ShaderUniform.TEXTURE_SAMPLER);
 
     window.setClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-    transformation = new Transformation();
+    matrices = new Matrices();
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -57,10 +57,10 @@ public class Renderer {
     shaderProgram.bind();
     shaderProgram.setUniform(ShaderUniform.TEXTURE_SAMPLER, 0);
     shaderProgram.setUniform(ShaderUniform.PROJECTION_MATRIX,
-        transformation.getProjectionMatrix(width, height));
+        matrices.getProjectionMatrix(width, height));
 
     gameItems.forEach(gameItem -> {
-      var modelMatrix = transformation.getModelMatrix(gameItem.getPosition(),
+      var modelMatrix = matrices.getModelMatrix(gameItem.getPosition(),
           gameItem.getRotation(),
           gameItem.getScale());
       shaderProgram.setUniform(ShaderUniform.MODEL_MATRIX, modelMatrix);

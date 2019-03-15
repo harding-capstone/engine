@@ -6,8 +6,13 @@ import static org.lwjgl.glfw.GLFW.GLFW_KEY_LEFT;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_Q;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_RIGHT;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_UP;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_W;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_X;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_Z;
+import static org.lwjgl.opengl.GL11.GL_FILL;
+import static org.lwjgl.opengl.GL11.GL_FRONT_AND_BACK;
+import static org.lwjgl.opengl.GL11.GL_LINE;
+import static org.lwjgl.opengl.GL11.glPolygonMode;
 
 import com.shepherdjerred.capstone.engine.engine.GameItem;
 import com.shepherdjerred.capstone.engine.engine.GameLogic;
@@ -15,11 +20,13 @@ import com.shepherdjerred.capstone.engine.engine.Mouse;
 import com.shepherdjerred.capstone.engine.engine.Window;
 import com.shepherdjerred.capstone.engine.engine.graphics.Coordinate;
 import com.shepherdjerred.capstone.engine.engine.graphics.Mesh;
-import com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName;
 import com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureLoader;
+import com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName;
+import com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureSheet;
 import com.shepherdjerred.capstone.engine.engine.graphics.texture.locator.PathBasedTextureFileLocator;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class CastleCastersGame implements GameLogic {
 
@@ -40,15 +47,44 @@ public class CastleCastersGame implements GameLogic {
     textureLoader = new TextureLoader(textureLocator);
   }
 
-  private GameItem createWizard() {
-    var texture = textureLoader.loadTexture(TextureName.FIRE_WIZARD_FRONT);
-
-    var pos = new float[] {
+  private float[] getDefaultPos() {
+    return new float[] {
         0, 0, 0,
         0, 32, 0,
         32, 0, 0,
         32, 32, 0
     };
+  }
+
+  private int[] getDefaultInd() {
+    return new int[] {
+        0, 1, 2,
+        3, 1, 2
+    };
+  }
+
+  private GameItem createFromTexturedSheet() {
+    var texture = textureLoader.loadTexture(TextureName.TERRAIN);
+    var textureSheet = new TextureSheet(texture, 16);
+
+    int randomX = ThreadLocalRandom.current()
+        .nextInt(0, textureSheet.getNumberOfHorizonalTextures());
+    int randomY = ThreadLocalRandom.current()
+        .nextInt(0, textureSheet.getNumberOfVerticalTextures());
+
+    var texCoords = textureSheet.getCoordinatesForTexture(new Coordinate(randomX, randomY));
+
+    var pos = getDefaultPos();
+    var ind = getDefaultInd();
+
+    var mesh = new Mesh(pos, texCoords.asFloatArray(), ind, texture);
+    return new GameItem(mesh);
+  }
+
+  private GameItem createWizard() {
+    var texture = textureLoader.loadTexture(TextureName.FIRE_WIZARD_FRONT);
+
+    var pos = getDefaultPos();
 
     var tex = new float[] {
         0, .33f,
@@ -59,10 +95,7 @@ public class CastleCastersGame implements GameLogic {
         1, .33f
     };
 
-    var ind = new int[] {
-        0, 1, 2,
-        3, 1, 2
-    };
+    var ind = getDefaultInd();
 
     var mesh = new Mesh(pos, tex, ind, texture);
     return new GameItem(mesh);
@@ -127,17 +160,19 @@ public class CastleCastersGame implements GameLogic {
   @Override
   public void init(Window window) throws Exception {
     renderer.init(window);
-    gameItems.add(createTexturedSquare());
+//    gameItems.add(createTexturedSquare());
+
+    gameItems.add(createFromTexturedSheet());
 
     var wall = createWall();
-    gameItems.add(wall);
+//    gameItems.add(wall);
 
     var wizard = createWizard();
-    gameItems.add(wizard);
+//    gameItems.add(wizard);
 
     var offsetSquare = createTexturedSquare();
     offsetSquare.setPosition(new Coordinate(200, 200, 0));
-    gameItems.add(offsetSquare);
+//    gameItems.add(offsetSquare);
   }
 
   @Override
@@ -156,7 +191,7 @@ public class CastleCastersGame implements GameLogic {
 //    }
     if (mouse.isLeftButtonPressed()) {
       try {
-        var newItem = createWizard();
+        var newItem = createFromTexturedSheet();
         newItem.setPosition(new Coordinate((float) mouse.getCurrentPos().x,
             (float) mouse.getCurrentPos().y,
             0));
@@ -173,10 +208,7 @@ public class CastleCastersGame implements GameLogic {
         var mouseY = mouse.getCurrentPos().y;
         var itemX = gameItem.getPosition().getX();
         var itemY = gameItem.getPosition().getY();
-        if (Math.abs(itemX - mouseX) < 5) {
-          newGameItems.remove(gameItem);
-        }
-        if (Math.abs(itemY - mouseY) < 5) {
+        if (Math.abs(itemX - mouseX) < 10 && Math.abs(itemY - mouseY) < 10) {
           newGameItems.remove(gameItem);
         }
       }
@@ -206,6 +238,11 @@ public class CastleCastersGame implements GameLogic {
     }
     if (window.isKeyPressed(GLFW_KEY_X)) {
       scale += 1;
+    }
+    if (window.isKeyPressed(GLFW_KEY_W)) {
+      glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    } else {
+      glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     }
   }
 

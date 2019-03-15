@@ -3,7 +3,7 @@ package com.shepherdjerred.capstone.engine.engine.graphics;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
-public class Transformation {
+public class Matrices {
 
   // https://gamedev.stackexchange.com/questions/59161/is-opengl-appropriate-for-2d-games
   // https://en.wikibooks.org/wiki/OpenGL_Programming/Modern_OpenGL_Tutorial_2D
@@ -17,7 +17,7 @@ public class Transformation {
   public Matrix4f getModelMatrix(Coordinate offset,
       float rotation,
       float scale) {
-    var rotationTranslateVector = new Vector3f(scale * .5f, scale * .5f, 0);
+    var rotationTranslateVector = new Vector3f(.5f * scale * 32, .5f * scale * 32, 0);
     return new Matrix4f()
         .translate(offset.getX(), offset.getY(), 0)
         .translate(rotationTranslateVector)
