@@ -33,8 +33,67 @@ public class CastleCastersGame implements GameLogic {
     gameItems = new ArrayList<>();
   }
 
+  private GameItem createWizard() throws Exception {
+    var texture = new Texture(
+        "/Users/jerred/IdeaProjects/capstone/engine/src/main/resources/textures/front_fire.png");
+
+    var pos = new float[] {
+        64, 64, 0,
+        64, 96, 0,
+        96, 64, 0,
+        96, 96, 0
+    };
+
+    var tex = new float[] {
+        0, .33f,
+        0, .66f,
+        1, .33f,
+        1, .66f,
+        0, .66f,
+        1, .33f
+    };
+
+    var ind = new int[] {
+        0, 1, 2,
+        3, 1, 2
+    };
+
+    var mesh = new Mesh(pos, tex, ind, texture);
+    return new GameItem(mesh);
+  }
+
+  private GameItem createWall() throws Exception {
+    var texture = new Texture(
+        "/Users/jerred/IdeaProjects/capstone/engine/src/main/resources/textures/wall_frost.png");
+
+    var pos = new float[] {
+        32, 32, 0,
+        32, 64, 0,
+        64, 32, 0,
+        64, 64, 0
+    };
+
+    var tex = new float[] {
+        0, 0,
+        0, .2f,
+        .25f, 0,
+        .25f, .2f,
+        0, .2f,
+        .25f, 0
+    };
+
+    var ind = new int[] {
+        0, 1, 2,
+        3, 1, 2
+    };
+
+    var mesh = new Mesh(pos, tex, ind, texture);
+    return new GameItem(mesh);
+  }
+
   private GameItem createTexturedSquare() throws Exception {
-    var texture = new Texture("/Users/jerred/IdeaProjects/capstone/engine/src/main/resources/textures/grass.png");
+    var texture = new Texture(
+        "/Users/jerred/IdeaProjects/capstone/engine/src/main/resources/textures/grass.png");
 
     var pos = new float[] {
         0, 0, 0,
@@ -65,6 +124,8 @@ public class CastleCastersGame implements GameLogic {
   public void init(Window window) throws Exception {
     renderer.init(window);
     gameItems.add(createTexturedSquare());
+    gameItems.add(createWall());
+    gameItems.add(createWizard());
   }
 
   @Override
