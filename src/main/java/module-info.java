@@ -5,4 +5,5 @@ module com.shepherdjerred.capstone.engine {
   requires org.lwjgl.opengl;
   requires org.joml;
   requires org.lwjgl.stb;
+  requires com.google.common;
 }
