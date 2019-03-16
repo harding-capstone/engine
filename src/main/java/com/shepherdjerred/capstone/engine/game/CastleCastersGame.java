@@ -19,7 +19,7 @@ import com.shepherdjerred.capstone.engine.engine.GameLogic;
 import com.shepherdjerred.capstone.engine.engine.Mouse;
 import com.shepherdjerred.capstone.engine.engine.Window;
 import com.shepherdjerred.capstone.engine.engine.graphics.Coordinate;
-import com.shepherdjerred.capstone.engine.engine.graphics.Mesh;
+import com.shepherdjerred.capstone.engine.engine.graphics.TexturedMesh;
 import com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureLoader;
 import com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName;
 import com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureSheet;
@@ -77,7 +77,7 @@ public class CastleCastersGame implements GameLogic {
     var pos = getDefaultPos();
     var ind = getDefaultInd();
 
-    var mesh = new Mesh(pos, texCoords.asFloatArray(), ind, texture);
+    var mesh = new TexturedMesh(pos, texCoords.asFloatArray(), ind, texture);
     return new GameItem(mesh);
   }
 
@@ -97,7 +97,7 @@ public class CastleCastersGame implements GameLogic {
 
     var ind = getDefaultInd();
 
-    var mesh = new Mesh(pos, tex, ind, texture);
+    var mesh = new TexturedMesh(pos, tex, ind, texture);
     return new GameItem(mesh);
   }
 
@@ -125,7 +125,7 @@ public class CastleCastersGame implements GameLogic {
         3, 1, 2
     };
 
-    var mesh = new Mesh(pos, tex, ind, texture);
+    var mesh = new TexturedMesh(pos, tex, ind, texture);
     return new GameItem(mesh);
   }
 
@@ -153,7 +153,7 @@ public class CastleCastersGame implements GameLogic {
         3, 1, 2
     };
 
-    var mesh = new Mesh(pos, tex, ind, texture);
+    var mesh = new TexturedMesh(pos, tex, ind, texture);
     return new GameItem(mesh);
   }
 
@@ -280,6 +280,6 @@ public class CastleCastersGame implements GameLogic {
   @Override
   public void cleanup() {
     renderer.cleanup();
-    gameItems.forEach(gameItem -> gameItem.getMesh().cleanup());
+    gameItems.forEach(gameItem -> gameItem.getTexturedMesh().cleanup());
   }
 }

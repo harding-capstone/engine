@@ -64,7 +64,7 @@ public class Renderer {
           gameItem.getRotation(),
           gameItem.getScale());
       shaderProgram.setUniform(ShaderUniform.MODEL_MATRIX, modelMatrix);
-      gameItem.getMesh().render();
+      gameItem.getTexturedMesh().render();
     });
 
     shaderProgram.unbind();

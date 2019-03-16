@@ -27,7 +27,7 @@ import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 import com.shepherdjerred.capstone.engine.engine.graphics.texture.Texture;
 import org.lwjgl.system.MemoryStack;
 
-public class Mesh {
+public class TexturedMesh {
 
   private final int indicesLength;
   private final int glVaoId;
@@ -35,11 +35,13 @@ public class Mesh {
   private final int glTextureCoordinatesVboId;
   private final int glIndicesVboId;
   private final Texture texture;
+  private boolean isRenderable;
 
-  public Mesh(float[] vertices, float[] textureCoordinates, int[] indices, Texture texture) {
+  public TexturedMesh(float[] vertices, float[] textureCoordinates, int[] indices, Texture texture) {
 //    Preconditions.checkArgument(vertices.length == 3);
 //    Preconditions.checkArgument(textureCoordinates.length == 2);
 
+    this.isRenderable = false;
     this.texture = texture;
     this.indicesLength = indices.length;
 
@@ -72,6 +74,7 @@ public class Mesh {
 
     unbindVertexArray();
     unbindBuffer();
+    this.isRenderable = true;
   }
 
   private void bindVertexArray() {
@@ -90,7 +93,14 @@ public class Mesh {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, glIndicesVboId);
   }
 
+  /**
+   * Draws this object.
+   */
   public void render() {
+    if (!isRenderable) {
+      throw new IllegalStateException();
+    }
+
     // Activate first texture bank
     glActiveTexture(GL_TEXTURE0);
 
@@ -107,7 +117,11 @@ public class Mesh {
     unbindVertexArray();
   }
 
+  /**
+   * Cleans up OpenGL resources.
+   */
   public void cleanup() {
+    isRenderable = false;
     glDisableVertexAttribArray(0);
     glDisableVertexAttribArray(1);
 
