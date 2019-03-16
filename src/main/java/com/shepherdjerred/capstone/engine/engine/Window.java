@@ -4,11 +4,13 @@ import static org.lwjgl.glfw.GLFW.GLFW_CONTEXT_VERSION_MAJOR;
 import static org.lwjgl.glfw.GLFW.GLFW_CONTEXT_VERSION_MINOR;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_ESCAPE;
 import static org.lwjgl.glfw.GLFW.GLFW_OPENGL_CORE_PROFILE;
+import static org.lwjgl.glfw.GLFW.GLFW_OPENGL_DEBUG_CONTEXT;
 import static org.lwjgl.glfw.GLFW.GLFW_OPENGL_FORWARD_COMPAT;
 import static org.lwjgl.glfw.GLFW.GLFW_OPENGL_PROFILE;
 import static org.lwjgl.glfw.GLFW.GLFW_PRESS;
 import static org.lwjgl.glfw.GLFW.GLFW_RELEASE;
 import static org.lwjgl.glfw.GLFW.GLFW_RESIZABLE;
+import static org.lwjgl.glfw.GLFW.GLFW_TRUE;
 import static org.lwjgl.glfw.GLFW.GLFW_VISIBLE;
 import static org.lwjgl.glfw.GLFW.glfwCreateWindow;
 import static org.lwjgl.glfw.GLFW.glfwDefaultWindowHints;
@@ -18,6 +20,7 @@ import static org.lwjgl.glfw.GLFW.glfwGetVideoMode;
 import static org.lwjgl.glfw.GLFW.glfwInit;
 import static org.lwjgl.glfw.GLFW.glfwMakeContextCurrent;
 import static org.lwjgl.glfw.GLFW.glfwPollEvents;
+import static org.lwjgl.glfw.GLFW.glfwSetErrorCallback;
 import static org.lwjgl.glfw.GLFW.glfwSetFramebufferSizeCallback;
 import static org.lwjgl.glfw.GLFW.glfwSetKeyCallback;
 import static org.lwjgl.glfw.GLFW.glfwSetWindowPos;
@@ -41,6 +44,7 @@ import lombok.extern.log4j.Log4j2;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
+import org.lwjgl.opengl.GLUtil;
 
 @Log4j2
 public class Window {
@@ -69,14 +73,14 @@ public class Window {
   }
 
   public void init() {
-    // Setup an error callback. The default implementation
-    // will print the error message in System.err.
-    GLFWErrorCallback.createPrint(System.err).set();
-
     // Initialize GLFW. Most GLFW functions will not work before doing this.
     if (!glfwInit()) {
       throw new IllegalStateException("Unable to initialize GLFW");
     }
+
+    glfwSetErrorCallback((error, description) -> log.error(
+        "GLFW error [" + Integer.toHexString(error) + "]: " + GLFWErrorCallback.getDescription(
+            description)));
 
     glfwDefaultWindowHints(); // optional, the current window hints are already the default
     glfwWindowHint(GLFW_VISIBLE, GL_FALSE); // the window will stay hidden after creation
@@ -85,6 +89,7 @@ public class Window {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+    glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
 
     // Create the window
     windowHandle = glfwCreateWindow(width, height, title, NULL, NULL);
@@ -127,6 +132,8 @@ public class Window {
     glfwShowWindow(windowHandle);
 
     GL.createCapabilities();
+    GLUtil.setupDebugMessageCallback(System.out);
+    GLUtil.setupDebugMessageCallback();
 
     if (isWireframe) {
       glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);

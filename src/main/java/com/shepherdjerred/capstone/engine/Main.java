@@ -21,6 +21,7 @@ public class Main {
   }
 
   private static void init() {
+//    Configuration.DEBUG.set(true);
     var settings = getSettings();
     GameLogic logic = new CastleCastersGame();
     GameEngine engine = new GameEngine(logic, settings);
