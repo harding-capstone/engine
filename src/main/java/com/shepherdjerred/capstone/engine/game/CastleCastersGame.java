@@ -160,19 +160,15 @@ public class CastleCastersGame implements GameLogic {
   @Override
   public void init(Window window) throws Exception {
     renderer.init(window);
-//    gameItems.add(createTexturedSquare());
-
-    gameItems.add(createFromTexturedSheet());
-
-    var wall = createWall();
-//    gameItems.add(wall);
-
-    var wizard = createWizard();
-//    gameItems.add(wizard);
-
-    var offsetSquare = createTexturedSquare();
-    offsetSquare.setPosition(new Coordinate(200, 200, 0));
-//    gameItems.add(offsetSquare);
+    var width = window.getWidth();
+    var height = window.getHeight();
+    for (int i = width; i > 0; i -= 32) {
+      for (int j = height; j > 0; j -= 32) {
+        var tile = createFromTexturedSheet();
+        tile.setPosition(new Coordinate((float) i, (float) j));
+        gameItems.add(tile);
+      }
+    }
   }
 
   @Override

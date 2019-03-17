@@ -17,7 +17,6 @@ import static org.lwjgl.opengl.GL15.glBindBuffer;
 import static org.lwjgl.opengl.GL15.glBufferData;
 import static org.lwjgl.opengl.GL15.glDeleteBuffers;
 import static org.lwjgl.opengl.GL15.glGenBuffers;
-import static org.lwjgl.opengl.GL20.glDisableVertexAttribArray;
 import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
 import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
 import static org.lwjgl.opengl.GL30.glBindVertexArray;
@@ -27,7 +26,13 @@ import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 import com.shepherdjerred.capstone.engine.engine.graphics.texture.Texture;
 import org.lwjgl.system.MemoryStack;
 
+/**
+ * A 3D object that is drawable and has a texture.
+ */
 public class TexturedMesh {
+
+  private static final int VERTICES_BUFFER_INDEX = 0;
+  private static final int TEXTURE_COORDINATES_BUFFER_INDEX = 1;
 
   private final int indicesLength;
   private final int glVaoId;
@@ -37,7 +42,10 @@ public class TexturedMesh {
   private final Texture texture;
   private boolean isRenderable;
 
-  public TexturedMesh(float[] vertices, float[] textureCoordinates, int[] indices, Texture texture) {
+  public TexturedMesh(float[] vertices,
+      float[] textureCoordinates,
+      int[] indices,
+      Texture texture) {
 //    Preconditions.checkArgument(vertices.length == 3);
 //    Preconditions.checkArgument(textureCoordinates.length == 2);
 
@@ -58,13 +66,15 @@ public class TexturedMesh {
       verticesBuffer.put(vertices).flip();
       bindGlPositionsVbo();
       glBufferData(GL_ARRAY_BUFFER, verticesBuffer, GL_STATIC_DRAW);
-      glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0);
+      glVertexAttribPointer(VERTICES_BUFFER_INDEX, 3, GL_FLOAT, false, 0, 0);
+      glEnableVertexAttribArray(VERTICES_BUFFER_INDEX);
 
       var textureCoordinatesBuffer = stack.mallocFloat(textureCoordinates.length);
       bindGlTextureCoordinatesVbo();
       textureCoordinatesBuffer.put(textureCoordinates).flip();
       glBufferData(GL_ARRAY_BUFFER, textureCoordinatesBuffer, GL_STATIC_DRAW);
-      glVertexAttribPointer(1, 2, GL_FLOAT, false, 0, 0);
+      glVertexAttribPointer(TEXTURE_COORDINATES_BUFFER_INDEX, 2, GL_FLOAT, false, 0, 0);
+      glEnableVertexAttribArray(TEXTURE_COORDINATES_BUFFER_INDEX);
 
       var indicesBuffer = stack.mallocInt(indices.length);
       indicesBuffer.put(indices).flip();
@@ -104,16 +114,8 @@ public class TexturedMesh {
     // Activate first texture bank
     glActiveTexture(GL_TEXTURE0);
 
-    // Bind to the VAO
     glBindVertexArray(glVaoId);
-    glEnableVertexAttribArray(0);
-    glEnableVertexAttribArray(1);
-
     glDrawElements(GL_TRIANGLES, indicesLength, GL_UNSIGNED_INT, 0);
-
-    // Restore state
-    glDisableVertexAttribArray(0);
-    glDisableVertexAttribArray(1);
     unbindVertexArray();
   }
 
@@ -122,8 +124,6 @@ public class TexturedMesh {
    */
   public void cleanup() {
     isRenderable = false;
-    glDisableVertexAttribArray(0);
-    glDisableVertexAttribArray(1);
 
     unbindBuffer();
     glDeleteBuffers(glPositionsVboId);

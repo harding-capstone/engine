@@ -44,7 +44,7 @@ import lombok.extern.log4j.Log4j2;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
-import org.lwjgl.opengl.GLUtil;
+import org.lwjgl.system.Configuration;
 
 @Log4j2
 public class Window {
@@ -73,6 +73,8 @@ public class Window {
   }
 
   public void init() {
+    Configuration.DEBUG.set(true);
+
     // Initialize GLFW. Most GLFW functions will not work before doing this.
     if (!glfwInit()) {
       throw new IllegalStateException("Unable to initialize GLFW");
@@ -132,8 +134,7 @@ public class Window {
     glfwShowWindow(windowHandle);
 
     GL.createCapabilities();
-    GLUtil.setupDebugMessageCallback(System.out);
-    GLUtil.setupDebugMessageCallback();
+//    GLUtil.setupDebugMessageCallback();
 
     if (isWireframe) {
       glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
