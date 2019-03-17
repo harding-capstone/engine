@@ -23,6 +23,7 @@ import static org.lwjgl.opengl.GL30.glBindVertexArray;
 import static org.lwjgl.opengl.GL30.glDeleteVertexArrays;
 import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 
+import com.google.common.base.Preconditions;
 import com.shepherdjerred.capstone.engine.engine.graphics.texture.Texture;
 import org.lwjgl.system.MemoryStack;
 
@@ -46,8 +47,9 @@ public class TexturedMesh {
       float[] textureCoordinates,
       int[] indices,
       Texture texture) {
-//    Preconditions.checkArgument(vertices.length == 3);
-//    Preconditions.checkArgument(textureCoordinates.length == 2);
+    Preconditions.checkArgument(indices.length % 3 == 0);
+    Preconditions.checkArgument(textureCoordinates.length % 2 == 0);
+    Preconditions.checkArgument(indices.length / 3 == textureCoordinates.length / 6);
 
     this.isRenderable = false;
     this.texture = texture;
