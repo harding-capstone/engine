@@ -132,8 +132,6 @@ public class TexturedMesh {
     glDeleteBuffers(glTextureCoordinatesVboId);
     glDeleteBuffers(glIndicesVboId);
 
-    texture.cleanup();
-
     unbindVertexArray();
     glDeleteVertexArrays(glVaoId);
   }

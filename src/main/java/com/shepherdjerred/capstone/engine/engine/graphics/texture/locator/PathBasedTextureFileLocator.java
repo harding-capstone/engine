@@ -22,7 +22,6 @@ public class PathBasedTextureFileLocator implements TextureFileLocator {
   private void initializeMap() {
     fileHashMap.put(TextureName.FROST_WALL, "wall_frost.png");
     fileHashMap.put(TextureName.FIRE_WIZARD_FRONT, "front_fire.png");
-    fileHashMap.put(TextureName.GRASS, "grass.png");
     fileHashMap.put(TextureName.TERRAIN, "terrain.png");
   }
 

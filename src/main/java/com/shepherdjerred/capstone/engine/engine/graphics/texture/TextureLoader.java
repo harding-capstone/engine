@@ -7,6 +7,7 @@ import static org.lwjgl.opengl.GL11.GL_TEXTURE_MIN_FILTER;
 import static org.lwjgl.opengl.GL11.GL_UNPACK_ALIGNMENT;
 import static org.lwjgl.opengl.GL11.GL_UNSIGNED_BYTE;
 import static org.lwjgl.opengl.GL11.glBindTexture;
+import static org.lwjgl.opengl.GL11.glDeleteTextures;
 import static org.lwjgl.opengl.GL11.glGenTextures;
 import static org.lwjgl.opengl.GL11.glPixelStorei;
 import static org.lwjgl.opengl.GL11.glTexImage2D;
@@ -19,7 +20,8 @@ import static org.lwjgl.stb.STBImage.stbi_load;
 import com.shepherdjerred.capstone.engine.engine.graphics.texture.locator.TextureFileLocator;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
-import lombok.AllArgsConstructor;
+import java.util.HashMap;
+import java.util.Map;
 import lombok.ToString;
 import org.lwjgl.system.MemoryStack;
 
@@ -27,10 +29,15 @@ import org.lwjgl.system.MemoryStack;
  * Loads a texture.
  */
 @ToString
-@AllArgsConstructor
 public class TextureLoader {
 
   private final TextureFileLocator textureFileLocator;
+  private final Map<TextureName, Texture> textureMap;
+
+  public TextureLoader(TextureFileLocator textureFileLocator) {
+    this.textureFileLocator = textureFileLocator;
+    textureMap = new HashMap<>();
+  }
 
   /**
    * Loads a texture from disk into memory.
@@ -96,5 +103,9 @@ public class TextureLoader {
     glBindTexture(GL_TEXTURE_2D, 0);
 
     return openGlTextureId;
+  }
+
+  public void cleanup(TextureName textureName) {
+    glDeleteTextures(textureMap.get(textureName).getOpenGlTextureId());
   }
 }

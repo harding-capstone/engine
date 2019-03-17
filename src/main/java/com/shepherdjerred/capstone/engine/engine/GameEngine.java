@@ -57,7 +57,7 @@ public class GameEngine implements Runnable {
     gameLogic.init(window);
   }
 
-  private void gameLoop() {
+  private void gameLoop() throws Exception {
     float elapsedTime;
     float accumulator = 0f;
     float updateInterval = 1f / targetUpdatesPerSecond;
@@ -102,7 +102,7 @@ public class GameEngine implements Runnable {
     gameLogic.updateGameState(interval);
   }
 
-  private void render() {
+  private void render() throws Exception {
     gameLogic.render(window);
     window.update();
   }
