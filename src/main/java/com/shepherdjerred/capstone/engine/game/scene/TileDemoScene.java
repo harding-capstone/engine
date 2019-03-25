@@ -5,6 +5,7 @@ import static org.lwjgl.glfw.GLFW.GLFW_KEY_DOWN;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_LEFT;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_Q;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_RIGHT;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_T;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_UP;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_W;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_X;
@@ -14,8 +15,8 @@ import static org.lwjgl.opengl.GL11.GL_FRONT_AND_BACK;
 import static org.lwjgl.opengl.GL11.GL_LINE;
 import static org.lwjgl.opengl.GL11.glPolygonMode;
 
-import com.shepherdjerred.capstone.engine.engine.GameItem;
 import com.shepherdjerred.capstone.engine.engine.Mouse;
+import com.shepherdjerred.capstone.engine.engine.RenderedElement;
 import com.shepherdjerred.capstone.engine.engine.Window;
 import com.shepherdjerred.capstone.engine.engine.graphics.Coordinate;
 import com.shepherdjerred.capstone.engine.engine.graphics.TexturedMesh;
@@ -31,13 +32,15 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class TileDemoScene implements Scene {
 
+  private Optional<Scene> nextScene;
   private final Renderer renderer;
-  private List<GameItem> gameItems;
+  private List<RenderedElement> renderedElements;
   private TextureLoader textureLoader;
 
   public TileDemoScene() {
+    nextScene = Optional.empty();
     renderer = new Renderer();
-    gameItems = new ArrayList<>();
+    renderedElements = new ArrayList<>();
     var textureLocator = new PathBasedTextureFileLocator(
         "/Users/jerred/IdeaProjects/capstone/engine/src/main/resources/textures/");
     textureLoader = new TextureLoader(textureLocator);
@@ -57,7 +60,7 @@ public class TileDemoScene implements Scene {
       for (int j = height; j > 0; j -= 32) {
         var tile = createFromTexturedSheet();
         tile.setPosition(new Coordinate((float) i, (float) j));
-        gameItems.add(tile);
+        renderedElements.add(tile);
       }
     }
   }
@@ -82,27 +85,30 @@ public class TileDemoScene implements Scene {
         newItem.setPosition(new Coordinate((float) mouse.getCurrentPos().x,
             (float) mouse.getCurrentPos().y,
             0));
-        gameItems.add(newItem);
+        renderedElements.add(newItem);
       } catch (Exception e) {
         e.printStackTrace();
       }
     }
 
     if (mouse.isRightButtonPressed()) {
-      var newGameItems = new ArrayList<>(gameItems);
-      for (GameItem gameItem : gameItems) {
+      var newGameItems = new ArrayList<>(renderedElements);
+      for (RenderedElement renderedElement : renderedElements) {
         var mouseX = mouse.getCurrentPos().x;
         var mouseY = mouse.getCurrentPos().y;
-        var itemX = gameItem.getPosition().getX();
-        var itemY = gameItem.getPosition().getY();
+        var itemX = renderedElement.getPosition().getX();
+        var itemY = renderedElement.getPosition().getY();
         if (Math.abs(itemX - mouseX) < 10 && Math.abs(itemY - mouseY) < 10) {
-          newGameItems.remove(gameItem);
-          gameItem.getTexturedMesh().cleanup();
+          newGameItems.remove(renderedElement);
+          renderedElement.getTexturedMesh().cleanup();
         }
       }
-      gameItems = newGameItems;
+      renderedElements = newGameItems;
     }
 
+    if (window.isKeyPressed(GLFW_KEY_T)) {
+      nextScene = Optional.of(new MainMenuScene());
+    }
     if (window.isKeyPressed(GLFW_KEY_UP)) {
       translateY += -1;
     }
@@ -136,45 +142,45 @@ public class TileDemoScene implements Scene {
 
   @Override
   public void updateState(float interval) {
-    for (GameItem gameItem : gameItems) {
+    for (RenderedElement renderedElement : renderedElements) {
       // Update position
-      var itemPos = gameItem.getPosition();
+      var itemPos = renderedElement.getPosition();
       float posx = itemPos.getX() + translateX * 9;
       float posy = itemPos.getY() + translateY * 9;
-      gameItem.setPosition(new Coordinate(posx, posy, itemPos.getZ()));
+      renderedElement.setPosition(new Coordinate(posx, posy, itemPos.getZ()));
 
       // Update scale
-      float scale = gameItem.getScale();
+      float scale = renderedElement.getScale();
       scale += this.scale * 0.5f;
       if (scale < 0) {
         scale = 0;
       }
-      gameItem.setScale(scale);
+      renderedElement.setScale(scale);
 
       // Update rotation angle
-      float rotation = gameItem.getRotation() + rotate;
+      float rotation = renderedElement.getRotation() + rotate;
       if (rotation > 360) {
         rotation = 0;
       }
-      gameItem.setRotation(rotation);
+      renderedElement.setRotation(rotation);
     }
 
   }
 
   @Override
   public void render(Window window) {
-    renderer.render(window, gameItems);
+    renderer.render(window, renderedElements);
   }
 
   @Override
   public void cleanup() {
     renderer.cleanup();
-    gameItems.forEach(gameItem -> gameItem.getTexturedMesh().cleanup());
+    renderedElements.forEach(renderedElement -> renderedElement.getTexturedMesh().cleanup());
   }
 
   @Override
   public Optional<Scene> transition() {
-    return Optional.empty();
+    return nextScene;
   }
 
 
@@ -194,7 +200,7 @@ public class TileDemoScene implements Scene {
     };
   }
 
-  private GameItem createFromTexturedSheet() {
+  private RenderedElement createFromTexturedSheet() {
     var texture = textureLoader.loadTexture(TextureName.TERRAIN);
     var textureSheet = new TextureSheet(texture, 16);
 
@@ -209,6 +215,6 @@ public class TileDemoScene implements Scene {
     var ind = getDefaultInd();
 
     var mesh = new TexturedMesh(pos, texCoords.asFloatArray(), ind, texture);
-    return new GameItem(mesh);
+    return new RenderedElement(mesh);
   }
 }

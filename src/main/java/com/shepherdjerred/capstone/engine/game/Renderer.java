@@ -10,7 +10,7 @@ import static org.lwjgl.opengl.GL11.glEnable;
 import static org.lwjgl.opengl.GL11.glViewport;
 import static org.lwjgl.opengl.GL11C.GL_SRC_ALPHA;
 
-import com.shepherdjerred.capstone.engine.engine.GameItem;
+import com.shepherdjerred.capstone.engine.engine.RenderedElement;
 import com.shepherdjerred.capstone.engine.engine.Window;
 import com.shepherdjerred.capstone.engine.engine.graphics.shader.ClasspathShaderCodeLoader;
 import com.shepherdjerred.capstone.engine.engine.graphics.shader.ShaderProgram;
@@ -43,7 +43,7 @@ public class Renderer {
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   }
 
-  public void render(Window window, List<GameItem> gameItems) {
+  public void render(Window window, List<RenderedElement> renderedElements) {
     clear();
 
     if (window.isResized()) {
@@ -59,12 +59,12 @@ public class Renderer {
     shaderProgram.setUniform(ShaderUniform.PROJECTION_MATRIX,
         matrices.getProjectionMatrix(width, height));
 
-    gameItems.forEach(gameItem -> {
-      var modelMatrix = matrices.getModelMatrix(gameItem.getPosition(),
-          gameItem.getRotation(),
-          gameItem.getScale());
+    renderedElements.forEach(renderedElement -> {
+      var modelMatrix = matrices.getModelMatrix(renderedElement.getPosition(),
+          renderedElement.getRotation(),
+          renderedElement.getScale());
       shaderProgram.setUniform(ShaderUniform.MODEL_MATRIX, modelMatrix);
-      gameItem.getTexturedMesh().render();
+      renderedElement.getTexturedMesh().render();
     });
 
     shaderProgram.unbind();

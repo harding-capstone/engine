@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @Getter
 @RequiredArgsConstructor
-public class GameItem {
+public class RenderedElement {
 
   private final TexturedMesh texturedMesh;
   private float scale = 1;
