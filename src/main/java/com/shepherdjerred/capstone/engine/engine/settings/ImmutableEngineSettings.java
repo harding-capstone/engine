@@ -1,4 +1,4 @@
-package com.shepherdjerred.capstone.engine.settings;
+package com.shepherdjerred.capstone.engine.engine.settings;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,5 +11,4 @@ public class ImmutableEngineSettings implements EngineSettings {
   private final int windowWidth;
   private final int windowHeight;
   private final boolean isVsyncEnabled;
-  private final boolean isWireframeEnabled;
 }

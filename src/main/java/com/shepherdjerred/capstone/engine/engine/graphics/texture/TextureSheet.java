@@ -1,6 +1,6 @@
 package com.shepherdjerred.capstone.engine.engine.graphics.texture;
 
-import com.shepherdjerred.capstone.engine.engine.graphics.Coordinate;
+import com.shepherdjerred.capstone.engine.engine.graphics.RendererCoordinate;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 
@@ -21,12 +21,12 @@ public class TextureSheet {
     numberOfVerticalTextures = texture.getHeight() / individualTextureResolution;
   }
 
-  public TextureSheetCoordinates getCoordinatesForTexture(Coordinate coordinate) {
+  public TextureSheetCoordinates getCoordinatesForTexture(RendererCoordinate rendererCoordinate) {
     var textureWidth = texture.getWidth();
     var textureHeight = texture.getHeight();
 
-    var x = coordinate.getX();
-    var y = coordinate.getY();
+    var x = rendererCoordinate.getX();
+    var y = rendererCoordinate.getY();
 
     float rawMinX = x * individualTextureResolution;
     float rawMaxX = x * individualTextureResolution + individualTextureResolution;

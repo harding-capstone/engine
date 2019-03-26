@@ -1,6 +1,6 @@
 package com.shepherdjerred.capstone.engine.engine.graphics.texture;
 
-import com.shepherdjerred.capstone.engine.engine.graphics.Coordinate;
+import com.shepherdjerred.capstone.engine.engine.graphics.RendererCoordinate;
 import lombok.Getter;
 import lombok.ToString;
 
@@ -12,20 +12,20 @@ public class TextureSheetCoordinates {
   private final float maxX;
   private final float minY;
   private final float maxY;
-  private final Coordinate topLeft;
-  private final Coordinate topRight;
-  private final Coordinate bottomLeft;
-  private final Coordinate bottomRight;
+  private final RendererCoordinate topLeft;
+  private final RendererCoordinate topRight;
+  private final RendererCoordinate bottomLeft;
+  private final RendererCoordinate bottomRight;
 
   public TextureSheetCoordinates(float minX, float maxX, float minY, float maxY) {
     this.minX = minX;
     this.maxX = maxX;
     this.minY = minY;
     this.maxY = maxY;
-    this.topLeft = new Coordinate(minX, minY);
-    this.topRight = new Coordinate(maxX, minY);
-    this.bottomLeft = new Coordinate(minX, maxY);
-    this.bottomRight = new Coordinate(maxX, maxY);
+    this.topLeft = new RendererCoordinate(minX, minY);
+    this.topRight = new RendererCoordinate(maxX, minY);
+    this.bottomLeft = new RendererCoordinate(minX, maxY);
+    this.bottomRight = new RendererCoordinate(maxX, maxY);
   }
 
   // TODO better name

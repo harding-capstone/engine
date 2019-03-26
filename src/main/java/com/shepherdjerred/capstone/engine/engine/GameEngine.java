@@ -1,6 +1,10 @@
 package com.shepherdjerred.capstone.engine.engine;
 
-import com.shepherdjerred.capstone.engine.settings.EngineSettings;
+import com.shepherdjerred.capstone.engine.engine.input.Mouse;
+import com.shepherdjerred.capstone.engine.engine.settings.EngineSettings;
+import com.shepherdjerred.capstone.engine.engine.window.Window;
+import com.shepherdjerred.capstone.events.Event;
+import com.shepherdjerred.capstone.events.EventBus;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
@@ -13,14 +17,16 @@ public class GameEngine implements Runnable {
   private final Timer timer;
   private final GameLogic gameLogic;
   private final Mouse mouse;
+  private final EventBus<Event> eventBus;
 
-  public GameEngine(GameLogic gameLogic, EngineSettings engineSettings) {
+  public GameEngine(GameLogic gameLogic, EngineSettings engineSettings, EventBus<Event> eventBus) {
     gameLoopThread = new Thread(this, "GAME_LOOP_THREAD");
-    window = new Window(engineSettings.getWindowTitle(),
+    window = new Window(eventBus,
+        engineSettings.getWindowTitle(),
         engineSettings.getWindowWidth(),
         engineSettings.getWindowHeight(),
-        engineSettings.isVsyncEnabled(),
-        engineSettings.isWireframeEnabled());
+        engineSettings.isVsyncEnabled());
+    this.eventBus = eventBus;
     this.gameLogic = gameLogic;
     timer = new Timer();
     mouse = new Mouse();
@@ -42,7 +48,7 @@ public class GameEngine implements Runnable {
   public void run() {
     try {
       initialize();
-      gameLoop();
+      runGameLoop();
     } catch (Exception e) {
       log.catching(e);
     } finally {
@@ -54,16 +60,16 @@ public class GameEngine implements Runnable {
     window.init();
     timer.init();
     mouse.init(window);
-    gameLogic.init(window);
+    gameLogic.initialize(window.getWindowSize());
   }
 
-  private void gameLoop() throws Exception {
+  private void runGameLoop() throws Exception {
     float elapsedTime;
     float accumulator = 0f;
     float updateInterval = 1f / targetUpdatesPerSecond;
 
     boolean isRunning = true;
-    while (isRunning && !window.windowShouldClose()) {
+    while (isRunning && !window.shouldWindowClose()) {
       elapsedTime = timer.getElapsedTime();
       accumulator += elapsedTime;
 
@@ -103,7 +109,7 @@ public class GameEngine implements Runnable {
   }
 
   private void render() throws Exception {
-    gameLogic.render(window);
+    gameLogic.render();
     window.update();
   }
 

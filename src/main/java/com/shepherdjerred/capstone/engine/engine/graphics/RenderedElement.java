@@ -1,7 +1,5 @@
-package com.shepherdjerred.capstone.engine.engine;
+package com.shepherdjerred.capstone.engine.engine.graphics;
 
-import com.shepherdjerred.capstone.engine.engine.graphics.Coordinate;
-import com.shepherdjerred.capstone.engine.engine.graphics.TexturedMesh;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -14,5 +12,5 @@ public class RenderedElement {
   private final TexturedMesh texturedMesh;
   private float scale = 1;
   private float rotation = 0;
-  private Coordinate position = new Coordinate(0, 0, 0);
+  private RendererCoordinate position = new RendererCoordinate(0, 0, 0);
 }

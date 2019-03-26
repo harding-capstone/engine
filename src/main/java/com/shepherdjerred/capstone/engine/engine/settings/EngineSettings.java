@@ -1,4 +1,4 @@
-package com.shepherdjerred.capstone.engine.settings;
+package com.shepherdjerred.capstone.engine.engine.settings;
 
 public interface EngineSettings {
 
@@ -9,6 +9,4 @@ public interface EngineSettings {
   boolean isVsyncEnabled();
 
   String getWindowTitle();
-
-  boolean isWireframeEnabled();
 }

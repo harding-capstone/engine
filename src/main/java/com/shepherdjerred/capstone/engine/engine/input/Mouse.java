@@ -1,4 +1,4 @@
-package com.shepherdjerred.capstone.engine.engine;
+package com.shepherdjerred.capstone.engine.engine.input;
 
 import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_1;
 import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_2;
@@ -7,6 +7,7 @@ import static org.lwjgl.glfw.GLFW.glfwSetCursorEnterCallback;
 import static org.lwjgl.glfw.GLFW.glfwSetCursorPosCallback;
 import static org.lwjgl.glfw.GLFW.glfwSetMouseButtonCallback;
 
+import com.shepherdjerred.capstone.engine.engine.window.Window;
 import lombok.Getter;
 import org.joml.Vector2d;
 import org.joml.Vector2f;
