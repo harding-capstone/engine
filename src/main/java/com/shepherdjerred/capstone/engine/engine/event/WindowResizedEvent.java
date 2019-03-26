@@ -1,5 +1,6 @@
 package com.shepherdjerred.capstone.engine.engine.event;
 
+import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
 import com.shepherdjerred.capstone.events.Event;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,6 +11,5 @@ import lombok.ToString;
 @AllArgsConstructor
 public class WindowResizedEvent implements Event {
 
-  private final int newWidth;
-  private final int newHeight;
+  private final WindowSize newWindowSize;
 }

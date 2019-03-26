@@ -1,14 +1,11 @@
 package com.shepherdjerred.capstone.engine.game;
 
 import com.shepherdjerred.capstone.engine.engine.GameLogic;
-import com.shepherdjerred.capstone.engine.engine.graphics.matrices.ProjectionMatrix;
 import com.shepherdjerred.capstone.engine.engine.graphics.shader.ClasspathShaderCodeLoader;
 import com.shepherdjerred.capstone.engine.engine.graphics.shader.ShaderProgram;
 import com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureLoader;
 import com.shepherdjerred.capstone.engine.engine.graphics.texture.locator.PathBasedTextureFileLocator;
 import com.shepherdjerred.capstone.engine.engine.graphics.texture.locator.TextureFileLocator;
-import com.shepherdjerred.capstone.engine.engine.input.Mouse;
-import com.shepherdjerred.capstone.engine.engine.window.Window;
 import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
 import com.shepherdjerred.capstone.engine.game.rendering.MainMenuSceneRenderer;
 import com.shepherdjerred.capstone.engine.game.rendering.SceneRenderer;
@@ -39,18 +36,12 @@ public class CastleCastersGame implements GameLogic {
 
   @Override
   public void initialize(WindowSize windowSize) throws Exception {
-    var projectionMatrix = new ProjectionMatrix(windowSize);
-    sceneRenderer = new MainMenuSceneRenderer(new ShaderProgram(new ClasspathShaderCodeLoader(
-        "/shaders")),
-        projectionMatrix,
+    sceneRenderer = new MainMenuSceneRenderer(eventBus,
+        new ShaderProgram(new ClasspathShaderCodeLoader("/shaders")),
         windowSize,
         textureLoader);
 
     sceneRenderer.initialize(scene);
-  }
-
-  @Override
-  public void handleInput(Window window, Mouse mouse) {
   }
 
   @Override

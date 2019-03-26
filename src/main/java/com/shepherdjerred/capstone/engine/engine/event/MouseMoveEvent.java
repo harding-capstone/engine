@@ -1,6 +1,5 @@
 package com.shepherdjerred.capstone.engine.engine.event;
 
-import com.shepherdjerred.capstone.engine.engine.input.Mouse.Button;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
@@ -8,6 +7,8 @@ import lombok.ToString;
 @Getter
 @ToString
 @AllArgsConstructor
-public class MouseDownEvent implements InputEvent {
-  private final Button button;
+public class MouseMoveEvent implements InputEvent {
+
+  private final double x;
+  private final double y;
 }

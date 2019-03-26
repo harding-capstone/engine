@@ -8,6 +8,7 @@ import lombok.ToString;
 @Getter
 @ToString
 @AllArgsConstructor
-public class MouseDownEvent implements InputEvent {
+public class MouseUpEvent implements InputEvent {
+
   private final Button button;
 }

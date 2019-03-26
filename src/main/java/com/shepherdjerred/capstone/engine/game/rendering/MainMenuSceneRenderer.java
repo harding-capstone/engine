@@ -10,6 +10,7 @@ import static org.lwjgl.opengl.GL11.glClearColor;
 import static org.lwjgl.opengl.GL11.glEnable;
 import static org.lwjgl.opengl.GL11C.GL_SRC_ALPHA;
 
+import com.shepherdjerred.capstone.engine.engine.event.WindowResizedEvent;
 import com.shepherdjerred.capstone.engine.engine.graphics.RendererCoordinate;
 import com.shepherdjerred.capstone.engine.engine.graphics.matrices.ModelMatrix;
 import com.shepherdjerred.capstone.engine.engine.graphics.matrices.ProjectionMatrix;
@@ -21,15 +22,28 @@ import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
 import com.shepherdjerred.capstone.engine.game.scene.MainMenuScene;
 import com.shepherdjerred.capstone.engine.game.scene.element.ButtonRenderer;
 import com.shepherdjerred.capstone.engine.game.scene.element.ButtonSceneElement;
-import lombok.AllArgsConstructor;
+import com.shepherdjerred.capstone.events.Event;
+import com.shepherdjerred.capstone.events.EventBus;
+import com.shepherdjerred.capstone.events.handlers.EventHandler;
 
-@AllArgsConstructor
 public class MainMenuSceneRenderer implements SceneRenderer<MainMenuScene> {
 
+  private final EventBus<Event> eventBus;
   private ShaderProgram shaderProgram;
-  private ProjectionMatrix projectionMatrix;
   private WindowSize windowSize;
   private final TextureLoader textureLoader;
+  private ProjectionMatrix projectionMatrix;
+
+  public MainMenuSceneRenderer(EventBus<Event> eventBus,
+      ShaderProgram shaderProgram,
+      WindowSize windowSize,
+      TextureLoader textureLoader) {
+    this.eventBus = eventBus;
+    this.shaderProgram = shaderProgram;
+    this.windowSize = windowSize;
+    this.textureLoader = textureLoader;
+
+  }
 
   @Override
   public void render(MainMenuScene scene) {
@@ -58,6 +72,16 @@ public class MainMenuSceneRenderer implements SceneRenderer<MainMenuScene> {
     projectionMatrix = new ProjectionMatrix(windowSize);
     createShaderProgram();
     enableTransparency();
+  }
+
+  private void registerEventHandlers() {
+    var windowResizeEventHandler = new EventHandler<WindowResizedEvent>() {
+      @Override
+      public void handle(WindowResizedEvent windowResizedEvent) {
+        projectionMatrix = new ProjectionMatrix(windowResizedEvent.getNewWindowSize());
+      }
+    };
+    eventBus.registerHandler(WindowResizedEvent.class, windowResizeEventHandler);
   }
 
   private void createShaderProgram() throws Exception {
@@ -91,5 +115,9 @@ public class MainMenuSceneRenderer implements SceneRenderer<MainMenuScene> {
     if (shaderProgram != null) {
       shaderProgram.cleanup();
     }
+  }
+
+  private void deregisterEventHandlers() {
+
   }
 }

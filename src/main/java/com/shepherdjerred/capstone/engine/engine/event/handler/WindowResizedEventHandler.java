@@ -9,8 +9,8 @@ public class WindowResizedEventHandler implements EventHandler<WindowResizedEven
 
   @Override
   public void handle(WindowResizedEvent windowResizedEvent) {
-    var width = windowResizedEvent.getNewWidth();
-    var height = windowResizedEvent.getNewHeight();
+    var width = windowResizedEvent.getNewWindowSize().getWidth();
+    var height = windowResizedEvent.getNewWindowSize().getHeight();
     glViewport(0, 0, width, height);
   }
 }

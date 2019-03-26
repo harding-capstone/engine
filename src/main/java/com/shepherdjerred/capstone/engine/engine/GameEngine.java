@@ -1,8 +1,10 @@
 package com.shepherdjerred.capstone.engine.engine;
 
-import com.shepherdjerred.capstone.engine.engine.input.Mouse;
-import com.shepherdjerred.capstone.engine.engine.settings.EngineSettings;
-import com.shepherdjerred.capstone.engine.engine.window.Window;
+import com.shepherdjerred.capstone.engine.engine.event.WindowResizedEvent;
+import com.shepherdjerred.capstone.engine.engine.event.handler.WindowResizedEventHandler;
+import com.shepherdjerred.capstone.engine.engine.input.GlfwKeyConverter;
+import com.shepherdjerred.capstone.engine.engine.window.GlfwWindow;
+import com.shepherdjerred.capstone.engine.engine.window.WindowSettings;
 import com.shepherdjerred.capstone.events.Event;
 import com.shepherdjerred.capstone.events.EventBus;
 import lombok.extern.log4j.Log4j2;
@@ -10,26 +12,22 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class GameEngine implements Runnable {
 
-  private final int targetFramesPerSecond = 60;
-  private final int targetUpdatesPerSecond = 20;
-  private final Window window;
+  private static final int TARGET_FRAMES_PER_SECOND = 60;
+  private static final int TARGET_UPDATES_PER_SECOND = 20;
+
+  private final GameLogic gameLogic;
+  private final GlfwWindow window;
   private final Thread gameLoopThread;
   private final Timer timer;
-  private final GameLogic gameLogic;
-  private final Mouse mouse;
+
   private final EventBus<Event> eventBus;
 
-  public GameEngine(GameLogic gameLogic, EngineSettings engineSettings, EventBus<Event> eventBus) {
-    gameLoopThread = new Thread(this, "GAME_LOOP_THREAD");
-    window = new Window(eventBus,
-        engineSettings.getWindowTitle(),
-        engineSettings.getWindowWidth(),
-        engineSettings.getWindowHeight(),
-        engineSettings.isVsyncEnabled());
-    this.eventBus = eventBus;
+  public GameEngine(GameLogic gameLogic, WindowSettings windowSettings, EventBus<Event> eventBus) {
     this.gameLogic = gameLogic;
+    this.eventBus = eventBus;
+    gameLoopThread = new Thread(this, "GAME_LOOP_THREAD");
+    window = new GlfwWindow(windowSettings, new GlfwKeyConverter(), eventBus);
     timer = new Timer();
-    mouse = new Mouse();
   }
 
   public void start() {
@@ -57,19 +55,18 @@ public class GameEngine implements Runnable {
   }
 
   private void initialize() throws Exception {
-    window.init();
+    window.initialize();
     timer.init();
-    mouse.init(window);
-    gameLogic.initialize(window.getWindowSize());
+    gameLogic.initialize(window.getWindowSettings().getWindowSize());
+    registerEventHandlers();
   }
 
   private void runGameLoop() throws Exception {
     float elapsedTime;
     float accumulator = 0f;
-    float updateInterval = 1f / targetUpdatesPerSecond;
+    float updateInterval = 1f / TARGET_UPDATES_PER_SECOND;
 
-    boolean isRunning = true;
-    while (isRunning && !window.shouldWindowClose()) {
+    while (!window.shouldClose()) {
       elapsedTime = timer.getElapsedTime();
       accumulator += elapsedTime;
 
@@ -82,14 +79,14 @@ public class GameEngine implements Runnable {
 
       render();
 
-      if (!window.isVsyncEnabled()) {
+      if (!window.getWindowSettings().isVsyncEnabled()) {
         sync();
       }
     }
   }
 
   private void sync() {
-    float loopSlot = 1f / targetFramesPerSecond;
+    float loopSlot = 1f / TARGET_FRAMES_PER_SECOND;
     double endTime = timer.getLastLoopTime() + loopSlot;
     while (timer.getTime() < endTime) {
       try {
@@ -100,8 +97,6 @@ public class GameEngine implements Runnable {
   }
 
   private void handleInput() {
-    mouse.updatePosition();
-    gameLogic.handleInput(window, mouse);
   }
 
   private void updateGameState(float interval) {
@@ -110,10 +105,15 @@ public class GameEngine implements Runnable {
 
   private void render() throws Exception {
     gameLogic.render();
-    window.update();
+    window.swapBuffers();
+    window.pollEvents();
   }
 
   private void cleanup() {
     gameLogic.cleanup();
+  }
+
+  private void registerEventHandlers() {
+    eventBus.registerHandler(WindowResizedEvent.class, new WindowResizedEventHandler());
   }
 }
