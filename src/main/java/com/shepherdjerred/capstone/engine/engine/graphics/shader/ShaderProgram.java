@@ -23,6 +23,7 @@ import static org.lwjgl.opengl.GL20.glUniformMatrix4fv;
 import static org.lwjgl.opengl.GL20.glUseProgram;
 import static org.lwjgl.opengl.GL20.glValidateProgram;
 
+import com.shepherdjerred.capstone.engine.engine.graphics.shader.code.ShaderCodeLoader;
 import java.io.IOException;
 import java.nio.FloatBuffer;
 import java.util.HashMap;
@@ -34,7 +35,6 @@ import org.lwjgl.system.MemoryStack;
 @Log4j2
 public class ShaderProgram {
 
-
   private final ShaderCodeLoader shaderCodeLoader;
   private final Map<ShaderUniform, Integer> uniformIdMap;
   private final int shaderProgramId;
@@ -45,11 +45,10 @@ public class ShaderProgram {
     this.shaderCodeLoader = shaderCodeLoader;
     shaderProgramId = glCreateProgram();
     if (shaderProgramId == 0) {
-      throw new RuntimeException("Could not create Shader");
+      throw new RuntimeException("Could not create ShaderCode");
     }
     uniformIdMap = new HashMap<>();
   }
-
 
   public void createUniform(ShaderUniform uniform) {
     int uniformId = glGetUniformLocation(shaderProgramId, uniform.getName());
@@ -95,7 +94,7 @@ public class ShaderProgram {
 
     if (glGetShaderi(shaderId, GL_COMPILE_STATUS) == 0) {
       throw new RuntimeException(
-          "Error compiling Shader code: " + glGetShaderInfoLog(shaderId, 1024));
+          "Error compiling ShaderCode code: " + glGetShaderInfoLog(shaderId, 1024));
     }
 
     glAttachShader(shaderProgramId, shaderId);
@@ -107,7 +106,7 @@ public class ShaderProgram {
     glLinkProgram(shaderProgramId);
     if (glGetProgrami(shaderProgramId, GL_LINK_STATUS) == 0) {
       throw new RuntimeException(
-          "Error linking Shader code: " + glGetProgramInfoLog(shaderProgramId, 1024));
+          "Error linking ShaderCode code: " + glGetProgramInfoLog(shaderProgramId, 1024));
     }
 
     if (vertexShaderId != 0) {
@@ -119,7 +118,7 @@ public class ShaderProgram {
 
     glValidateProgram(shaderProgramId);
     if (glGetProgrami(shaderProgramId, GL_VALIDATE_STATUS) == 0) {
-      log.warn("Warning validating Shader code: " + glGetProgramInfoLog(shaderProgramId, 1024));
+      log.warn("Warning validating ShaderCode code: " + glGetProgramInfoLog(shaderProgramId, 1024));
     }
   }
 

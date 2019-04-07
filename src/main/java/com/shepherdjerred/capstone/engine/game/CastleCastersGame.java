@@ -1,14 +1,14 @@
 package com.shepherdjerred.capstone.engine.game;
 
 import com.shepherdjerred.capstone.engine.engine.GameLogic;
-import com.shepherdjerred.capstone.engine.engine.graphics.shader.ClasspathShaderCodeLoader;
+import com.shepherdjerred.capstone.engine.engine.graphics.shader.code.ClasspathFileShaderCodeLoader;
 import com.shepherdjerred.capstone.engine.engine.graphics.shader.ShaderProgram;
 import com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureLoader;
 import com.shepherdjerred.capstone.engine.engine.graphics.texture.locator.PathBasedTextureFileLocator;
 import com.shepherdjerred.capstone.engine.engine.graphics.texture.locator.TextureFileLocator;
 import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
-import com.shepherdjerred.capstone.engine.game.rendering.MainMenuSceneRenderer;
-import com.shepherdjerred.capstone.engine.game.rendering.SceneRenderer;
+import com.shepherdjerred.capstone.engine.game.scene.rendering.MainMenuSceneRenderer;
+import com.shepherdjerred.capstone.engine.game.scene.rendering.SceneRenderer;
 import com.shepherdjerred.capstone.engine.game.scene.MainMenuScene;
 import com.shepherdjerred.capstone.engine.game.scene.Scene;
 import com.shepherdjerred.capstone.events.Event;
@@ -38,7 +38,7 @@ public class CastleCastersGame implements GameLogic {
   @Override
   public void initialize(WindowSize windowSize) throws Exception {
     sceneRenderer = new MainMenuSceneRenderer(eventBus,
-        new ShaderProgram(new ClasspathShaderCodeLoader("/shaders")),
+        new ShaderProgram(new ClasspathFileShaderCodeLoader("/shaders")),
         windowSize,
         textureLoader);
 

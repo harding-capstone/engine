@@ -26,10 +26,11 @@ public class PathBasedTextureFileLocator implements TextureFileLocator {
     fileHashMap.put(FIRE_WIZARD_FRONT, "front_fire.png");
     fileHashMap.put(TERRAIN, "terrain.png");
     fileHashMap.put(MAIN_MENU_BUTTON, "ui/mainMenu_button_big.png");
+    fileHashMap.put(PURPLE_MOUNTAINS, "ui/purple mountains.png");
   }
 
   @Override
   public String getTexturePath(TextureName textureName) {
-    return basePath + fileHashMap.get(textureName);
+    return basePath + fileHashMap.getOrDefault(textureName, "unknown.png");
   }
 }

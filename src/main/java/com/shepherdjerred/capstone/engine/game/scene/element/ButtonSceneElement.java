@@ -13,11 +13,11 @@ public class ButtonSceneElement implements SceneElement, Clickable {
   private final SceneCoordinate position;
   private final int width;
   private final int height;
-  private final Runnable runnable;
+  private final Runnable onClick;
 
   @Override
   public void onClick() {
-    runnable.run();
+    onClick.run();
   }
 
   @Override

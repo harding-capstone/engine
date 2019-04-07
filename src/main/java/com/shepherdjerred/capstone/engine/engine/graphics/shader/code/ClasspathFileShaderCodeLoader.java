@@ -1,4 +1,4 @@
-package com.shepherdjerred.capstone.engine.engine.graphics.shader;
+package com.shepherdjerred.capstone.engine.engine.graphics.shader.code;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -10,7 +10,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 @ToString
 @AllArgsConstructor
-public class ClasspathShaderCodeLoader implements ShaderCodeLoader {
+public class ClasspathFileShaderCodeLoader implements ShaderCodeLoader {
 
   private final String basePath;
 

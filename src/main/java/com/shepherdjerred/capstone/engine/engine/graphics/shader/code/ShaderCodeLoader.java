@@ -1,4 +1,4 @@
-package com.shepherdjerred.capstone.engine.engine.graphics.shader;
+package com.shepherdjerred.capstone.engine.engine.graphics.shader.code;
 
 import java.io.IOException;
 

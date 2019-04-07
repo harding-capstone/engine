@@ -1,4 +1,4 @@
-package com.shepherdjerred.capstone.engine.game.rendering;
+package com.shepherdjerred.capstone.engine.game.scene.rendering;
 
 import static org.lwjgl.opengl.GL11.GL_BLEND;
 import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
@@ -14,18 +14,22 @@ import com.shepherdjerred.capstone.engine.engine.event.WindowResizeEvent;
 import com.shepherdjerred.capstone.engine.engine.graphics.RendererCoordinate;
 import com.shepherdjerred.capstone.engine.engine.graphics.matrices.ModelMatrix;
 import com.shepherdjerred.capstone.engine.engine.graphics.matrices.ProjectionMatrix;
-import com.shepherdjerred.capstone.engine.engine.graphics.shader.ClasspathShaderCodeLoader;
 import com.shepherdjerred.capstone.engine.engine.graphics.shader.ShaderProgram;
 import com.shepherdjerred.capstone.engine.engine.graphics.shader.ShaderUniform;
+import com.shepherdjerred.capstone.engine.engine.graphics.shader.code.ClasspathFileShaderCodeLoader;
 import com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureLoader;
 import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
 import com.shepherdjerred.capstone.engine.game.scene.MainMenuScene;
-import com.shepherdjerred.capstone.engine.game.scene.element.ButtonRenderer;
+import com.shepherdjerred.capstone.engine.game.scene.element.BackgroundSceneElement;
 import com.shepherdjerred.capstone.engine.game.scene.element.ButtonSceneElement;
+import com.shepherdjerred.capstone.engine.game.scene.element.rendering.BackgroundRenderer;
+import com.shepherdjerred.capstone.engine.game.scene.element.rendering.ButtonRenderer;
 import com.shepherdjerred.capstone.events.Event;
 import com.shepherdjerred.capstone.events.EventBus;
 import com.shepherdjerred.capstone.events.handlers.EventHandler;
+import lombok.extern.log4j.Log4j2;
 
+@Log4j2
 public class MainMenuSceneRenderer implements SceneRenderer<MainMenuScene> {
 
   private final EventBus<Event> eventBus;
@@ -56,12 +60,21 @@ public class MainMenuSceneRenderer implements SceneRenderer<MainMenuScene> {
     shaderProgram.setUniform(ShaderUniform.PROJECTION_MATRIX, projectionMatrix.getMatrix());
 
     var buttonRenderer = new ButtonRenderer(textureLoader);
+    var backgroundRenderer = new BackgroundRenderer(textureLoader);
 
     scene.getSceneElements().forEach(element -> {
-      buttonRenderer.init((ButtonSceneElement) element);
       var modelMatrix = new ModelMatrix(new RendererCoordinate(0, 0, 0), 0, 1);
       shaderProgram.setUniform(ShaderUniform.MODEL_MATRIX, modelMatrix.getMatrix());
-      buttonRenderer.render((ButtonSceneElement) element);
+      if (element instanceof ButtonSceneElement) {
+        buttonRenderer.init((ButtonSceneElement) element);
+        buttonRenderer.render((ButtonSceneElement) element);
+        buttonRenderer.cleanup();
+      }
+      if (element instanceof BackgroundSceneElement) {
+        backgroundRenderer.init((BackgroundSceneElement) element);
+        backgroundRenderer.render((BackgroundSceneElement) element);
+        backgroundRenderer.cleanup();
+      }
     });
 
     shaderProgram.unbind();
@@ -72,20 +85,21 @@ public class MainMenuSceneRenderer implements SceneRenderer<MainMenuScene> {
     projectionMatrix = new ProjectionMatrix(windowSize);
     createShaderProgram();
     enableTransparency();
+    registerEventHandlers();
   }
 
   private void registerEventHandlers() {
     var windowResizeEventHandler = new EventHandler<WindowResizeEvent>() {
       @Override
-      public void handle(WindowResizeEvent windowResizedEvent) {
-        projectionMatrix = new ProjectionMatrix(windowResizedEvent.getNewWindowSize());
+      public void handle(WindowResizeEvent windowResizeEvent) {
+        projectionMatrix = new ProjectionMatrix(windowResizeEvent.getNewWindowSize());
       }
     };
     eventBus.registerHandler(WindowResizeEvent.class, windowResizeEventHandler);
   }
 
   private void createShaderProgram() throws Exception {
-    var shaderLoader = new ClasspathShaderCodeLoader("/shaders/");
+    var shaderLoader = new ClasspathFileShaderCodeLoader("/shaders/");
     shaderProgram = new ShaderProgram(shaderLoader);
     shaderProgram.createVertexShader("vertex.glsl");
     shaderProgram.createFragmentShader("fragment.glsl");
@@ -115,6 +129,7 @@ public class MainMenuSceneRenderer implements SceneRenderer<MainMenuScene> {
     if (shaderProgram != null) {
       shaderProgram.cleanup();
     }
+    deregisterEventHandlers();
   }
 
   private void deregisterEventHandlers() {

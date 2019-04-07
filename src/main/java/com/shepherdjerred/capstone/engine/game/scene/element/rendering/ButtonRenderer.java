@@ -1,8 +1,9 @@
-package com.shepherdjerred.capstone.engine.game.scene.element;
+package com.shepherdjerred.capstone.engine.game.scene.element.rendering;
 
 import com.shepherdjerred.capstone.engine.engine.graphics.TexturedMesh;
 import com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureLoader;
 import com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName;
+import com.shepherdjerred.capstone.engine.game.scene.element.ButtonSceneElement;
 
 public class ButtonRenderer implements SceneElementRenderer<ButtonSceneElement> {
 

@@ -16,7 +16,7 @@ public class Main {
 
   public static void main(String[] args) {
     try {
-      init();
+      start();
     } catch (Exception e) {
       log.catching(e);
       log.error(e.getStackTrace());
@@ -24,7 +24,7 @@ public class Main {
     }
   }
 
-  private static void init() {
+  private static void start() throws Exception {
     createEventListeners();
     var settings = getSettings();
     var logic = new CastleCastersGame(eventBus);
