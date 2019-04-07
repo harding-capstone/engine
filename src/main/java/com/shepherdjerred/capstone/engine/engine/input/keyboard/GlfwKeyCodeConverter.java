@@ -1,6 +1,6 @@
-package com.shepherdjerred.capstone.engine.engine.input;
+package com.shepherdjerred.capstone.engine.engine.input.keyboard;
 
-import static com.shepherdjerred.capstone.engine.engine.input.Key.*;
+import static com.shepherdjerred.capstone.engine.engine.input.keyboard.Key.*;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_A;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_ESCAPE;
 

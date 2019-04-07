@@ -1,7 +1,6 @@
 package com.shepherdjerred.capstone.engine.game.scene;
 
 import com.shepherdjerred.capstone.engine.engine.event.MouseButtonDownEvent;
-import com.shepherdjerred.capstone.engine.engine.event.TestEvent;
 import com.shepherdjerred.capstone.engine.game.scene.element.ButtonSceneElement;
 import com.shepherdjerred.capstone.engine.game.scene.element.Clickable;
 import com.shepherdjerred.capstone.engine.game.scene.element.SceneElement;

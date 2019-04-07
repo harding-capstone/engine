@@ -1,4 +1,4 @@
-package com.shepherdjerred.capstone.engine.engine.input;
+package com.shepherdjerred.capstone.engine.engine.input.keyboard;
 
 /**
  * Keys on a keyboard
