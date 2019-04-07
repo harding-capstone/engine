@@ -49,7 +49,7 @@ public class TexturedMesh {
       Texture texture) {
     Preconditions.checkArgument(indices.length % 3 == 0);
     Preconditions.checkArgument(textureCoordinates.length % 2 == 0);
-    Preconditions.checkArgument(indices.length / 3 == textureCoordinates.length / 6);
+//    Preconditions.checkArgument(indices.length / 3 == textureCoordinates.length / 6);
 
     this.isRenderable = false;
     this.texture = texture;

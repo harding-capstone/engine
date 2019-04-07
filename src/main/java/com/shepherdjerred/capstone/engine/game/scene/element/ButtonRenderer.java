@@ -1,10 +1,8 @@
 package com.shepherdjerred.capstone.engine.game.scene.element;
 
-import com.shepherdjerred.capstone.engine.engine.graphics.RendererCoordinate;
 import com.shepherdjerred.capstone.engine.engine.graphics.TexturedMesh;
 import com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureLoader;
 import com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName;
-import com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureSheet;
 
 public class ButtonRenderer implements SceneElementRenderer<ButtonSceneElement> {
 
@@ -20,8 +18,7 @@ public class ButtonRenderer implements SceneElementRenderer<ButtonSceneElement> 
     var width = sceneElement.getWidth();
     var height = sceneElement.getHeight();
 
-    var texture = textureLoader.loadTexture(TextureName.TERRAIN);
-    var textureSheet = new TextureSheet(texture, 16);
+    var texture = textureLoader.loadTexture(TextureName.MAIN_MENU_BUTTON);
 
     var vertices = new float[] {
         0, 0, 0,
@@ -30,8 +27,12 @@ public class ButtonRenderer implements SceneElementRenderer<ButtonSceneElement> 
         width, height, 0
     };
 
-    var textureCoordinates = textureSheet.getCoordinatesForTexture(new RendererCoordinate(2, 2))
-        .asFloatArray();
+    var textureCoordinates = new float[] {
+        0, 0,
+        0, 1,
+        1, 0,
+        1, 1
+    };
 
     var indices = new int[] {
         0, 1, 2,

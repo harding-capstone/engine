@@ -25,6 +25,7 @@ import static org.lwjgl.glfw.GLFW.glfwSetFramebufferSizeCallback;
 import static org.lwjgl.glfw.GLFW.glfwSetKeyCallback;
 import static org.lwjgl.glfw.GLFW.glfwSetMouseButtonCallback;
 import static org.lwjgl.glfw.GLFW.glfwSetScrollCallback;
+import static org.lwjgl.glfw.GLFW.glfwSetWindowCloseCallback;
 import static org.lwjgl.glfw.GLFW.glfwSetWindowPos;
 import static org.lwjgl.glfw.GLFW.glfwShowWindow;
 import static org.lwjgl.glfw.GLFW.glfwSwapBuffers;
@@ -35,6 +36,7 @@ import static org.lwjgl.opengl.GL11.GL_FALSE;
 import static org.lwjgl.opengl.GL11.GL_TRUE;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
+import com.shepherdjerred.capstone.engine.engine.event.CloseApplicationEvent;
 import com.shepherdjerred.capstone.engine.engine.event.InputEvent;
 import com.shepherdjerred.capstone.engine.engine.event.KeyPressedEvent;
 import com.shepherdjerred.capstone.engine.engine.event.KeyReleasedEvent;
@@ -185,6 +187,9 @@ public class GlfwWindow implements Window {
 
     glfwSetScrollCallback(windowHandle, (windowHandle, xOffset, yOffset) ->
         eventBus.dispatch(new MouseScrollEvent((int) xOffset, (int) yOffset)));
+
+    glfwSetWindowCloseCallback(windowHandle,
+        (windowHandle) -> eventBus.dispatch(new CloseApplicationEvent()));
   }
 
   private void createWindow() {

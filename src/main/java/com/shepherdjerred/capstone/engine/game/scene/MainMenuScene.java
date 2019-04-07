@@ -24,7 +24,7 @@ public class MainMenuScene implements Scene {
     this.eventBus = eventBus;
     sceneElements = new ArrayList<>();
     sceneElements.add(new ButtonSceneElement(new SceneCoordinate(0, 0, 0),
-        300,
+        100,
         100,
         () -> eventBus.dispatch(new TestEvent("Testing button click"))));
   }
