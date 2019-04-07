@@ -18,11 +18,13 @@ import static org.lwjgl.glfw.GLFW.glfwGetVideoMode;
 import static org.lwjgl.glfw.GLFW.glfwInit;
 import static org.lwjgl.glfw.GLFW.glfwMakeContextCurrent;
 import static org.lwjgl.glfw.GLFW.glfwPollEvents;
+import static org.lwjgl.glfw.GLFW.glfwSetCursorEnterCallback;
 import static org.lwjgl.glfw.GLFW.glfwSetCursorPosCallback;
 import static org.lwjgl.glfw.GLFW.glfwSetErrorCallback;
 import static org.lwjgl.glfw.GLFW.glfwSetFramebufferSizeCallback;
 import static org.lwjgl.glfw.GLFW.glfwSetKeyCallback;
 import static org.lwjgl.glfw.GLFW.glfwSetMouseButtonCallback;
+import static org.lwjgl.glfw.GLFW.glfwSetScrollCallback;
 import static org.lwjgl.glfw.GLFW.glfwSetWindowPos;
 import static org.lwjgl.glfw.GLFW.glfwShowWindow;
 import static org.lwjgl.glfw.GLFW.glfwSwapBuffers;
@@ -38,7 +40,10 @@ import com.shepherdjerred.capstone.engine.engine.event.KeyPressedEvent;
 import com.shepherdjerred.capstone.engine.engine.event.KeyReleasedEvent;
 import com.shepherdjerred.capstone.engine.engine.event.MouseButtonDownEvent;
 import com.shepherdjerred.capstone.engine.engine.event.MouseButtonUpEvent;
+import com.shepherdjerred.capstone.engine.engine.event.MouseEnterEvent;
+import com.shepherdjerred.capstone.engine.engine.event.MouseLeaveEvent;
 import com.shepherdjerred.capstone.engine.engine.event.MouseMoveEvent;
+import com.shepherdjerred.capstone.engine.engine.event.MouseScrollEvent;
 import com.shepherdjerred.capstone.engine.engine.event.WindowResizeEvent;
 import com.shepherdjerred.capstone.engine.engine.input.GlfwKeyCodeConverter;
 import com.shepherdjerred.capstone.engine.engine.input.Key;
@@ -167,6 +172,19 @@ public class GlfwWindow implements Window {
         }
       }
     });
+
+    glfwSetCursorEnterCallback(windowHandle, (windowHandle, entered) -> {
+      Event event;
+      if (entered) {
+        event = new MouseEnterEvent();
+      } else {
+        event = new MouseLeaveEvent();
+      }
+      eventBus.dispatch(event);
+    });
+
+    glfwSetScrollCallback(windowHandle, (windowHandle, xOffset, yOffset) ->
+        eventBus.dispatch(new MouseScrollEvent((int) xOffset, (int) yOffset)));
   }
 
   private void createWindow() {
@@ -181,8 +199,7 @@ public class GlfwWindow implements Window {
 
     GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 
-    glfwSetWindowPos(
-        windowHandle,
+    glfwSetWindowPos(windowHandle,
         (vidmode.width() - windowSettings.getWindowSize().getWidth()) / 2,
         (vidmode.height() - windowSettings.getWindowSize().getHeight()) / 2
     );
