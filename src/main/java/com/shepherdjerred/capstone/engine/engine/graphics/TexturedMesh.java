@@ -61,7 +61,7 @@ public class TexturedMesh {
     glIndicesVboId = glGenBuffers();
 
     bindVertexArray();
-    glBindTexture(GL_TEXTURE_2D, texture.getOpenGlTextureId());
+    glBindTexture(GL_TEXTURE_2D, texture.getGlTextureId());
 
     try (var stack = MemoryStack.stackPush()) {
       var verticesBuffer = stack.mallocFloat(vertices.length);

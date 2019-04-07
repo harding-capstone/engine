@@ -2,8 +2,6 @@ package com.shepherdjerred.capstone.engine.engine.window;
 
 import static org.lwjgl.glfw.GLFW.GLFW_CONTEXT_VERSION_MAJOR;
 import static org.lwjgl.glfw.GLFW.GLFW_CONTEXT_VERSION_MINOR;
-import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
-import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_RIGHT;
 import static org.lwjgl.glfw.GLFW.GLFW_OPENGL_CORE_PROFILE;
 import static org.lwjgl.glfw.GLFW.GLFW_OPENGL_DEBUG_CONTEXT;
 import static org.lwjgl.glfw.GLFW.GLFW_OPENGL_FORWARD_COMPAT;
@@ -39,11 +37,12 @@ import com.shepherdjerred.capstone.engine.engine.event.InputEvent;
 import com.shepherdjerred.capstone.engine.engine.event.KeyPressedEvent;
 import com.shepherdjerred.capstone.engine.engine.event.KeyReleasedEvent;
 import com.shepherdjerred.capstone.engine.engine.event.MouseButtonDownEvent;
-import com.shepherdjerred.capstone.engine.engine.event.MouseMoveEvent;
 import com.shepherdjerred.capstone.engine.engine.event.MouseButtonUpEvent;
-import com.shepherdjerred.capstone.engine.engine.event.WindowResizedEvent;
-import com.shepherdjerred.capstone.engine.engine.input.GlfwKeyConverter;
-import com.shepherdjerred.capstone.engine.engine.input.Keyboard.Key;
+import com.shepherdjerred.capstone.engine.engine.event.MouseMoveEvent;
+import com.shepherdjerred.capstone.engine.engine.event.WindowResizeEvent;
+import com.shepherdjerred.capstone.engine.engine.input.GlfwKeyCodeConverter;
+import com.shepherdjerred.capstone.engine.engine.input.Key;
+import com.shepherdjerred.capstone.engine.engine.input.mouse.GlfwMouseCodeConverter;
 import com.shepherdjerred.capstone.engine.engine.input.mouse.MouseButton;
 import com.shepherdjerred.capstone.engine.engine.input.mouse.MouseCoordinate;
 import com.shepherdjerred.capstone.engine.engine.input.mouse.MouseTracker;
@@ -63,16 +62,17 @@ public class GlfwWindow implements Window {
   @Getter
   private WindowSettings windowSettings;
   private long windowHandle;
-  private final GlfwKeyConverter keyConverter;
+  private final GlfwKeyCodeConverter keyCodeConverter;
+  private final GlfwMouseCodeConverter mouseCodeConverter;
   private final EventBus<Event> eventBus;
   private final MouseTracker mouseTracker;
 
   public GlfwWindow(WindowSettings windowSettings,
-      GlfwKeyConverter glfwKeyConverter,
       MouseTracker mouseTracker,
       EventBus<Event> eventBus) {
     this.windowSettings = windowSettings;
-    this.keyConverter = glfwKeyConverter;
+    this.keyCodeConverter = new GlfwKeyCodeConverter();
+    this.mouseCodeConverter = new GlfwMouseCodeConverter();
     this.eventBus = eventBus;
     this.mouseTracker = mouseTracker;
   }
@@ -123,7 +123,7 @@ public class GlfwWindow implements Window {
             description)));
 
     glfwSetKeyCallback(windowHandle, (window, glfwKey, scancode, action, mods) -> {
-      Optional<Key> key = keyConverter.fromGlfwKey(glfwKey);
+      Optional<Key> key = keyCodeConverter.fromGlfwKey(glfwKey);
 
       if (key.isPresent()) {
         InputEvent event = null;
@@ -141,31 +141,25 @@ public class GlfwWindow implements Window {
     });
 
     glfwSetFramebufferSizeCallback(windowHandle, (window, width, height) -> {
-      var event = new WindowResizedEvent(new WindowSize(width, height));
+      var event = new WindowResizeEvent(new WindowSize(width, height));
       eventBus.dispatch(event);
     });
 
     glfwSetCursorPosCallback(windowHandle, (windowHandle, x, y) -> {
-      // TODO fix casting
+      // TODO fix casting?
       var event = new MouseMoveEvent(new MouseCoordinate((int) x, (int) y));
       eventBus.dispatch(event);
     });
 
     glfwSetMouseButtonCallback(windowHandle, (windowHandle, glfwButton, action, mode) -> {
-      MouseButton button = null;
+      Optional<MouseButton> mouseButton = mouseCodeConverter.fromGlfwButton(glfwButton);
 
-      if (glfwButton == GLFW_MOUSE_BUTTON_LEFT) {
-        button = MouseButton.LEFT;
-      } else if (glfwButton == GLFW_MOUSE_BUTTON_RIGHT) {
-        button = MouseButton.RIGHT;
-      }
-
-      if (button != null) {
+      if (mouseButton.isPresent()) {
         Event event = null;
         if (action == GLFW_PRESS) {
-          event = new MouseButtonDownEvent(button, mouseTracker.getMousePosition());
+          event = new MouseButtonDownEvent(mouseButton.get(), mouseTracker.getMousePosition());
         } else if (action == GLFW_RELEASE) {
-          event = new MouseButtonUpEvent(button, mouseTracker.getMousePosition());
+          event = new MouseButtonUpEvent(mouseButton.get(), mouseTracker.getMousePosition());
         }
 
         if (event != null) {

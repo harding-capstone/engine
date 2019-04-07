@@ -1,5 +1,7 @@
 package com.shepherdjerred.capstone.engine.engine.graphics.texture.locator;
 
+import static com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName.*;
+
 import com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName;
 import java.util.HashMap;
 import lombok.ToString;
@@ -20,9 +22,10 @@ public class PathBasedTextureFileLocator implements TextureFileLocator {
   }
 
   private void initializeMap() {
-    fileHashMap.put(TextureName.FROST_WALL, "wall_frost.png");
-    fileHashMap.put(TextureName.FIRE_WIZARD_FRONT, "front_fire.png");
-    fileHashMap.put(TextureName.TERRAIN, "terrain.png");
+    fileHashMap.put(FROST_WALL, "wall_frost.png");
+    fileHashMap.put(FIRE_WIZARD_FRONT, "front_fire.png");
+    fileHashMap.put(TERRAIN, "terrain.png");
+    fileHashMap.put(MAIN_MENU_BUTTON, "ui/mainMenu_button_big.png");
   }
 
   @Override

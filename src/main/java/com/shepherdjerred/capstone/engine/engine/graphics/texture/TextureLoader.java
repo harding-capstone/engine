@@ -106,6 +106,6 @@ public class TextureLoader {
   }
 
   public void cleanup(TextureName textureName) {
-    glDeleteTextures(textureMap.get(textureName).getOpenGlTextureId());
+    glDeleteTextures(textureMap.get(textureName).getGlTextureId());
   }
 }

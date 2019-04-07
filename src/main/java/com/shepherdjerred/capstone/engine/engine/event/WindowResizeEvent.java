@@ -9,7 +9,7 @@ import lombok.ToString;
 @Getter
 @ToString
 @AllArgsConstructor
-public class WindowResizedEvent implements Event {
+public class WindowResizeEvent implements Event {
 
   private final WindowSize newWindowSize;
 }

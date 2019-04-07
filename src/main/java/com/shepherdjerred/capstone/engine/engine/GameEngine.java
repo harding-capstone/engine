@@ -1,10 +1,9 @@
 package com.shepherdjerred.capstone.engine.engine;
 
 import com.shepherdjerred.capstone.engine.engine.event.MouseMoveEvent;
-import com.shepherdjerred.capstone.engine.engine.event.WindowResizedEvent;
+import com.shepherdjerred.capstone.engine.engine.event.WindowResizeEvent;
 import com.shepherdjerred.capstone.engine.engine.event.handler.MouseMoveEventHandler;
 import com.shepherdjerred.capstone.engine.engine.event.handler.WindowResizedEventHandler;
-import com.shepherdjerred.capstone.engine.engine.input.GlfwKeyConverter;
 import com.shepherdjerred.capstone.engine.engine.input.mouse.MouseTracker;
 import com.shepherdjerred.capstone.engine.engine.window.GlfwWindow;
 import com.shepherdjerred.capstone.engine.engine.window.WindowSettings;
@@ -30,7 +29,7 @@ public class GameEngine implements Runnable {
     this.eventBus = eventBus;
     this.mouseTracker = new MouseTracker();
     gameLoopThread = new Thread(this, "GAME_LOOP_THREAD");
-    window = new GlfwWindow(windowSettings, new GlfwKeyConverter(), mouseTracker, eventBus);
+    window = new GlfwWindow(windowSettings, mouseTracker, eventBus);
     timer = new Timer();
   }
 
@@ -118,7 +117,7 @@ public class GameEngine implements Runnable {
   }
 
   private void registerEventHandlers() {
-    eventBus.registerHandler(WindowResizedEvent.class, new WindowResizedEventHandler());
+    eventBus.registerHandler(WindowResizeEvent.class, new WindowResizedEventHandler());
     eventBus.registerHandler(MouseMoveEvent.class, new MouseMoveEventHandler(mouseTracker));
   }
 }

@@ -10,7 +10,7 @@ import static org.lwjgl.opengl.GL11.glClearColor;
 import static org.lwjgl.opengl.GL11.glEnable;
 import static org.lwjgl.opengl.GL11C.GL_SRC_ALPHA;
 
-import com.shepherdjerred.capstone.engine.engine.event.WindowResizedEvent;
+import com.shepherdjerred.capstone.engine.engine.event.WindowResizeEvent;
 import com.shepherdjerred.capstone.engine.engine.graphics.RendererCoordinate;
 import com.shepherdjerred.capstone.engine.engine.graphics.matrices.ModelMatrix;
 import com.shepherdjerred.capstone.engine.engine.graphics.matrices.ProjectionMatrix;
@@ -75,13 +75,13 @@ public class MainMenuSceneRenderer implements SceneRenderer<MainMenuScene> {
   }
 
   private void registerEventHandlers() {
-    var windowResizeEventHandler = new EventHandler<WindowResizedEvent>() {
+    var windowResizeEventHandler = new EventHandler<WindowResizeEvent>() {
       @Override
-      public void handle(WindowResizedEvent windowResizedEvent) {
+      public void handle(WindowResizeEvent windowResizedEvent) {
         projectionMatrix = new ProjectionMatrix(windowResizedEvent.getNewWindowSize());
       }
     };
-    eventBus.registerHandler(WindowResizedEvent.class, windowResizeEventHandler);
+    eventBus.registerHandler(WindowResizeEvent.class, windowResizeEventHandler);
   }
 
   private void createShaderProgram() throws Exception {

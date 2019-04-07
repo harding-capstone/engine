@@ -13,13 +13,13 @@ import lombok.ToString;
 public class Texture {
 
   private final TextureName textureName;
-  private final int openGlTextureId;
+  private final int glTextureId;
   private final int width;
   private final int height;
   private final int numberOfChannels;
 
   public void bind() {
-    glBindTexture(GL_TEXTURE_2D, openGlTextureId);
+    glBindTexture(GL_TEXTURE_2D, glTextureId);
   }
 
 }

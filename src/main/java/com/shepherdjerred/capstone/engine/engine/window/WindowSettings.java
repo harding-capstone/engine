@@ -8,6 +8,7 @@ import lombok.ToString;
 @ToString
 @AllArgsConstructor
 public class WindowSettings {
+
   private final String title;
   private final WindowSize windowSize;
   private final boolean isVsyncEnabled;
