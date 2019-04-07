@@ -28,7 +28,7 @@ public class CastleCastersGame implements GameLogic {
   public CastleCastersGame(EventBus<Event> eventBus) {
     this.eventBus = eventBus;
     this.textureFileLocator = new PathBasedTextureFileLocator(
-        "/Users/jerred/IdeaProjects/capstone/engine/src/main/resources/textures/");
+        "/Users/jerred/programming/capstone/engine/src/main/resources/textures/");
     this.textureLoader = new TextureLoader(textureFileLocator);
 
     scene = new MainMenuScene(eventBus);

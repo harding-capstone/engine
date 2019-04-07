@@ -1,8 +1,11 @@
 package com.shepherdjerred.capstone.engine.engine;
 
+import com.shepherdjerred.capstone.engine.engine.event.MouseMoveEvent;
 import com.shepherdjerred.capstone.engine.engine.event.WindowResizedEvent;
+import com.shepherdjerred.capstone.engine.engine.event.handler.MouseMoveEventHandler;
 import com.shepherdjerred.capstone.engine.engine.event.handler.WindowResizedEventHandler;
 import com.shepherdjerred.capstone.engine.engine.input.GlfwKeyConverter;
+import com.shepherdjerred.capstone.engine.engine.input.mouse.MouseTracker;
 import com.shepherdjerred.capstone.engine.engine.window.GlfwWindow;
 import com.shepherdjerred.capstone.engine.engine.window.WindowSettings;
 import com.shepherdjerred.capstone.events.Event;
@@ -19,14 +22,15 @@ public class GameEngine implements Runnable {
   private final GlfwWindow window;
   private final Thread gameLoopThread;
   private final Timer timer;
-
   private final EventBus<Event> eventBus;
+  private final MouseTracker mouseTracker;
 
   public GameEngine(GameLogic gameLogic, WindowSettings windowSettings, EventBus<Event> eventBus) {
     this.gameLogic = gameLogic;
     this.eventBus = eventBus;
+    this.mouseTracker = new MouseTracker();
     gameLoopThread = new Thread(this, "GAME_LOOP_THREAD");
-    window = new GlfwWindow(windowSettings, new GlfwKeyConverter(), eventBus);
+    window = new GlfwWindow(windowSettings, new GlfwKeyConverter(), mouseTracker, eventBus);
     timer = new Timer();
   }
 
@@ -115,5 +119,6 @@ public class GameEngine implements Runnable {
 
   private void registerEventHandlers() {
     eventBus.registerHandler(WindowResizedEvent.class, new WindowResizedEventHandler());
+    eventBus.registerHandler(MouseMoveEvent.class, new MouseMoveEventHandler(mouseTracker));
   }
 }
