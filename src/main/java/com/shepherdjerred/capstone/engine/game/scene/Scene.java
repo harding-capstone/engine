@@ -6,6 +6,10 @@ import java.util.Optional;
 
 public interface Scene {
 
+  void initialize();
+
+  void cleanup();
+
   void updateState(float interval);
 
   List<SceneElement> getSceneElements();

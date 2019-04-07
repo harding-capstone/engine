@@ -32,6 +32,7 @@ public class CastleCastersGame implements GameLogic {
     this.textureLoader = new TextureLoader(textureFileLocator);
 
     scene = new MainMenuScene(eventBus);
+    scene.initialize();
   }
 
   @Override
