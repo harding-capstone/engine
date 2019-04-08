@@ -19,7 +19,6 @@ import lombok.extern.log4j.Log4j2;
 public class CastleCastersGame implements GameLogic {
 
   private final EventBus<Event> eventBus;
-  private final TextureFileLocator textureFileLocator;
   private final TextureLoader textureLoader;
   private Scene scene;
   private SceneRenderer sceneRenderer;
@@ -27,11 +26,11 @@ public class CastleCastersGame implements GameLogic {
 
   public CastleCastersGame(EventBus<Event> eventBus) {
     this.eventBus = eventBus;
-    this.textureFileLocator = new PathBasedTextureFileLocator(
+    TextureFileLocator textureFileLocator = new PathBasedTextureFileLocator(
         "/Users/jerred/programming/capstone/engine/src/main/resources/textures/");
     this.textureLoader = new TextureLoader(textureFileLocator);
 
-    scene = new MainMenuScene(eventBus);
+    scene = new MainMenuScene(eventBus, textureLoader, new WindowSize(1360, 768));
     scene.initialize();
   }
 

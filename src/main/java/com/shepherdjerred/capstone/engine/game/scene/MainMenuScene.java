@@ -3,13 +3,18 @@ package com.shepherdjerred.capstone.engine.game.scene;
 import com.shepherdjerred.capstone.engine.engine.event.MouseButtonDownEvent;
 import com.shepherdjerred.capstone.engine.engine.event.MouseButtonUpEvent;
 import com.shepherdjerred.capstone.engine.engine.event.MouseMoveEvent;
-import com.shepherdjerred.capstone.engine.game.scene.element.BackgroundSceneElement;
-import com.shepherdjerred.capstone.engine.game.scene.element.BackgroundSceneElement.Type;
-import com.shepherdjerred.capstone.engine.game.scene.element.ButtonSceneElement;
-import com.shepherdjerred.capstone.engine.game.scene.element.Clickable;
-import com.shepherdjerred.capstone.engine.game.scene.element.Hoverable;
-import com.shepherdjerred.capstone.engine.game.scene.element.LogoSceneElement;
-import com.shepherdjerred.capstone.engine.game.scene.element.SceneElement;
+import com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureLoader;
+import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
+import com.shepherdjerred.capstone.engine.game.scene.objects.Background;
+import com.shepherdjerred.capstone.engine.game.scene.objects.Background.Type;
+import com.shepherdjerred.capstone.engine.game.scene.objects.Button;
+import com.shepherdjerred.capstone.engine.game.scene.objects.Clickable;
+import com.shepherdjerred.capstone.engine.game.scene.objects.Hoverable;
+import com.shepherdjerred.capstone.engine.game.scene.objects.Logo;
+import com.shepherdjerred.capstone.engine.game.scene.objects.GameObject;
+import com.shepherdjerred.capstone.engine.game.scene.objects.rendering.BackgroundRenderer;
+import com.shepherdjerred.capstone.engine.game.scene.objects.rendering.ButtonRenderer;
+import com.shepherdjerred.capstone.engine.game.scene.objects.rendering.LogoRenderer;
 import com.shepherdjerred.capstone.events.Event;
 import com.shepherdjerred.capstone.events.EventBus;
 import java.util.ArrayList;
@@ -23,28 +28,47 @@ public class MainMenuScene implements Scene {
 
   private final EventBus<Event> eventBus;
   @Getter
-  private final List<SceneElement> sceneElements;
+  private final List<GameObject> gameObjects;
+  private final TextureLoader textureLoader;
+  private final WindowSize windowSize;
 
-  public MainMenuScene(EventBus<Event> eventBus) {
+  public MainMenuScene(EventBus<Event> eventBus,
+      TextureLoader textureLoader,
+      WindowSize windowSize) {
     this.eventBus = eventBus;
-    sceneElements = new ArrayList<>();
+    this.textureLoader = textureLoader;
+    this.windowSize = windowSize;
+    gameObjects = new ArrayList<>();
+    createGameObjects();
+  }
 
-    sceneElements.add(new BackgroundSceneElement(new SceneCoordinate(0, 0, 0),
-        Type.PURPLE_MOUNTAINS));
-    sceneElements.add(new ButtonSceneElement(new SceneCoordinate(410, 410, -10),
+  private void createGameObjects() {
+    var background = new Background(
+        new BackgroundRenderer(textureLoader, windowSize),
+        new SceneCoordinate(0, 0, 0),
+        Type.PURPLE_MOUNTAINS);
+    var button = new Button(
+        new ButtonRenderer(textureLoader),
+        new SceneCoordinate(410, 410, -10),
         100,
         100,
-        () -> log.info("Hey there!")));
-    sceneElements.add(new LogoSceneElement(new SceneCoordinate(0, 0, 0),
+        () -> log.info("Hey there!"));
+    var logo = new Logo(
+        new LogoRenderer(textureLoader),
+        new SceneCoordinate(0, 0, 0),
         444,
         300,
-        LogoSceneElement.Type.GAME));
+        Logo.Type.GAME);
+
+    gameObjects.add(background);
+    gameObjects.add(button);
+    gameObjects.add(logo);
   }
 
   @Override
   public void initialize() {
     eventBus.registerHandler(MouseButtonDownEvent.class,
-        mouseButtonDownEvent -> sceneElements.forEach(element -> {
+        mouseButtonDownEvent -> gameObjects.forEach(element -> {
           if (element instanceof Clickable) {
             var orig = mouseButtonDownEvent.getMouseCoordinate();
             var coord = new SceneCoordinate(orig.getX(), orig.getY(), 0);
@@ -54,7 +78,7 @@ public class MainMenuScene implements Scene {
           }
         }));
     eventBus.registerHandler(MouseButtonUpEvent.class,
-        mouseButtonUpEvent -> sceneElements.forEach(element -> {
+        mouseButtonUpEvent -> gameObjects.forEach(element -> {
           if (element instanceof Clickable) {
             if (((Clickable) element).isClicked()) {
               ((Clickable) element).onRelease();
@@ -62,7 +86,7 @@ public class MainMenuScene implements Scene {
           }
         }));
     eventBus.registerHandler(MouseMoveEvent.class,
-        mouseMoveEvent -> sceneElements.forEach(element -> {
+        mouseMoveEvent -> gameObjects.forEach(element -> {
           var orig = mouseMoveEvent.getNewMousePosition();
           var coord = new SceneCoordinate(orig.getX(), orig.getY(), 0);
           if (element instanceof Hoverable) {

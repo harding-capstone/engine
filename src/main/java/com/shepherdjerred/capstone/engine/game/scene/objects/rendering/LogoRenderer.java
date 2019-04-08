@@ -1,14 +1,14 @@
-package com.shepherdjerred.capstone.engine.game.scene.element.rendering;
+package com.shepherdjerred.capstone.engine.game.scene.objects.rendering;
 
 import com.shepherdjerred.capstone.engine.engine.graphics.TexturedMesh;
 import com.shepherdjerred.capstone.engine.engine.graphics.texture.Texture;
 import com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureLoader;
 import com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName;
-import com.shepherdjerred.capstone.engine.game.scene.element.LogoSceneElement;
-import com.shepherdjerred.capstone.engine.game.scene.element.LogoSceneElement.Type;
+import com.shepherdjerred.capstone.engine.game.scene.objects.Logo;
+import com.shepherdjerred.capstone.engine.game.scene.objects.Logo.Type;
 
 public class LogoRenderer implements
-    SceneElementRenderer<LogoSceneElement> {
+    ObjectRenderer<Logo> {
 
   private TexturedMesh mesh;
   private TextureLoader textureLoader;
@@ -18,7 +18,7 @@ public class LogoRenderer implements
   }
 
   @Override
-  public void init(LogoSceneElement sceneElement) {
+  public void init(Logo sceneElement) {
     var width = sceneElement.getWidth();
     var height = sceneElement.getHeight();
 
@@ -52,7 +52,7 @@ public class LogoRenderer implements
   }
 
   @Override
-  public void render(LogoSceneElement sceneElement) {
+  public void render(Logo sceneElement) {
     mesh.render();
   }
 

@@ -1,6 +1,7 @@
-package com.shepherdjerred.capstone.engine.game.scene.element;
+package com.shepherdjerred.capstone.engine.game.scene.objects;
 
 import com.shepherdjerred.capstone.engine.game.scene.SceneCoordinate;
+import com.shepherdjerred.capstone.engine.game.scene.objects.rendering.ObjectRenderer;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
@@ -8,8 +9,9 @@ import lombok.ToString;
 @Getter
 @ToString
 @RequiredArgsConstructor
-public class ButtonSceneElement implements SceneElement, Clickable, Hoverable {
+public class Button implements GameObject, Clickable, Hoverable {
 
+  private final ObjectRenderer<Button> renderer;
   private final SceneCoordinate position;
   private final int width;
   private final int height;

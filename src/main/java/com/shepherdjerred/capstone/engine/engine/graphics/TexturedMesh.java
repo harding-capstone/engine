@@ -115,6 +115,7 @@ public class TexturedMesh {
 
     // Activate first texture bank
     glActiveTexture(GL_TEXTURE0);
+    texture.bind();
 
     glBindVertexArray(glVaoId);
     glDrawElements(GL_TRIANGLES, indicesLength, GL_UNSIGNED_INT, 0);

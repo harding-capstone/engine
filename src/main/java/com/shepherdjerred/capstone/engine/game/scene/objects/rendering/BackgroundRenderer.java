@@ -1,15 +1,15 @@
-package com.shepherdjerred.capstone.engine.game.scene.element.rendering;
+package com.shepherdjerred.capstone.engine.game.scene.objects.rendering;
 
 import com.shepherdjerred.capstone.engine.engine.graphics.TexturedMesh;
 import com.shepherdjerred.capstone.engine.engine.graphics.texture.Texture;
 import com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureLoader;
 import com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName;
 import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
-import com.shepherdjerred.capstone.engine.game.scene.element.BackgroundSceneElement;
-import com.shepherdjerred.capstone.engine.game.scene.element.BackgroundSceneElement.Type;
+import com.shepherdjerred.capstone.engine.game.scene.objects.Background;
+import com.shepherdjerred.capstone.engine.game.scene.objects.Background.Type;
 
 public class BackgroundRenderer implements
-    SceneElementRenderer<BackgroundSceneElement> {
+    ObjectRenderer<Background> {
 
   private TexturedMesh mesh;
   private TextureLoader textureLoader;
@@ -21,7 +21,7 @@ public class BackgroundRenderer implements
   }
 
   @Override
-  public void init(BackgroundSceneElement sceneElement) {
+  public void init(Background sceneElement) {
     var width = windowSize.getWidth();
     var height = windowSize.getHeight();
 
@@ -55,7 +55,7 @@ public class BackgroundRenderer implements
   }
 
   @Override
-  public void render(BackgroundSceneElement sceneElement) {
+  public void render(Background sceneElement) {
     mesh.render();
   }
 
