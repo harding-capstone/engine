@@ -4,30 +4,27 @@ import com.shepherdjerred.capstone.engine.engine.graphics.TexturedMesh;
 import com.shepherdjerred.capstone.engine.engine.graphics.texture.Texture;
 import com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureLoader;
 import com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName;
-import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
-import com.shepherdjerred.capstone.engine.game.scene.element.BackgroundSceneElement;
-import com.shepherdjerred.capstone.engine.game.scene.element.BackgroundSceneElement.Type;
+import com.shepherdjerred.capstone.engine.game.scene.element.LogoSceneElement;
+import com.shepherdjerred.capstone.engine.game.scene.element.LogoSceneElement.Type;
 
-public class BackgroundRenderer implements
-    SceneElementRenderer<BackgroundSceneElement> {
+public class LogoRenderer implements
+    SceneElementRenderer<LogoSceneElement> {
 
   private TexturedMesh mesh;
   private TextureLoader textureLoader;
-  private WindowSize windowSize;
 
-  public BackgroundRenderer(TextureLoader textureLoader, WindowSize windowSize) {
+  public LogoRenderer(TextureLoader textureLoader) {
     this.textureLoader = textureLoader;
-    this.windowSize = windowSize;
   }
 
   @Override
-  public void init(BackgroundSceneElement sceneElement) {
-    var width = windowSize.getWidth();
-    var height = windowSize.getHeight();
+  public void init(LogoSceneElement sceneElement) {
+    var width = sceneElement.getWidth();
+    var height = sceneElement.getHeight();
 
     Texture texture;
-    if (sceneElement.getType() == Type.PURPLE_MOUNTAINS) {
-      texture = textureLoader.loadTexture(TextureName.PURPLE_MOUNTAINS);
+    if (sceneElement.getType() == Type.GAME) {
+      texture = textureLoader.loadTexture(TextureName.GAME_LOGO);
     } else {
       throw new UnsupportedOperationException(sceneElement.getType().toString());
     }
@@ -55,7 +52,7 @@ public class BackgroundRenderer implements
   }
 
   @Override
-  public void render(BackgroundSceneElement sceneElement) {
+  public void render(LogoSceneElement sceneElement) {
     mesh.render();
   }
 

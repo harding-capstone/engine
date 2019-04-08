@@ -1,10 +1,14 @@
 package com.shepherdjerred.capstone.engine.game.scene;
 
 import com.shepherdjerred.capstone.engine.engine.event.MouseButtonDownEvent;
+import com.shepherdjerred.capstone.engine.engine.event.MouseButtonUpEvent;
+import com.shepherdjerred.capstone.engine.engine.event.MouseMoveEvent;
 import com.shepherdjerred.capstone.engine.game.scene.element.BackgroundSceneElement;
 import com.shepherdjerred.capstone.engine.game.scene.element.BackgroundSceneElement.Type;
 import com.shepherdjerred.capstone.engine.game.scene.element.ButtonSceneElement;
 import com.shepherdjerred.capstone.engine.game.scene.element.Clickable;
+import com.shepherdjerred.capstone.engine.game.scene.element.Hoverable;
+import com.shepherdjerred.capstone.engine.game.scene.element.LogoSceneElement;
 import com.shepherdjerred.capstone.engine.game.scene.element.SceneElement;
 import com.shepherdjerred.capstone.events.Event;
 import com.shepherdjerred.capstone.events.EventBus;
@@ -24,13 +28,17 @@ public class MainMenuScene implements Scene {
   public MainMenuScene(EventBus<Event> eventBus) {
     this.eventBus = eventBus;
     sceneElements = new ArrayList<>();
-    sceneElements.add(new ButtonSceneElement(new SceneCoordinate(400, 400, 0),
-        100,
-        100,
-        () -> {
-        }));
+
     sceneElements.add(new BackgroundSceneElement(new SceneCoordinate(0, 0, 0),
         Type.PURPLE_MOUNTAINS));
+    sceneElements.add(new ButtonSceneElement(new SceneCoordinate(410, 410, -10),
+        100,
+        100,
+        () -> log.info("Hey there!")));
+    sceneElements.add(new LogoSceneElement(new SceneCoordinate(0, 0, 0),
+        444,
+        300,
+        LogoSceneElement.Type.GAME));
   }
 
   @Override
@@ -40,8 +48,32 @@ public class MainMenuScene implements Scene {
           if (element instanceof Clickable) {
             var orig = mouseButtonDownEvent.getMouseCoordinate();
             var coord = new SceneCoordinate(orig.getX(), orig.getY(), 0);
-            if (element.contains(coord)) {
+            if (((Clickable) element).contains(coord)) {
               ((Clickable) element).onClick();
+            }
+          }
+        }));
+    eventBus.registerHandler(MouseButtonUpEvent.class,
+        mouseButtonUpEvent -> sceneElements.forEach(element -> {
+          if (element instanceof Clickable) {
+            if (((Clickable) element).isClicked()) {
+              ((Clickable) element).onRelease();
+            }
+          }
+        }));
+    eventBus.registerHandler(MouseMoveEvent.class,
+        mouseMoveEvent -> sceneElements.forEach(element -> {
+          var orig = mouseMoveEvent.getNewMousePosition();
+          var coord = new SceneCoordinate(orig.getX(), orig.getY(), 0);
+          if (element instanceof Hoverable) {
+            if (((Hoverable) element).isHovered()) {
+              if (!((Hoverable) element).contains(coord)) {
+                ((Hoverable) element).onUnhover();
+              }
+            } else {
+              if (((Hoverable) element).contains(coord)) {
+                ((Hoverable) element).onHover();
+              }
             }
           }
         }));
@@ -49,6 +81,7 @@ public class MainMenuScene implements Scene {
 
   @Override
   public void cleanup() {
+
   }
 
   @Override

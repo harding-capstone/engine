@@ -2,7 +2,7 @@ package com.shepherdjerred.capstone.engine.game.scene.element;
 
 import com.shepherdjerred.capstone.engine.game.scene.SceneCoordinate;
 
-public interface SceneElement {
+public interface Containable {
 
-  SceneCoordinate getPosition();
+  boolean contains(SceneCoordinate sceneCoordinate);
 }

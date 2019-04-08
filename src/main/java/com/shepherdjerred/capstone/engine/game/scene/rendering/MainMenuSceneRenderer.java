@@ -2,11 +2,15 @@ package com.shepherdjerred.capstone.engine.game.scene.rendering;
 
 import static org.lwjgl.opengl.GL11.GL_BLEND;
 import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
+import static org.lwjgl.opengl.GL11.GL_DEPTH;
 import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
+import static org.lwjgl.opengl.GL11.GL_LEQUAL;
 import static org.lwjgl.opengl.GL11.GL_ONE_MINUS_SRC_ALPHA;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
 import static org.lwjgl.opengl.GL11.glBlendFunc;
 import static org.lwjgl.opengl.GL11.glClear;
 import static org.lwjgl.opengl.GL11.glClearColor;
+import static org.lwjgl.opengl.GL11.glDepthFunc;
 import static org.lwjgl.opengl.GL11.glEnable;
 import static org.lwjgl.opengl.GL11C.GL_SRC_ALPHA;
 
@@ -22,8 +26,10 @@ import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
 import com.shepherdjerred.capstone.engine.game.scene.MainMenuScene;
 import com.shepherdjerred.capstone.engine.game.scene.element.BackgroundSceneElement;
 import com.shepherdjerred.capstone.engine.game.scene.element.ButtonSceneElement;
+import com.shepherdjerred.capstone.engine.game.scene.element.LogoSceneElement;
 import com.shepherdjerred.capstone.engine.game.scene.element.rendering.BackgroundRenderer;
 import com.shepherdjerred.capstone.engine.game.scene.element.rendering.ButtonRenderer;
+import com.shepherdjerred.capstone.engine.game.scene.element.rendering.LogoRenderer;
 import com.shepherdjerred.capstone.events.Event;
 import com.shepherdjerred.capstone.events.EventBus;
 import com.shepherdjerred.capstone.events.handlers.EventHandler;
@@ -46,7 +52,6 @@ public class MainMenuSceneRenderer implements SceneRenderer<MainMenuScene> {
     this.shaderProgram = shaderProgram;
     this.windowSize = windowSize;
     this.textureLoader = textureLoader;
-
   }
 
   @Override
@@ -60,10 +65,14 @@ public class MainMenuSceneRenderer implements SceneRenderer<MainMenuScene> {
     shaderProgram.setUniform(ShaderUniform.PROJECTION_MATRIX, projectionMatrix.getMatrix());
 
     var buttonRenderer = new ButtonRenderer(textureLoader);
-    var backgroundRenderer = new BackgroundRenderer(textureLoader);
+    var backgroundRenderer = new BackgroundRenderer(textureLoader, windowSize);
+    var logoRenderer = new LogoRenderer(textureLoader);
 
     scene.getSceneElements().forEach(element -> {
-      var modelMatrix = new ModelMatrix(new RendererCoordinate(0, 0, 0), 0, 1);
+      var position = element.getPosition();
+      var modelMatrix = new ModelMatrix(new RendererCoordinate(position.getX(),
+          position.getY(),
+          position.getZ()), 0, 1);
       shaderProgram.setUniform(ShaderUniform.MODEL_MATRIX, modelMatrix.getMatrix());
       if (element instanceof ButtonSceneElement) {
         buttonRenderer.init((ButtonSceneElement) element);
@@ -75,6 +84,11 @@ public class MainMenuSceneRenderer implements SceneRenderer<MainMenuScene> {
         backgroundRenderer.render((BackgroundSceneElement) element);
         backgroundRenderer.cleanup();
       }
+      if (element instanceof LogoSceneElement) {
+        logoRenderer.init((LogoSceneElement) element);
+        logoRenderer.render((LogoSceneElement) element);
+        logoRenderer.cleanup();
+      }
     });
 
     shaderProgram.unbind();
@@ -85,6 +99,7 @@ public class MainMenuSceneRenderer implements SceneRenderer<MainMenuScene> {
     projectionMatrix = new ProjectionMatrix(windowSize);
     createShaderProgram();
     enableTransparency();
+    enableDepth();
     registerEventHandlers();
   }
 
@@ -108,6 +123,12 @@ public class MainMenuSceneRenderer implements SceneRenderer<MainMenuScene> {
     shaderProgram.createUniform(ShaderUniform.PROJECTION_MATRIX);
     shaderProgram.createUniform(ShaderUniform.MODEL_MATRIX);
     shaderProgram.createUniform(ShaderUniform.TEXTURE_SAMPLER);
+  }
+
+  private void enableDepth() {
+    glEnable(GL_TEXTURE_2D);
+    glEnable(GL_DEPTH);
+    glDepthFunc(GL_LEQUAL);
   }
 
   private void enableTransparency() {

@@ -16,6 +16,6 @@ public class ProjectionMatrix {
   // https://gamedev.stackexchange.com/questions/59161/is-opengl-appropriate-for-2d-games
   // https://en.wikibooks.org/wiki/OpenGL_Programming/Modern_OpenGL_Tutorial_2D
   public Matrix4f getMatrix() {
-    return new Matrix4f().ortho2D(0, windowSize.getWidth(), windowSize.getHeight(), 0);
+    return new Matrix4f().ortho(0, windowSize.getWidth(), windowSize.getHeight(), 0, 1000, -1000);
   }
 }
