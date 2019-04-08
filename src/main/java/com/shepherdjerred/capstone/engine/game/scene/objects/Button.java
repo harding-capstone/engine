@@ -1,10 +1,10 @@
 package com.shepherdjerred.capstone.engine.game.scene.objects;
 
-import com.shepherdjerred.capstone.engine.engine.scene.Clickable;
+import com.shepherdjerred.capstone.engine.engine.scene.attributes.Clickable;
 import com.shepherdjerred.capstone.engine.engine.scene.GameObject;
-import com.shepherdjerred.capstone.engine.engine.scene.Hoverable;
+import com.shepherdjerred.capstone.engine.engine.scene.attributes.Hoverable;
 import com.shepherdjerred.capstone.engine.game.scene.SceneCoordinate;
-import com.shepherdjerred.capstone.engine.game.scene.objects.rendering.ObjectRenderer;
+import com.shepherdjerred.capstone.engine.engine.scene.GameObjectRenderer;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -13,7 +13,7 @@ import lombok.ToString;
 @ToString
 public class Button implements GameObject, Clickable, Hoverable {
 
-  private final ObjectRenderer<Button> renderer;
+  private final GameObjectRenderer<Button> renderer;
   @Setter
   private SceneCoordinate position;
   private final int width;
@@ -23,7 +23,7 @@ public class Button implements GameObject, Clickable, Hoverable {
   private boolean isHovered;
   public State state = State.INACTIVE;
 
-  public Button(ObjectRenderer<Button> renderer, SceneCoordinate position, int width, int height, Runnable onClick) {
+  public Button(GameObjectRenderer<Button> renderer, SceneCoordinate position, int width, int height, Runnable onClick) {
     this.renderer = renderer;
     this.position = position;
     this.width = width;
@@ -32,14 +32,14 @@ public class Button implements GameObject, Clickable, Hoverable {
   }
 
   @Override
-  public void onClick() {
+  public void onClickBegin() {
     this.isClicked = true;
     onClick.run();
     updateState();
   }
 
   @Override
-  public void onRelease() {
+  public void onClickEnd() {
     this.isClicked = false;
     updateState();
   }
@@ -82,5 +82,4 @@ public class Button implements GameObject, Clickable, Hoverable {
   public enum State {
     INACTIVE, HOVERED, CLICKED
   }
-
 }

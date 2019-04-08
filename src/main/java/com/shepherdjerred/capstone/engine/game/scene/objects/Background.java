@@ -2,7 +2,7 @@ package com.shepherdjerred.capstone.engine.game.scene.objects;
 
 import com.shepherdjerred.capstone.engine.engine.scene.GameObject;
 import com.shepherdjerred.capstone.engine.game.scene.SceneCoordinate;
-import com.shepherdjerred.capstone.engine.game.scene.objects.rendering.ObjectRenderer;
+import com.shepherdjerred.capstone.engine.engine.scene.GameObjectRenderer;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,7 +16,7 @@ import lombok.ToString;
 @AllArgsConstructor
 public class Background implements GameObject {
 
-  private final ObjectRenderer<Background> renderer;
+  private final GameObjectRenderer<Background> renderer;
   @Setter
   private SceneCoordinate position;
   private final Type type;

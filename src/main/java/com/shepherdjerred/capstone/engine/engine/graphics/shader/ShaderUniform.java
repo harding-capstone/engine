@@ -8,7 +8,8 @@ import lombok.Getter;
 public enum ShaderUniform {
   TEXTURE_SAMPLER("texture_sampler"),
   PROJECTION_MATRIX("projectionMatrix"),
-  MODEL_MATRIX("modelMatrix");
+  MODEL_MATRIX("modelMatrix"),
+  TEXT_COLOR("textColor");
 
   private final String name;
 }

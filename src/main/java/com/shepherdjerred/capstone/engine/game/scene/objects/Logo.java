@@ -2,7 +2,7 @@ package com.shepherdjerred.capstone.engine.game.scene.objects;
 
 import com.shepherdjerred.capstone.engine.engine.scene.GameObject;
 import com.shepherdjerred.capstone.engine.game.scene.SceneCoordinate;
-import com.shepherdjerred.capstone.engine.game.scene.objects.rendering.ObjectRenderer;
+import com.shepherdjerred.capstone.engine.engine.scene.GameObjectRenderer;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,7 +13,7 @@ import lombok.ToString;
 @AllArgsConstructor
 public class Logo implements GameObject {
 
-  private final ObjectRenderer<Logo> renderer;
+  private final GameObjectRenderer<Logo> renderer;
   @Setter
   private SceneCoordinate position;
   private final double aspectRatio;

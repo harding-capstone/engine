@@ -24,6 +24,7 @@ import com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureLoader;
 import com.shepherdjerred.capstone.engine.engine.scene.SceneRenderer;
 import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
 import com.shepherdjerred.capstone.engine.game.scene.MainMenuScene;
+import com.shepherdjerred.capstone.engine.game.scene.objects.Text;
 import com.shepherdjerred.capstone.events.Event;
 import com.shepherdjerred.capstone.events.EventBus;
 import com.shepherdjerred.capstone.events.handlers.EventHandler;
@@ -34,6 +35,7 @@ public class MainMenuSceneRenderer implements SceneRenderer<MainMenuScene> {
 
   private final EventBus<Event> eventBus;
   private ShaderProgram shaderProgram;
+  private ShaderProgram textShaderProgram;
   private WindowSize windowSize;
   private final TextureLoader textureLoader;
   private ProjectionMatrix projectionMatrix;
@@ -54,16 +56,24 @@ public class MainMenuSceneRenderer implements SceneRenderer<MainMenuScene> {
 
     updateProjectionMatrix();
 
-    shaderProgram.bind();
-    shaderProgram.setUniform(ShaderUniform.TEXTURE_SAMPLER, 0);
-    shaderProgram.setUniform(ShaderUniform.PROJECTION_MATRIX, projectionMatrix.getMatrix());
-
     scene.getGameObjects().forEach(element -> {
       var position = element.getPosition();
       var modelMatrix = new ModelMatrix(new RendererCoordinate(position.getX(),
           position.getY(),
           position.getZ()), 0, 1);
-      shaderProgram.setUniform(ShaderUniform.MODEL_MATRIX, modelMatrix.getMatrix());
+
+      if (element instanceof Text) {
+        textShaderProgram.bind();
+        textShaderProgram.setUniform(ShaderUniform.TEXTURE_SAMPLER, 0);
+        textShaderProgram.setUniform(ShaderUniform.PROJECTION_MATRIX, projectionMatrix.getMatrix());
+        textShaderProgram.setUniform(ShaderUniform.MODEL_MATRIX, modelMatrix.getMatrix());
+        textShaderProgram.setUniform(ShaderUniform.TEXT_COLOR, new float[] {1, 1, 1});
+      } else {
+        shaderProgram.bind();
+        shaderProgram.setUniform(ShaderUniform.TEXTURE_SAMPLER, 0);
+        shaderProgram.setUniform(ShaderUniform.PROJECTION_MATRIX, projectionMatrix.getMatrix());
+        shaderProgram.setUniform(ShaderUniform.MODEL_MATRIX, modelMatrix.getMatrix());
+      }
       element.getRenderer().render(element);
     });
 
@@ -101,6 +111,16 @@ public class MainMenuSceneRenderer implements SceneRenderer<MainMenuScene> {
     shaderProgram.createUniform(ShaderUniform.PROJECTION_MATRIX);
     shaderProgram.createUniform(ShaderUniform.MODEL_MATRIX);
     shaderProgram.createUniform(ShaderUniform.TEXTURE_SAMPLER);
+
+    textShaderProgram = new ShaderProgram(shaderLoader);
+    textShaderProgram.createVertexShader("vertex.glsl");
+    textShaderProgram.createFragmentShader("textFragment.glsl");
+    textShaderProgram.link();
+
+    textShaderProgram.createUniform(ShaderUniform.PROJECTION_MATRIX);
+    textShaderProgram.createUniform(ShaderUniform.MODEL_MATRIX);
+    textShaderProgram.createUniform(ShaderUniform.TEXTURE_SAMPLER);
+    textShaderProgram.createUniform(ShaderUniform.TEXT_COLOR);
   }
 
   private void enableDepth() {

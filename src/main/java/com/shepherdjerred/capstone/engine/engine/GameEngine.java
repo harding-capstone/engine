@@ -10,6 +10,7 @@ import com.shepherdjerred.capstone.engine.engine.window.Window;
 import com.shepherdjerred.capstone.engine.engine.window.WindowSettings;
 import com.shepherdjerred.capstone.events.Event;
 import com.shepherdjerred.capstone.events.EventBus;
+import com.shepherdjerred.capstone.events.handlers.EventLoggerHandler;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
@@ -37,7 +38,7 @@ public class GameEngine {
         TARGET_UPDATES_PER_SECOND);
   }
 
-  public void start() throws Exception {
+  public void run() throws Exception {
     initialize();
     gameLoop.start();
   }
@@ -49,6 +50,7 @@ public class GameEngine {
   }
 
   private void registerEventHandlers() {
+    eventBus.registerHandler(new EventLoggerHandler<>());
     eventBus.registerHandler(WindowResizeEvent.class, new WindowResizedEventHandler());
     eventBus.registerHandler(MouseMoveEvent.class, new MouseMoveEventHandler(mouseTracker));
   }

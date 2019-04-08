@@ -5,9 +5,9 @@ package com.shepherdjerred.capstone.engine.engine.scene;
  */
 public interface SceneRenderer<T extends Scene> {
 
-  void render(T scene);
-
   void initialize(T scene) throws Exception;
+
+  void render(T scene);
 
   void cleanup();
 }

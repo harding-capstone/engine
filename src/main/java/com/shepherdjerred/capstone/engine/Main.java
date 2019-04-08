@@ -6,7 +6,6 @@ import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
 import com.shepherdjerred.capstone.engine.game.CastleCastersGame;
 import com.shepherdjerred.capstone.events.Event;
 import com.shepherdjerred.capstone.events.EventBus;
-import com.shepherdjerred.capstone.events.handlers.EventLoggerHandler;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
@@ -16,24 +15,18 @@ public class Main {
 
   public static void main(String[] args) {
     try {
-      start();
+      run();
     } catch (Exception e) {
-      log.catching(e);
-      log.error(e.getStackTrace());
+      log.error(e);
       System.exit(1);
     }
   }
 
-  private static void start() throws Exception {
-    createEventListeners();
+  private static void run() throws Exception {
     var settings = getSettings();
-    var logic = new CastleCastersGame(eventBus, new WindowSize(1360, 768));
+    var logic = new CastleCastersGame(eventBus, settings.getWindowSize());
     var engine = new GameEngine(logic, settings, eventBus);
-    engine.start();
-  }
-
-  private static void createEventListeners() {
-    eventBus.registerHandler(new EventLoggerHandler<>());
+    engine.run();
   }
 
   private static WindowSettings getSettings() {

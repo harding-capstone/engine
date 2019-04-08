@@ -4,10 +4,11 @@ import com.shepherdjerred.capstone.engine.engine.graphics.mesh.Mesh;
 import com.shepherdjerred.capstone.engine.engine.graphics.mesh.TexturedMesh;
 import com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureLoader;
 import com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName;
+import com.shepherdjerred.capstone.engine.engine.scene.GameObjectRenderer;
 import com.shepherdjerred.capstone.engine.game.scene.objects.Button;
 import com.shepherdjerred.capstone.engine.game.scene.objects.Button.State;
 
-public class ButtonRenderer implements ObjectRenderer<Button> {
+public class ButtonRenderer implements GameObjectRenderer<Button> {
 
   private TexturedMesh normalMesh;
   private TexturedMesh hoveredMesh;

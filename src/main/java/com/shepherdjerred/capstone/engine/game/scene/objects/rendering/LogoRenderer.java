@@ -5,11 +5,12 @@ import com.shepherdjerred.capstone.engine.engine.graphics.mesh.TexturedMesh;
 import com.shepherdjerred.capstone.engine.engine.graphics.texture.Texture;
 import com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureLoader;
 import com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName;
+import com.shepherdjerred.capstone.engine.engine.scene.GameObjectRenderer;
 import com.shepherdjerred.capstone.engine.game.scene.objects.Logo;
 import com.shepherdjerred.capstone.engine.game.scene.objects.Logo.Type;
 
 public class LogoRenderer implements
-    ObjectRenderer<Logo> {
+    GameObjectRenderer<Logo> {
 
   private TexturedMesh texturedMesh;
   private TextureLoader textureLoader;

@@ -1,11 +1,12 @@
 package com.shepherdjerred.capstone.engine.game;
 
 import com.shepherdjerred.capstone.engine.engine.GameLogic;
+import com.shepherdjerred.capstone.engine.engine.graphics.font.FontLoader;
 import com.shepherdjerred.capstone.engine.engine.graphics.shader.code.ClasspathFileShaderCodeLoader;
 import com.shepherdjerred.capstone.engine.engine.graphics.shader.ShaderProgram;
 import com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureLoader;
-import com.shepherdjerred.capstone.engine.engine.graphics.texture.locator.PathBasedTextureFileLocator;
-import com.shepherdjerred.capstone.engine.engine.graphics.texture.locator.TextureFileLocator;
+import com.shepherdjerred.capstone.engine.engine.util.PathBasedResourceFileLocator;
+import com.shepherdjerred.capstone.engine.engine.util.ResourceFileLocator;
 import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
 import com.shepherdjerred.capstone.engine.game.scene.SceneManager;
 import com.shepherdjerred.capstone.engine.game.scene.rendering.MainMenuSceneRenderer;
@@ -19,15 +20,17 @@ public class CastleCastersGame implements GameLogic {
 
   private final EventBus<Event> eventBus;
   private final TextureLoader textureLoader;
+  private final FontLoader fontLoader;
   private SceneManager sceneManager;
 
   public CastleCastersGame(EventBus<Event> eventBus, WindowSize windowSize) {
     this.eventBus = eventBus;
-    TextureFileLocator textureFileLocator = new PathBasedTextureFileLocator(
-        "/Users/jerred/programming/capstone/engine/src/main/resources/textures/");
-    this.textureLoader = new TextureLoader(textureFileLocator);
-
-
+    ResourceFileLocator resourceFileLocator = new PathBasedResourceFileLocator(
+        "/Users/jerred/programming/capstone/engine/src/main/resources/textures/",
+        "/Users/jerred/programming/capstone/engine/src/main/resources/fonts/"
+    );
+    this.textureLoader = new TextureLoader(resourceFileLocator);
+    this.fontLoader = new FontLoader(resourceFileLocator);
   }
 
   @Override
@@ -39,6 +42,7 @@ public class CastleCastersGame implements GameLogic {
     var scene = new MainMenuScene(sceneRenderer,
         eventBus,
         textureLoader,
+        fontLoader,
         new WindowSize(1360, 768));
     scene.initialize();
     sceneRenderer.initialize(scene);

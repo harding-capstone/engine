@@ -5,12 +5,13 @@ import com.shepherdjerred.capstone.engine.engine.graphics.mesh.TexturedMesh;
 import com.shepherdjerred.capstone.engine.engine.graphics.texture.Texture;
 import com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureLoader;
 import com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName;
+import com.shepherdjerred.capstone.engine.engine.scene.GameObjectRenderer;
 import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
 import com.shepherdjerred.capstone.engine.game.scene.objects.Background;
 import com.shepherdjerred.capstone.engine.game.scene.objects.Background.Type;
 
 public class BackgroundRenderer implements
-    ObjectRenderer<Background> {
+    GameObjectRenderer<Background> {
 
   private TexturedMesh texturedMesh;
   private TextureLoader textureLoader;

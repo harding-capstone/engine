@@ -10,5 +10,6 @@ public enum TextureName {
   PURPLE_MOUNTAINS,
   RED_PLAINS,
   TEAM_LOGO,
-  GAME_LOGO
+  GAME_LOGO,
+  UNKNOWN
 }
