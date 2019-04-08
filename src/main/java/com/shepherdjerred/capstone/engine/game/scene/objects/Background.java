@@ -5,6 +5,7 @@ import com.shepherdjerred.capstone.engine.game.scene.SceneCoordinate;
 import com.shepherdjerred.capstone.engine.game.scene.objects.rendering.ObjectRenderer;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
 /**
@@ -16,7 +17,8 @@ import lombok.ToString;
 public class Background implements GameObject {
 
   private final ObjectRenderer<Background> renderer;
-  private final SceneCoordinate position;
+  @Setter
+  private SceneCoordinate position;
   private final Type type;
 
   @Override

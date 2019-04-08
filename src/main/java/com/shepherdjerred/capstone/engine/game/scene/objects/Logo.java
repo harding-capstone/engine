@@ -5,6 +5,7 @@ import com.shepherdjerred.capstone.engine.game.scene.SceneCoordinate;
 import com.shepherdjerred.capstone.engine.game.scene.objects.rendering.ObjectRenderer;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
 @Getter
@@ -13,7 +14,8 @@ import lombok.ToString;
 public class Logo implements GameObject {
 
   private final ObjectRenderer<Logo> renderer;
-  private final SceneCoordinate position;
+  @Setter
+  private SceneCoordinate position;
   private final double aspectRatio;
   private final int height;
   private final Type type;

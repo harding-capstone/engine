@@ -7,5 +7,7 @@ public interface GameObject {
 
   SceneCoordinate getPosition();
 
+  void setPosition(SceneCoordinate sceneCoordinate);
+
   ObjectRenderer getRenderer();
 }

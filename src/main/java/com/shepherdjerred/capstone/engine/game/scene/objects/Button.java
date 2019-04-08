@@ -6,22 +6,30 @@ import com.shepherdjerred.capstone.engine.engine.scene.Hoverable;
 import com.shepherdjerred.capstone.engine.game.scene.SceneCoordinate;
 import com.shepherdjerred.capstone.engine.game.scene.objects.rendering.ObjectRenderer;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 
 @Getter
 @ToString
-@RequiredArgsConstructor
 public class Button implements GameObject, Clickable, Hoverable {
 
   private final ObjectRenderer<Button> renderer;
-  private final SceneCoordinate position;
+  @Setter
+  private SceneCoordinate position;
   private final int width;
   private final int height;
   private final Runnable onClick;
   private boolean isClicked;
   private boolean isHovered;
   public State state = State.INACTIVE;
+
+  public Button(ObjectRenderer<Button> renderer, SceneCoordinate position, int width, int height, Runnable onClick) {
+    this.renderer = renderer;
+    this.position = position;
+    this.width = width;
+    this.height = height;
+    this.onClick = onClick;
+  }
 
   @Override
   public void onClick() {
