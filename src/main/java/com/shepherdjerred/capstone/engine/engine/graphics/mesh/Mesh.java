@@ -1,12 +1,10 @@
-package com.shepherdjerred.capstone.engine.engine.graphics;
+package com.shepherdjerred.capstone.engine.engine.graphics.mesh;
 
 import static com.shepherdjerred.capstone.engine.engine.graphics.OpenGlHelper.unbindBuffer;
 import static com.shepherdjerred.capstone.engine.engine.graphics.OpenGlHelper.unbindVertexArray;
 import static org.lwjgl.opengl.GL11.GL_FLOAT;
-import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
 import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
 import static org.lwjgl.opengl.GL11.GL_UNSIGNED_INT;
-import static org.lwjgl.opengl.GL11.glBindTexture;
 import static org.lwjgl.opengl.GL11.glDrawElements;
 import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
 import static org.lwjgl.opengl.GL13.glActiveTexture;
@@ -24,13 +22,12 @@ import static org.lwjgl.opengl.GL30.glDeleteVertexArrays;
 import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 
 import com.google.common.base.Preconditions;
-import com.shepherdjerred.capstone.engine.engine.graphics.texture.Texture;
 import org.lwjgl.system.MemoryStack;
 
 /**
  * A 3D object that is drawable and has a texture.
  */
-public class TexturedMesh {
+public class Mesh {
 
   private static final int VERTICES_BUFFER_INDEX = 0;
   private static final int TEXTURE_COORDINATES_BUFFER_INDEX = 1;
@@ -40,19 +37,16 @@ public class TexturedMesh {
   private final int glPositionsVboId;
   private final int glTextureCoordinatesVboId;
   private final int glIndicesVboId;
-  private final Texture texture;
   private boolean isRenderable;
 
-  public TexturedMesh(float[] vertices,
+  public Mesh(float[] vertices,
       float[] textureCoordinates,
-      int[] indices,
-      Texture texture) {
+      int[] indices) {
     Preconditions.checkArgument(indices.length % 3 == 0);
     Preconditions.checkArgument(textureCoordinates.length % 2 == 0);
 //    Preconditions.checkArgument(indices.length / 3 == textureCoordinates.length / 6);
 
     this.isRenderable = false;
-    this.texture = texture;
     this.indicesLength = indices.length;
 
     glVaoId = glGenVertexArrays();
@@ -61,7 +55,6 @@ public class TexturedMesh {
     glIndicesVboId = glGenBuffers();
 
     bindVertexArray();
-    glBindTexture(GL_TEXTURE_2D, texture.getGlTextureId());
 
     try (var stack = MemoryStack.stackPush()) {
       var verticesBuffer = stack.mallocFloat(vertices.length);
@@ -115,7 +108,6 @@ public class TexturedMesh {
 
     // Activate first texture bank
     glActiveTexture(GL_TEXTURE0);
-    texture.bind();
 
     glBindVertexArray(glVaoId);
     glDrawElements(GL_TRIANGLES, indicesLength, GL_UNSIGNED_INT, 0);

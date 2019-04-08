@@ -1,6 +1,4 @@
-package com.shepherdjerred.capstone.engine.game.scene.rendering;
-
-import com.shepherdjerred.capstone.engine.game.scene.Scene;
+package com.shepherdjerred.capstone.engine.engine.scene;
 
 /**
  * Renders an entire scene on the screen.

@@ -1,6 +1,7 @@
 package com.shepherdjerred.capstone.engine.game.scene.objects.rendering;
 
-import com.shepherdjerred.capstone.engine.engine.graphics.TexturedMesh;
+import com.shepherdjerred.capstone.engine.engine.graphics.mesh.Mesh;
+import com.shepherdjerred.capstone.engine.engine.graphics.mesh.TexturedMesh;
 import com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureLoader;
 import com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName;
 import com.shepherdjerred.capstone.engine.game.scene.objects.Button;
@@ -45,9 +46,11 @@ public class ButtonRenderer implements ObjectRenderer<Button> {
         3, 1, 2
     };
 
-    normalMesh = new TexturedMesh(vertices, textureCoordinates, indices, normalTexture);
-    hoveredMesh = new TexturedMesh(vertices, textureCoordinates, indices, hoveredTexture);
-    clickedMesh = new TexturedMesh(vertices, textureCoordinates, indices, clickedTexture);
+    var mesh = new Mesh(vertices, textureCoordinates, indices);
+
+    normalMesh = new TexturedMesh(mesh, normalTexture);
+    hoveredMesh = new TexturedMesh(mesh, hoveredTexture);
+    clickedMesh = new TexturedMesh(mesh, clickedTexture);
   }
 
   @Override
@@ -63,8 +66,5 @@ public class ButtonRenderer implements ObjectRenderer<Button> {
 
   @Override
   public void cleanup() {
-    normalMesh.cleanup();
-    hoveredMesh.cleanup();
-    clickedMesh.cleanup();
   }
 }

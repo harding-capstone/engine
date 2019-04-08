@@ -1,6 +1,6 @@
 package com.shepherdjerred.capstone.engine.game.scene.objects.rendering;
 
-import com.shepherdjerred.capstone.engine.game.scene.objects.GameObject;
+import com.shepherdjerred.capstone.engine.engine.scene.GameObject;
 
 public interface ObjectRenderer<T extends GameObject> {
 

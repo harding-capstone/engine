@@ -1,4 +1,4 @@
-package com.shepherdjerred.capstone.engine.game.scene.objects;
+package com.shepherdjerred.capstone.engine.engine.scene;
 
 import com.shepherdjerred.capstone.engine.game.scene.SceneCoordinate;
 

@@ -1,5 +1,6 @@
 package com.shepherdjerred.capstone.engine.game.scene.objects;
 
+import com.shepherdjerred.capstone.engine.engine.scene.GameObject;
 import com.shepherdjerred.capstone.engine.game.scene.SceneCoordinate;
 import com.shepherdjerred.capstone.engine.game.scene.objects.rendering.ObjectRenderer;
 import lombok.AllArgsConstructor;

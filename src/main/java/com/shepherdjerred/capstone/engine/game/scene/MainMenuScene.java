@@ -4,22 +4,23 @@ import com.shepherdjerred.capstone.engine.engine.event.MouseButtonDownEvent;
 import com.shepherdjerred.capstone.engine.engine.event.MouseButtonUpEvent;
 import com.shepherdjerred.capstone.engine.engine.event.MouseMoveEvent;
 import com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureLoader;
+import com.shepherdjerred.capstone.engine.engine.scene.Scene;
 import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
 import com.shepherdjerred.capstone.engine.game.scene.objects.Background;
 import com.shepherdjerred.capstone.engine.game.scene.objects.Background.Type;
 import com.shepherdjerred.capstone.engine.game.scene.objects.Button;
-import com.shepherdjerred.capstone.engine.game.scene.objects.Clickable;
-import com.shepherdjerred.capstone.engine.game.scene.objects.Hoverable;
+import com.shepherdjerred.capstone.engine.engine.scene.Clickable;
+import com.shepherdjerred.capstone.engine.engine.scene.GameObject;
+import com.shepherdjerred.capstone.engine.engine.scene.Hoverable;
 import com.shepherdjerred.capstone.engine.game.scene.objects.Logo;
-import com.shepherdjerred.capstone.engine.game.scene.objects.GameObject;
 import com.shepherdjerred.capstone.engine.game.scene.objects.rendering.BackgroundRenderer;
 import com.shepherdjerred.capstone.engine.game.scene.objects.rendering.ButtonRenderer;
 import com.shepherdjerred.capstone.engine.game.scene.objects.rendering.LogoRenderer;
+import com.shepherdjerred.capstone.engine.engine.scene.SceneRenderer;
 import com.shepherdjerred.capstone.events.Event;
 import com.shepherdjerred.capstone.events.EventBus;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 
@@ -31,10 +32,13 @@ public class MainMenuScene implements Scene {
   private final List<GameObject> gameObjects;
   private final TextureLoader textureLoader;
   private final WindowSize windowSize;
+  private final SceneRenderer<MainMenuScene> renderer;
 
-  public MainMenuScene(EventBus<Event> eventBus,
+  public MainMenuScene(SceneRenderer<MainMenuScene> renderer,
+      EventBus<Event> eventBus,
       TextureLoader textureLoader,
       WindowSize windowSize) {
+    this.renderer = renderer;
     this.eventBus = eventBus;
     this.textureLoader = textureLoader;
     this.windowSize = windowSize;
@@ -55,8 +59,8 @@ public class MainMenuScene implements Scene {
         () -> log.info("Hey there!"));
     var logo = new Logo(
         new LogoRenderer(textureLoader),
-        new SceneCoordinate(0, 0, 0),
-        444,
+        new SceneCoordinate((windowSize.getWidth() / 2), 50, 0),
+        1.485517919,
         300,
         Logo.Type.GAME);
 
@@ -113,7 +117,8 @@ public class MainMenuScene implements Scene {
   }
 
   @Override
-  public Optional<Scene> getNextScene() {
-    return Optional.empty();
+  public SceneRenderer getSceneRenderer() {
+    return renderer;
   }
+
 }
