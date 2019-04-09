@@ -1,5 +1,6 @@
 package com.shepherdjerred.capstone.engine.engine.util;
 
+import static com.shepherdjerred.capstone.engine.engine.graphics.font.FontName.FIRA_CODE;
 import static com.shepherdjerred.capstone.engine.engine.graphics.font.FontName.M5X7;
 import static com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName.*;
 
@@ -44,6 +45,7 @@ public class PathBasedResourceFileLocator implements ResourceFileLocator {
 
   private void initializeFontMap() {
     fontFileNameHashMap.put(M5X7, "m5x7.ttf");
+    fontFileNameHashMap.put(FIRA_CODE, "FiraCode-Regular.ttf");
   }
 
   @Override

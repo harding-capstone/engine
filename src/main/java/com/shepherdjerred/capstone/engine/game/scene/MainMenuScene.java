@@ -3,6 +3,7 @@ package com.shepherdjerred.capstone.engine.game.scene;
 import com.shepherdjerred.capstone.engine.engine.event.MouseButtonDownEvent;
 import com.shepherdjerred.capstone.engine.engine.event.MouseButtonUpEvent;
 import com.shepherdjerred.capstone.engine.engine.event.MouseMoveEvent;
+import com.shepherdjerred.capstone.engine.engine.graphics.Color;
 import com.shepherdjerred.capstone.engine.engine.graphics.font.FontLoader;
 import com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureLoader;
 import com.shepherdjerred.capstone.engine.engine.scene.GameObject;
@@ -69,7 +70,10 @@ public class MainMenuScene implements Scene {
         1.485517919,
         300,
         Logo.Type.GAME);
-    var text = new Text(new TextRenderer(fontLoader), "Hey!", new SceneCoordinate(0, 0, 0));
+    var text = new Text(new TextRenderer(fontLoader),
+        "Hey!",
+        new Color(1, 1, 1, 1),
+        new SceneCoordinate(0, 0, 0));
 
     gameObjects.add(background);
     gameObjects.add(button);
@@ -124,11 +128,11 @@ public class MainMenuScene implements Scene {
 
   @Override
   public void updateState(float interval) {
+
   }
 
   @Override
   public SceneRenderer getSceneRenderer() {
     return renderer;
   }
-
 }

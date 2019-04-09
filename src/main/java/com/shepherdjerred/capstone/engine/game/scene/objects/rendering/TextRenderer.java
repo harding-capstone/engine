@@ -9,7 +9,9 @@ import com.shepherdjerred.capstone.engine.engine.graphics.font.FontName;
 import com.shepherdjerred.capstone.engine.engine.graphics.mesh.Mesh;
 import com.shepherdjerred.capstone.engine.engine.scene.GameObjectRenderer;
 import com.shepherdjerred.capstone.engine.game.scene.objects.Text;
+import lombok.extern.log4j.Log4j2;
 
+@Log4j2
 public class TextRenderer implements GameObjectRenderer<Text> {
 
   private final FontLoader fontLoader;
@@ -25,9 +27,9 @@ public class TextRenderer implements GameObjectRenderer<Text> {
 
     var vertices = new float[] {
         0, 0, 0,
-        0, 300, 0,
-        300, 0, 0,
-        300, 300, 0
+        0, 600, 0,
+        600, 0, 0,
+        600, 600, 0
     };
 
     var textureCoordinates = new float[] {
@@ -59,6 +61,5 @@ public class TextRenderer implements GameObjectRenderer<Text> {
 
   @Override
   public void cleanup() {
-
   }
 }

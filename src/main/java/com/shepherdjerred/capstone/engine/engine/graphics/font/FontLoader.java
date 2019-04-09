@@ -1,19 +1,28 @@
 package com.shepherdjerred.capstone.engine.engine.graphics.font;
 
-import static org.lwjgl.opengl.GL11.GL_ALPHA;
+import static org.lwjgl.opengl.GL11.GL_NEAREST;
+import static org.lwjgl.opengl.GL11.GL_RED;
 import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_MAG_FILTER;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_MIN_FILTER;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_WRAP_S;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_WRAP_T;
 import static org.lwjgl.opengl.GL11.GL_UNSIGNED_BYTE;
 import static org.lwjgl.opengl.GL11.glBindTexture;
 import static org.lwjgl.opengl.GL11.glGenTextures;
 import static org.lwjgl.opengl.GL11.glTexImage2D;
+import static org.lwjgl.opengl.GL11.glTexParameteri;
+import static org.lwjgl.opengl.GL12.GL_CLAMP_TO_EDGE;
 import static org.lwjgl.stb.STBTruetype.stbtt_BakeFontBitmap;
 import static org.lwjgl.stb.STBTruetype.stbtt_GetFontVMetrics;
 import static org.lwjgl.stb.STBTruetype.stbtt_InitFont;
 
 import com.shepherdjerred.capstone.engine.engine.util.ResourceFileLocator;
-import java.io.FileInputStream;
 import java.nio.ByteBuffer;
-import java.nio.channels.FileChannel;
+import java.nio.channels.SeekableByteChannel;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.lwjgl.BufferUtils;
@@ -31,11 +40,20 @@ public class FontLoader {
     ByteBuffer fontDataBuffer;
     var filePath = fileLocator.getFontPath(fontName);
 
-    FileInputStream inputStream = new FileInputStream(filePath);
-    FileChannel fileChannel = inputStream.getChannel();
-    fontDataBuffer = fileChannel.map(FileChannel.MapMode.READ_ONLY, 0, fileChannel.size());
-    fileChannel.close();
-    inputStream.close();
+//    FileInputStream inputStream = new FileInputStream(filePath);
+//    FileChannel fileChannel = inputStream.getChannel();
+//    fontDataBuffer = fileChannel.map(FileChannel.MapMode.READ_ONLY, 0, fileChannel.size());
+//    fileChannel.close();
+//    inputStream.close();
+
+    Path path = Paths.get(filePath);
+    try (SeekableByteChannel fc = Files.newByteChannel(path)) {
+      fontDataBuffer = BufferUtils.createByteBuffer((int) fc.size() + 1);
+      while (fc.read(fontDataBuffer) != -1) {
+      }
+    }
+
+    fontDataBuffer.flip();
 
     var info = STBTTFontinfo.create();
     if (!stbtt_InitFont(info, fontDataBuffer)) {
@@ -53,16 +71,17 @@ public class FontLoader {
 
       stbtt_GetFontVMetrics(info, ascentBuffer, descentBuffer, gapBuffer);
 
-      ascent = ascentBuffer.get();
-      descent = descentBuffer.get();
-      gap = gapBuffer.get();
+      ascent = ascentBuffer.get(0);
+      descent = descentBuffer.get(0);
+      gap = gapBuffer.get(0);
     }
 
     var bitmapWidth = Math.round(512);
     var bitmapHeight = Math.round(512);
     var characters = STBTTBakedChar.malloc(96);
     var bitmapBuffer = BufferUtils.createByteBuffer(bitmapWidth * bitmapHeight);
-    stbtt_BakeFontBitmap(fontDataBuffer,
+
+    var value = stbtt_BakeFontBitmap(fontDataBuffer,
         24,
         bitmapBuffer,
         bitmapWidth,
@@ -70,18 +89,28 @@ public class FontLoader {
         32,
         characters);
 
+    if (value == 0) {
+      throw new Exception("No characters fit into texture");
+    }
+
     var glTextureName = glGenTextures();
     glBindTexture(GL_TEXTURE_2D, glTextureName);
     glTexImage2D(GL_TEXTURE_2D,
         0,
-        GL_ALPHA,
+        GL_RED,
         bitmapWidth,
         bitmapHeight,
         0,
-        GL_ALPHA,
+        GL_RED,
         GL_UNSIGNED_BYTE,
         bitmapBuffer);
 
-    return new Font(ascent, descent, gap, glTextureName);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+    var font = new Font(ascent, descent, gap, glTextureName);
+    return font;
   }
 }

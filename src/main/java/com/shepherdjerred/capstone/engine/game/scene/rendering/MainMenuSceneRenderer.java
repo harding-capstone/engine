@@ -63,11 +63,14 @@ public class MainMenuSceneRenderer implements SceneRenderer<MainMenuScene> {
           position.getZ()), 0, 1);
 
       if (element instanceof Text) {
+        var text = (Text) element;
+        var color = text.getColor();
         textShaderProgram.bind();
         textShaderProgram.setUniform(ShaderUniform.TEXTURE_SAMPLER, 0);
         textShaderProgram.setUniform(ShaderUniform.PROJECTION_MATRIX, projectionMatrix.getMatrix());
         textShaderProgram.setUniform(ShaderUniform.MODEL_MATRIX, modelMatrix.getMatrix());
-        textShaderProgram.setUniform(ShaderUniform.TEXT_COLOR, new float[] {1, 1, 1});
+        textShaderProgram.setUniform(ShaderUniform.TEXT_COLOR,
+            new float[] {color.getRed(), color.getBlue(), color.getGreen()});
       } else {
         shaderProgram.bind();
         shaderProgram.setUniform(ShaderUniform.TEXTURE_SAMPLER, 0);
