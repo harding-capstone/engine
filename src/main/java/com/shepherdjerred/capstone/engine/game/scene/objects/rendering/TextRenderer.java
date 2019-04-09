@@ -3,6 +3,7 @@ package com.shepherdjerred.capstone.engine.game.scene.objects.rendering;
 import com.shepherdjerred.capstone.engine.engine.graphics.font.Font;
 import com.shepherdjerred.capstone.engine.engine.graphics.font.FontLoader;
 import com.shepherdjerred.capstone.engine.engine.graphics.mesh.Mesh;
+import com.shepherdjerred.capstone.engine.engine.graphics.shader.ShaderProgram;
 import com.shepherdjerred.capstone.engine.engine.scene.GameObjectRenderer;
 import com.shepherdjerred.capstone.engine.game.scene.objects.Text;
 import java.util.HashMap;
@@ -12,11 +13,12 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class TextRenderer implements GameObjectRenderer<Text> {
 
+  private ShaderProgram shaderProgram;
   private final FontLoader fontLoader;
   private Font font;
   private Map<Integer, Mesh> characterMeshMap;
 
-  public TextRenderer(FontLoader fontLoader) {
+  public TextRenderer(ShaderProgram shaderProgram, FontLoader fontLoader) {
     this.fontLoader = fontLoader;
     characterMeshMap = new HashMap<>();
   }
@@ -30,11 +32,8 @@ public class TextRenderer implements GameObjectRenderer<Text> {
     var currY = 0;
     for (int i = 0; i < chars.length; i++) {
       char c = chars[i];
-//      log.info(currX);
 
       var fontChar = font.getFontCharacter(c, currX, currY);
-
-//      log.info(fontChar);
 
       var vertices = fontChar.getCoordinates().toFloatArray();
 
@@ -58,16 +57,21 @@ public class TextRenderer implements GameObjectRenderer<Text> {
 
   @Override
   public void render(Text sceneElement) {
+    shaderProgram.bind();
     font.bind();
-    char[] charArray = sceneElement.getText().toCharArray();
-    for (int i = 0; i < charArray.length; i++) {
-      char c = charArray[i];
+
+    char[] textCharacters = sceneElement.getText().toCharArray();
+    for (int i = 0; i < textCharacters.length; i++) {
       var mesh = characterMeshMap.get(i);
       mesh.render();
     }
+
+    font.unbind();
+    shaderProgram.unbind();
   }
 
   @Override
   public void cleanup() {
+    characterMeshMap.values().forEach(Mesh::cleanup);
   }
 }

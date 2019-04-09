@@ -5,6 +5,7 @@ import static org.lwjgl.opengl.GL11.glBindTexture;
 import static org.lwjgl.stb.STBTruetype.stbtt_GetBakedQuad;
 
 import com.google.common.base.Preconditions;
+import com.shepherdjerred.capstone.engine.engine.graphics.OpenGlHelper;
 import com.shepherdjerred.capstone.engine.engine.graphics.Quad;
 import com.shepherdjerred.capstone.engine.engine.graphics.RendererCoordinate;
 import com.shepherdjerred.capstone.engine.engine.graphics.TextureCoordinate;
@@ -31,6 +32,10 @@ public class Font {
 
   public void bind() {
     glBindTexture(GL_TEXTURE_2D, glTextureName);
+  }
+
+  public void unbind() {
+    OpenGlHelper.unbindTexture();
   }
 
   public FontCharacter getFontCharacter(char c, int x, int y) {
