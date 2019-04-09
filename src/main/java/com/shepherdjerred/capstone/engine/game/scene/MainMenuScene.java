@@ -61,8 +61,9 @@ public class MainMenuScene implements Scene {
         new LogoRenderer(textureLoader),
         new SceneCoordinate((windowSize.getWidth() / 2), 50, 0),
         1.485517919,
-        300,
+        200,
         Logo.Type.GAME);
+    logo.setPosition(new SceneCoordinate((windowSize.getWidth() - logo.getWidth()) / 2, 50, 0));
 
     createBackground();
     createBackgroundWithOffsets();
