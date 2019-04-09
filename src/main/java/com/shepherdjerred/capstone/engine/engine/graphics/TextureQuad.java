@@ -4,6 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
 
+/**
+ * A 2D texture quad.
+ */
 @Getter
 @ToString
 @AllArgsConstructor

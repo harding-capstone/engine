@@ -3,9 +3,7 @@ package com.shepherdjerred.capstone.engine.game.scene;
 import com.shepherdjerred.capstone.engine.engine.event.MouseButtonDownEvent;
 import com.shepherdjerred.capstone.engine.engine.event.MouseButtonUpEvent;
 import com.shepherdjerred.capstone.engine.engine.event.MouseMoveEvent;
-import com.shepherdjerred.capstone.engine.engine.graphics.Color;
 import com.shepherdjerred.capstone.engine.engine.graphics.font.FontLoader;
-import com.shepherdjerred.capstone.engine.engine.graphics.font.FontName;
 import com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureLoader;
 import com.shepherdjerred.capstone.engine.engine.scene.GameObject;
 import com.shepherdjerred.capstone.engine.engine.scene.Scene;
@@ -17,11 +15,9 @@ import com.shepherdjerred.capstone.engine.game.scene.objects.Background;
 import com.shepherdjerred.capstone.engine.game.scene.objects.Background.Type;
 import com.shepherdjerred.capstone.engine.game.scene.objects.Button;
 import com.shepherdjerred.capstone.engine.game.scene.objects.Logo;
-import com.shepherdjerred.capstone.engine.game.scene.objects.Text;
 import com.shepherdjerred.capstone.engine.game.scene.objects.rendering.BackgroundRenderer;
 import com.shepherdjerred.capstone.engine.game.scene.objects.rendering.ButtonRenderer;
 import com.shepherdjerred.capstone.engine.game.scene.objects.rendering.LogoRenderer;
-import com.shepherdjerred.capstone.engine.game.scene.objects.rendering.TextRenderer;
 import com.shepherdjerred.capstone.events.Event;
 import com.shepherdjerred.capstone.events.EventBus;
 import java.util.ArrayList;
@@ -71,52 +67,10 @@ public class MainMenuScene implements Scene {
         1.485517919,
         300,
         Logo.Type.GAME);
-    var text = new Text(new TextRenderer(fontLoader),
-        "T",
-        FontName.M5X7,
-        new Color(1, 1, 1, 1),
-        12,
-        new SceneCoordinate(0, 0, 0));
-    var text0 = new Text(new TextRenderer(fontLoader),
-        "Th",
-        FontName.M5X7,
-        new Color(1, 1, 1, 1),
-        12,
-        new SceneCoordinate(0, 20, 0));
-    var text1 = new Text(new TextRenderer(fontLoader),
-        "The",
-        FontName.M5X7,
-        new Color(1, 1, 1, 1),
-        12,
-        new SceneCoordinate(0, 40, 0));
-    var text2 = new Text(new TextRenderer(fontLoader),
-        "The quick brown fox jumps over the lazy dog",
-        FontName.M5X7,
-        new Color(1, 1, 1, 1),
-        12,
-        new SceneCoordinate(0, 60, 0));
-    var text3 = new Text(new TextRenderer(fontLoader),
-        "ABCDEFGHIJKLMNOPQRSTUVWXYZ !?.",
-        FontName.M5X7,
-        new Color(1, 1, 1, 1),
-        12,
-        new SceneCoordinate(0, 80, 0));
-    var text4 = new Text(new TextRenderer(fontLoader),
-        "abcdefghijklmnopqrstuvwxyz !?.",
-        FontName.M5X7,
-        new Color(1, 1, 1, 1),
-        12,
-        new SceneCoordinate(0, 100, 0));
 
-//    gameObjects.add(background);
-//    gameObjects.add(button);
-//    gameObjects.add(logo);
-    gameObjects.add(text);
-    gameObjects.add(text0);
-    gameObjects.add(text1);
-    gameObjects.add(text2);
-    gameObjects.add(text3);
-    gameObjects.add(text4);
+    gameObjects.add(background);
+    gameObjects.add(button);
+    gameObjects.add(logo);
   }
 
   @Override

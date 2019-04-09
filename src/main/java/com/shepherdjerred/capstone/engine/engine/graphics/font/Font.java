@@ -5,6 +5,8 @@ import static org.lwjgl.opengl.GL11.glBindTexture;
 import static org.lwjgl.stb.STBTruetype.stbtt_GetBakedQuad;
 
 import com.google.common.base.Preconditions;
+import com.shepherdjerred.capstone.engine.engine.graphics.Quad;
+import com.shepherdjerred.capstone.engine.engine.graphics.RendererCoordinate;
 import com.shepherdjerred.capstone.engine.engine.graphics.TextureCoordinate;
 import com.shepherdjerred.capstone.engine.engine.graphics.TextureQuad;
 import lombok.AllArgsConstructor;
@@ -41,6 +43,7 @@ public class Font {
 
       xBuffer.put(x).flip();
       yBuffer.put(y).flip();
+
       stbtt_GetBakedQuad(characterBuffer,
           textureWidth,
           textureHeight,
@@ -54,6 +57,12 @@ public class Font {
           c,
           quad.x1() - quad.x0(),
           quad.y1() - quad.y0(),
+          new Quad(
+              new RendererCoordinate(quad.x1(), quad.y1()),
+              new RendererCoordinate(quad.x0(), quad.y1()),
+              new RendererCoordinate(quad.x0(), quad.y0()),
+              new RendererCoordinate(quad.x1(), quad.y0())
+          ),
           new TextureQuad(
               new TextureCoordinate(quad.s1(), quad.t1()),
               new TextureCoordinate(quad.s0(), quad.t1()),

@@ -1,5 +1,6 @@
 package com.shepherdjerred.capstone.engine.engine.graphics.font;
 
+import com.shepherdjerred.capstone.engine.engine.graphics.Quad;
 import com.shepherdjerred.capstone.engine.engine.graphics.TextureQuad;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,6 +14,7 @@ public class FontCharacter {
   private final char character;
   private final float width;
   private final float height;
+  private final Quad coordinates;
   private final TextureQuad textureCoordinates;
 
 }

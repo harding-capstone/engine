@@ -4,6 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
 
+/**
+ * A coordinate in a 2D texture.
+ */
 @Getter
 @ToString
 @AllArgsConstructor

@@ -14,7 +14,7 @@ public class TextRenderer implements GameObjectRenderer<Text> {
 
   private final FontLoader fontLoader;
   private Font font;
-  private Map<Character, Mesh> characterMeshMap;
+  private Map<Integer, Mesh> characterMeshMap;
 
   public TextRenderer(FontLoader fontLoader) {
     this.fontLoader = fontLoader;
@@ -28,22 +28,15 @@ public class TextRenderer implements GameObjectRenderer<Text> {
 
     var currX = 0;
     var currY = 0;
-    for (char c : chars) {
-      if (characterMeshMap.containsKey(c)) {
-        continue;
-      }
+    for (int i = 0; i < chars.length; i++) {
+      char c = chars[i];
 //      log.info(currX);
 
       var fontChar = font.getFontCharacter(c, currX, currY);
 
 //      log.info(fontChar);
 
-      var vertices = new float[] {
-          currX, currY, 0,
-          currX, fontChar.getHeight(), 0,
-          currX + fontChar.getWidth(), currY, 0,
-          currX + fontChar.getWidth(), fontChar.getHeight(), 0
-      };
+      var vertices = fontChar.getCoordinates().toFloatArray();
 
       var textureCoordinates = fontChar.getTextureCoordinates().toFloatArray();
 
@@ -53,7 +46,7 @@ public class TextRenderer implements GameObjectRenderer<Text> {
       };
 
       var mesh = new Mesh(vertices, textureCoordinates, indices);
-      characterMeshMap.put(c, mesh);
+      characterMeshMap.put(i, mesh);
 
       if (c == 32) {
         currX += 12;
@@ -66,8 +59,10 @@ public class TextRenderer implements GameObjectRenderer<Text> {
   @Override
   public void render(Text sceneElement) {
     font.bind();
-    for (char c : sceneElement.getText().toCharArray()) {
-      var mesh = characterMeshMap.get(c);
+    char[] charArray = sceneElement.getText().toCharArray();
+    for (int i = 0; i < charArray.length; i++) {
+      char c = charArray[i];
+      var mesh = characterMeshMap.get(i);
       mesh.render();
     }
   }
