@@ -28,6 +28,11 @@ public class Background implements GameObject {
 
   public enum Type {
     PURPLE_MOUNTAINS,
+    PURPLE_MOUNTAINS_A,
+    PURPLE_MOUNTAINS_B,
+    PURPLE_MOUNTAINS_C,
+    PURPLE_MOUNTAINS_D,
+    PURPLE_MOUNTAINS_E,
     RED_PLAINS
   }
 }

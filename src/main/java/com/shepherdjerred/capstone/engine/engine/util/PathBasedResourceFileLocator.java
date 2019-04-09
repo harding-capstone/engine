@@ -33,11 +33,23 @@ public class PathBasedResourceFileLocator implements ResourceFileLocator {
     textureFileNameHashMap.put(FROST_WALL, "wall_frost.png");
     textureFileNameHashMap.put(FIRE_WIZARD_FRONT, "front_fire.png");
     textureFileNameHashMap.put(TERRAIN, "terrain.png");
-    textureFileNameHashMap.put(MAIN_MENU_BUTTON, "ui/Buttons/Regular/mainMenu_button_big.png");
-    textureFileNameHashMap.put(MAIN_MENU_BUTTON_HOVERED, "ui/Buttons/Regular/mainMenu_button_big_hovered.png");
-    textureFileNameHashMap.put(MAIN_MENU_BUTTON_CLICKED, "ui/Buttons/Regular/mainMenu_button_big_pressed.png");
-    textureFileNameHashMap.put(PURPLE_MOUNTAINS, "ui/purple mountains.png");
-    textureFileNameHashMap.put(RED_PLAINS, "ui/red plains.png");
+    textureFileNameHashMap.put(MAIN_MENU_BUTTON, "ui/buttons/mainMenu_button_big.png");
+    textureFileNameHashMap.put(MAIN_MENU_BUTTON_HOVERED,
+        "ui/buttons/mainMenu_button_big_hovered.png");
+    textureFileNameHashMap.put(MAIN_MENU_BUTTON_CLICKED,
+        "ui/buttons/mainMenu_button_big_pressed.png");
+    textureFileNameHashMap.put(PURPLE_MOUNTAINS, "ui/backgrounds/purple mountains.png");
+    textureFileNameHashMap.put(PURPLE_MOUNTAINS_A,
+        "ui/backgrounds/parallax/purple-mountains/Purple montains BGa.png");
+    textureFileNameHashMap.put(PURPLE_MOUNTAINS_B,
+        "ui/backgrounds/parallax/purple-mountains/Purple montains BGb.png");
+    textureFileNameHashMap.put(PURPLE_MOUNTAINS_C,
+        "ui/backgrounds/parallax/purple-mountains/Purple montains BGc.png");
+    textureFileNameHashMap.put(PURPLE_MOUNTAINS_D,
+        "ui/backgrounds/parallax/purple-mountains/Purple montains BGd.png");
+    textureFileNameHashMap.put(PURPLE_MOUNTAINS_E,
+        "ui/backgrounds/parallax/purple-mountains/Purple montains BGe.png");
+    textureFileNameHashMap.put(RED_PLAINS, "ui/backgrounds/red plains.png");
     textureFileNameHashMap.put(GAME_LOGO, "logos/game logo.png");
     textureFileNameHashMap.put(TEAM_LOGO, "logos/team logo.png");
     textureFileNameHashMap.put(UNKNOWN, "unknown.png");

@@ -8,7 +8,6 @@ import com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName;
 import com.shepherdjerred.capstone.engine.engine.scene.GameObjectRenderer;
 import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
 import com.shepherdjerred.capstone.engine.game.scene.objects.Background;
-import com.shepherdjerred.capstone.engine.game.scene.objects.Background.Type;
 
 public class BackgroundRenderer implements
     GameObjectRenderer<Background> {
@@ -28,10 +27,29 @@ public class BackgroundRenderer implements
     var height = windowSize.getHeight();
 
     Texture texture;
-    if (sceneElement.getType() == Type.PURPLE_MOUNTAINS) {
-      texture = textureLoader.loadTexture(TextureName.PURPLE_MOUNTAINS);
-    } else {
-      throw new UnsupportedOperationException(sceneElement.getType().toString());
+    var type = sceneElement.getType();
+
+    switch (type) {
+      case PURPLE_MOUNTAINS:
+        texture = textureLoader.loadTexture(TextureName.PURPLE_MOUNTAINS);
+        break;
+      case PURPLE_MOUNTAINS_A:
+        texture = textureLoader.loadTexture(TextureName.PURPLE_MOUNTAINS_A);
+        break;
+      case PURPLE_MOUNTAINS_B:
+        texture = textureLoader.loadTexture(TextureName.PURPLE_MOUNTAINS_B);
+        break;
+      case PURPLE_MOUNTAINS_C:
+        texture = textureLoader.loadTexture(TextureName.PURPLE_MOUNTAINS_C);
+        break;
+      case PURPLE_MOUNTAINS_D:
+        texture = textureLoader.loadTexture(TextureName.PURPLE_MOUNTAINS_D);
+        break;
+      case PURPLE_MOUNTAINS_E:
+        texture = textureLoader.loadTexture(TextureName.PURPLE_MOUNTAINS_E);
+        break;
+      default:
+        throw new UnsupportedOperationException(sceneElement.getType().toString());
     }
 
     var vertices = new float[] {

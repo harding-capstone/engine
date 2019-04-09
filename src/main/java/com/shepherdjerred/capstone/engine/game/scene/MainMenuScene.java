@@ -51,10 +51,6 @@ public class MainMenuScene implements Scene {
   }
 
   private void createGameObjects() {
-    var background = new Background(
-        new BackgroundRenderer(textureLoader, windowSize),
-        new SceneCoordinate(0, 0, 0),
-        Type.PURPLE_MOUNTAINS);
     var button = new Button(
         new ButtonRenderer(textureLoader),
         new SceneCoordinate(410, 410, -10),
@@ -68,9 +64,105 @@ public class MainMenuScene implements Scene {
         300,
         Logo.Type.GAME);
 
-    gameObjects.add(background);
+    createBackground();
+    createBackgroundWithOffsets();
+    createBackgroundWithOffsets2();
     gameObjects.add(button);
     gameObjects.add(logo);
+  }
+
+  private void createBackground() {
+    var backgroundA = new Background(
+        new BackgroundRenderer(textureLoader, windowSize),
+        new SceneCoordinate(0, 0, 0),
+        Type.PURPLE_MOUNTAINS_A);
+    var backgroundB = new Background(
+        new BackgroundRenderer(textureLoader, windowSize),
+        new SceneCoordinate(0, 0, 0),
+        Type.PURPLE_MOUNTAINS_B);
+    var backgroundC = new Background(
+        new BackgroundRenderer(textureLoader, windowSize),
+        new SceneCoordinate(0, 0, 0),
+        Type.PURPLE_MOUNTAINS_C);
+    var backgroundD = new Background(
+        new BackgroundRenderer(textureLoader, windowSize),
+        new SceneCoordinate(0, 0, 0),
+        Type.PURPLE_MOUNTAINS_D);
+    var backgroundE = new Background(
+        new BackgroundRenderer(textureLoader, windowSize),
+        new SceneCoordinate(0, 0, 0),
+        Type.PURPLE_MOUNTAINS_E);
+    gameObjects.add(backgroundA);
+    gameObjects.add(backgroundB);
+    gameObjects.add(backgroundC);
+    gameObjects.add(backgroundD);
+    gameObjects.add(backgroundE);
+  }
+
+  private void createBackgroundWithOffsets() {
+    var backgroundA = new Background(
+        new BackgroundRenderer(textureLoader, windowSize),
+        new SceneCoordinate(0, 0, 0),
+        Type.PURPLE_MOUNTAINS_A);
+    var backgroundB = new Background(
+        new BackgroundRenderer(textureLoader, windowSize),
+        new SceneCoordinate(0, 0, 0),
+        Type.PURPLE_MOUNTAINS_B);
+    var backgroundC = new Background(
+        new BackgroundRenderer(textureLoader, windowSize),
+        new SceneCoordinate(0, 0, 0),
+        Type.PURPLE_MOUNTAINS_C);
+    var backgroundD = new Background(
+        new BackgroundRenderer(textureLoader, windowSize),
+        new SceneCoordinate(0, 0, 0),
+        Type.PURPLE_MOUNTAINS_D);
+    var backgroundE = new Background(
+        new BackgroundRenderer(textureLoader, windowSize),
+        new SceneCoordinate(0, 0, 0),
+        Type.PURPLE_MOUNTAINS_E);
+    backgroundA.setPosition(new SceneCoordinate(windowSize.getWidth(), 0, 0));
+    backgroundB.setPosition(new SceneCoordinate(windowSize.getWidth(), 0, 0));
+    backgroundC.setPosition(new SceneCoordinate(windowSize.getWidth(), 0, 0));
+    backgroundD.setPosition(new SceneCoordinate(windowSize.getWidth(), 0, 0));
+    backgroundE.setPosition(new SceneCoordinate(windowSize.getWidth(), 0, 0));
+    gameObjects.add(backgroundA);
+    gameObjects.add(backgroundB);
+    gameObjects.add(backgroundC);
+    gameObjects.add(backgroundD);
+    gameObjects.add(backgroundE);
+  }
+
+  private void createBackgroundWithOffsets2() {
+    var backgroundA = new Background(
+        new BackgroundRenderer(textureLoader, windowSize),
+        new SceneCoordinate(0, 0, 0),
+        Type.PURPLE_MOUNTAINS_A);
+    var backgroundB = new Background(
+        new BackgroundRenderer(textureLoader, windowSize),
+        new SceneCoordinate(0, 0, 0),
+        Type.PURPLE_MOUNTAINS_B);
+    var backgroundC = new Background(
+        new BackgroundRenderer(textureLoader, windowSize),
+        new SceneCoordinate(0, 0, 0),
+        Type.PURPLE_MOUNTAINS_C);
+    var backgroundD = new Background(
+        new BackgroundRenderer(textureLoader, windowSize),
+        new SceneCoordinate(0, 0, 0),
+        Type.PURPLE_MOUNTAINS_D);
+    var backgroundE = new Background(
+        new BackgroundRenderer(textureLoader, windowSize),
+        new SceneCoordinate(0, 0, 0),
+        Type.PURPLE_MOUNTAINS_E);
+    backgroundA.setPosition(new SceneCoordinate(windowSize.getWidth() * 2, 0, 0));
+    backgroundB.setPosition(new SceneCoordinate(windowSize.getWidth() * 2, 0, 0));
+    backgroundC.setPosition(new SceneCoordinate(windowSize.getWidth() * 2, 0, 0));
+    backgroundD.setPosition(new SceneCoordinate(windowSize.getWidth() * 2, 0, 0));
+    backgroundE.setPosition(new SceneCoordinate(windowSize.getWidth() * 2, 0, 0));
+    gameObjects.add(backgroundA);
+    gameObjects.add(backgroundB);
+    gameObjects.add(backgroundC);
+    gameObjects.add(backgroundD);
+    gameObjects.add(backgroundE);
   }
 
   @Override
@@ -120,7 +212,39 @@ public class MainMenuScene implements Scene {
 
   @Override
   public void updateState(float interval) {
-
+    gameObjects.forEach(gameObject -> {
+      if (gameObject instanceof Background) {
+        var background = (Background) gameObject;
+        var pos = background.getPosition();
+        float step;
+        var type = background.getType();
+        switch (type) {
+          case PURPLE_MOUNTAINS_A:
+            step = 0f;
+            break;
+          case PURPLE_MOUNTAINS_B:
+            step = .2f;
+            break;
+          case PURPLE_MOUNTAINS_C:
+            step = .6f;
+            break;
+          case PURPLE_MOUNTAINS_D:
+            step = 1.2f;
+            break;
+          case PURPLE_MOUNTAINS_E:
+            step = 2.4f;
+            break;
+          default:
+            step = 0;
+            break;
+        }
+        var newPos = new SceneCoordinate(pos.getX() - step, pos.getY(), pos.getZ());
+        if (newPos.getX() < windowSize.getWidth() * -1) {
+          newPos = new SceneCoordinate(windowSize.getWidth() * 2, pos.getY(), pos.getZ());
+        }
+        background.setPosition(newPos);
+      }
+    });
   }
 
   @Override
