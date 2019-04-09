@@ -2,7 +2,9 @@ package com.shepherdjerred.capstone.engine.engine.input.keyboard;
 
 import static com.shepherdjerred.capstone.engine.engine.input.keyboard.Key.*;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_A;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_B;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_ESCAPE;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_W;
 
 import java.util.Optional;
 
@@ -17,6 +19,12 @@ public class GlfwKeyCodeConverter {
     switch (glfwKey) {
       case GLFW_KEY_A:
         key = A;
+        break;
+      case GLFW_KEY_B:
+        key = B;
+        break;
+      case GLFW_KEY_W:
+        key = W;
         break;
       case GLFW_KEY_ESCAPE:
         key = ESCAPE;

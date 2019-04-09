@@ -18,11 +18,9 @@ import static org.lwjgl.stb.STBTruetype.stbtt_GetFontVMetrics;
 import static org.lwjgl.stb.STBTruetype.stbtt_InitFont;
 
 import com.shepherdjerred.capstone.engine.engine.util.ResourceFileLocator;
+import java.io.FileInputStream;
 import java.nio.ByteBuffer;
-import java.nio.channels.SeekableByteChannel;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.nio.channels.FileChannel;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.lwjgl.BufferUtils;
@@ -40,18 +38,11 @@ public class FontLoader {
     ByteBuffer fontDataBuffer;
     var filePath = fileLocator.getFontPath(fontName);
 
-//    FileInputStream inputStream = new FileInputStream(filePath);
-//    FileChannel fileChannel = inputStream.getChannel();
-//    fontDataBuffer = fileChannel.map(FileChannel.MapMode.READ_ONLY, 0, fileChannel.size());
-//    fileChannel.close();
-//    inputStream.close();
-
-    Path path = Paths.get(filePath);
-    try (SeekableByteChannel fc = Files.newByteChannel(path)) {
-      fontDataBuffer = BufferUtils.createByteBuffer((int) fc.size() + 1);
-      while (fc.read(fontDataBuffer) != -1) {
-      }
-    }
+    FileInputStream inputStream = new FileInputStream(filePath);
+    FileChannel fileChannel = inputStream.getChannel();
+    fontDataBuffer = fileChannel.map(FileChannel.MapMode.READ_ONLY, 0, fileChannel.size());
+    fileChannel.close();
+    inputStream.close();
 
     fontDataBuffer.flip();
 
@@ -110,7 +101,6 @@ public class FontLoader {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-    var font = new Font(ascent, descent, gap, glTextureName);
-    return font;
+    return new Font(ascent, descent, gap, glTextureName, bitmapWidth, bitmapHeight, characters);
   }
 }

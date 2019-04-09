@@ -1,8 +1,14 @@
 package com.shepherdjerred.capstone.engine.engine;
 
+import com.shepherdjerred.capstone.engine.engine.event.KeyReleasedEvent;
 import com.shepherdjerred.capstone.engine.engine.event.MouseMoveEvent;
+import com.shepherdjerred.capstone.engine.engine.event.ToggleBlendingEvent;
+import com.shepherdjerred.capstone.engine.engine.event.ToggleWireframeEvent;
 import com.shepherdjerred.capstone.engine.engine.event.WindowResizeEvent;
+import com.shepherdjerred.capstone.engine.engine.event.handler.KeyReleasedEventHandler;
 import com.shepherdjerred.capstone.engine.engine.event.handler.MouseMoveEventHandler;
+import com.shepherdjerred.capstone.engine.engine.event.handler.ToggleBlendingEventHandler;
+import com.shepherdjerred.capstone.engine.engine.event.handler.ToggleWireframeEventHandler;
 import com.shepherdjerred.capstone.engine.engine.event.handler.WindowResizedEventHandler;
 import com.shepherdjerred.capstone.engine.engine.input.mouse.MouseTracker;
 import com.shepherdjerred.capstone.engine.engine.window.GlfwWindow;
@@ -53,5 +59,8 @@ public class GameEngine {
     eventBus.registerHandler(new EventLoggerHandler<>());
     eventBus.registerHandler(WindowResizeEvent.class, new WindowResizedEventHandler());
     eventBus.registerHandler(MouseMoveEvent.class, new MouseMoveEventHandler(mouseTracker));
+    eventBus.registerHandler(ToggleWireframeEvent.class, new ToggleWireframeEventHandler());
+    eventBus.registerHandler(ToggleBlendingEvent.class, new ToggleBlendingEventHandler());
+    eventBus.registerHandler(KeyReleasedEvent.class, new KeyReleasedEventHandler(eventBus));
   }
 }

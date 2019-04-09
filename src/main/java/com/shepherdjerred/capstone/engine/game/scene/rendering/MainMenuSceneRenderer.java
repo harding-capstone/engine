@@ -21,6 +21,7 @@ import com.shepherdjerred.capstone.engine.engine.graphics.shader.ShaderProgram;
 import com.shepherdjerred.capstone.engine.engine.graphics.shader.ShaderUniform;
 import com.shepherdjerred.capstone.engine.engine.graphics.shader.code.ClasspathFileShaderCodeLoader;
 import com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureLoader;
+import com.shepherdjerred.capstone.engine.engine.scene.GameObject;
 import com.shepherdjerred.capstone.engine.engine.scene.SceneRenderer;
 import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
 import com.shepherdjerred.capstone.engine.game.scene.MainMenuScene;
@@ -91,7 +92,9 @@ public class MainMenuSceneRenderer implements SceneRenderer<MainMenuScene> {
     enableDepth();
     registerEventHandlers();
 
-    scene.getGameObjects().forEach(gameObject -> gameObject.getRenderer().init(gameObject));
+    for (GameObject gameObject : scene.getGameObjects()) {
+      gameObject.getRenderer().init(gameObject);
+    }
   }
 
   private void registerEventHandlers() {

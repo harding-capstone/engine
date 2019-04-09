@@ -5,6 +5,7 @@ import com.shepherdjerred.capstone.engine.engine.event.MouseButtonUpEvent;
 import com.shepherdjerred.capstone.engine.engine.event.MouseMoveEvent;
 import com.shepherdjerred.capstone.engine.engine.graphics.Color;
 import com.shepherdjerred.capstone.engine.engine.graphics.font.FontLoader;
+import com.shepherdjerred.capstone.engine.engine.graphics.font.FontName;
 import com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureLoader;
 import com.shepherdjerred.capstone.engine.engine.scene.GameObject;
 import com.shepherdjerred.capstone.engine.engine.scene.Scene;
@@ -71,14 +72,51 @@ public class MainMenuScene implements Scene {
         300,
         Logo.Type.GAME);
     var text = new Text(new TextRenderer(fontLoader),
-        "Hey!",
+        "T",
+        FontName.M5X7,
         new Color(1, 1, 1, 1),
+        12,
         new SceneCoordinate(0, 0, 0));
+    var text0 = new Text(new TextRenderer(fontLoader),
+        "Th",
+        FontName.M5X7,
+        new Color(1, 1, 1, 1),
+        12,
+        new SceneCoordinate(0, 20, 0));
+    var text1 = new Text(new TextRenderer(fontLoader),
+        "The",
+        FontName.M5X7,
+        new Color(1, 1, 1, 1),
+        12,
+        new SceneCoordinate(0, 40, 0));
+    var text2 = new Text(new TextRenderer(fontLoader),
+        "The quick brown fox jumps over the lazy dog",
+        FontName.M5X7,
+        new Color(1, 1, 1, 1),
+        12,
+        new SceneCoordinate(0, 60, 0));
+    var text3 = new Text(new TextRenderer(fontLoader),
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZ !?.",
+        FontName.M5X7,
+        new Color(1, 1, 1, 1),
+        12,
+        new SceneCoordinate(0, 80, 0));
+    var text4 = new Text(new TextRenderer(fontLoader),
+        "abcdefghijklmnopqrstuvwxyz !?.",
+        FontName.M5X7,
+        new Color(1, 1, 1, 1),
+        12,
+        new SceneCoordinate(0, 100, 0));
 
-    gameObjects.add(background);
-    gameObjects.add(button);
-    gameObjects.add(logo);
+//    gameObjects.add(background);
+//    gameObjects.add(button);
+//    gameObjects.add(logo);
     gameObjects.add(text);
+    gameObjects.add(text0);
+    gameObjects.add(text1);
+    gameObjects.add(text2);
+    gameObjects.add(text3);
+    gameObjects.add(text4);
   }
 
   @Override
