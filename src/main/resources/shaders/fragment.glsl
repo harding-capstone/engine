@@ -5,6 +5,7 @@ in VertexOutput {
 } inputs;
 
 layout (location = 0) out vec4 outColor;
+
 uniform sampler2D texture_sampler;
 
 void main() {
