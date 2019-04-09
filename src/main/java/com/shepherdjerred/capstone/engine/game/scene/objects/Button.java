@@ -1,10 +1,11 @@
 package com.shepherdjerred.capstone.engine.game.scene.objects;
 
-import com.shepherdjerred.capstone.engine.engine.scene.attributes.Clickable;
 import com.shepherdjerred.capstone.engine.engine.scene.GameObject;
-import com.shepherdjerred.capstone.engine.engine.scene.attributes.Hoverable;
-import com.shepherdjerred.capstone.engine.game.scene.SceneCoordinate;
 import com.shepherdjerred.capstone.engine.engine.scene.GameObjectRenderer;
+import com.shepherdjerred.capstone.engine.engine.scene.attributes.Clickable;
+import com.shepherdjerred.capstone.engine.engine.scene.attributes.Hoverable;
+import com.shepherdjerred.capstone.engine.engine.scene.position.ScenePosition;
+import com.shepherdjerred.capstone.engine.game.scene.SceneCoordinate;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -15,7 +16,7 @@ public class Button implements GameObject, Clickable, Hoverable {
 
   private final GameObjectRenderer<Button> renderer;
   @Setter
-  private SceneCoordinate position;
+  private ScenePosition position;
   private final int width;
   private final int height;
   private final Runnable onClick;
@@ -23,7 +24,7 @@ public class Button implements GameObject, Clickable, Hoverable {
   private boolean isHovered;
   public State state = State.INACTIVE;
 
-  public Button(GameObjectRenderer<Button> renderer, SceneCoordinate position, int width, int height, Runnable onClick) {
+  public Button(GameObjectRenderer<Button> renderer, ScenePosition position, int width, int height, Runnable onClick) {
     this.renderer = renderer;
     this.position = position;
     this.width = width;
@@ -68,10 +69,10 @@ public class Button implements GameObject, Clickable, Hoverable {
 
   @Override
   public boolean contains(SceneCoordinate coordinate) {
-    var maxX = position.getX() + width;
-    var minX = position.getX();
-    var maxY = position.getY() + height;
-    var minY = position.getY();
+    var maxX = position.getSceneCoordinate().getX() + width;
+    var minX = position.getSceneCoordinate().getX();
+    var maxY = position.getSceneCoordinate().getY() + height;
+    var minY = position.getSceneCoordinate().getY();
 
     return coordinate.getX() <= maxX
         && coordinate.getX() >= minX

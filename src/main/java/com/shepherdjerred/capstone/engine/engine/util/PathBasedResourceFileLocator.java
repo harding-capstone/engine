@@ -33,11 +33,11 @@ public class PathBasedResourceFileLocator implements ResourceFileLocator {
     textureFileNameHashMap.put(FROST_WALL, "wall_frost.png");
     textureFileNameHashMap.put(FIRE_WIZARD_FRONT, "front_fire.png");
     textureFileNameHashMap.put(TERRAIN, "terrain.png");
-    textureFileNameHashMap.put(MAIN_MENU_BUTTON, "ui/buttons/mainMenu_button_big.png");
+    textureFileNameHashMap.put(MAIN_MENU_BUTTON, "ui/buttons/main-menu-default.png");
     textureFileNameHashMap.put(MAIN_MENU_BUTTON_HOVERED,
-        "ui/buttons/mainMenu_button_big_hovered.png");
+        "ui/buttons/main-menu-hovered.png");
     textureFileNameHashMap.put(MAIN_MENU_BUTTON_CLICKED,
-        "ui/buttons/mainMenu_button_big_pressed.png");
+        "ui/buttons/main-menu-active.png");
     textureFileNameHashMap.put(PURPLE_MOUNTAINS, "ui/backgrounds/purple mountains.png");
     textureFileNameHashMap.put(PURPLE_MOUNTAINS_A,
         "ui/backgrounds/parallax/purple-mountains/Purple montains BGa.png");

@@ -1,7 +1,5 @@
 package com.shepherdjerred.capstone.engine.game.scene.objects;
 
-import com.shepherdjerred.capstone.engine.engine.graphics.Color;
-import com.shepherdjerred.capstone.engine.engine.graphics.font.FontName;
 import com.shepherdjerred.capstone.engine.engine.scene.GameObject;
 import com.shepherdjerred.capstone.engine.engine.scene.GameObjectRenderer;
 import com.shepherdjerred.capstone.engine.engine.scene.position.ScenePosition;
@@ -10,17 +8,29 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+/**
+ * A background spanning the entire window.
+ */
 @Getter
 @ToString
 @AllArgsConstructor
-public class Text implements GameObject {
+public class ParallaxBackground implements GameObject {
 
-  private GameObjectRenderer<Text> renderer;
-  private final String text;
-  private final FontName fontName;
-  private final Color color;
-  private final int size;
+  private final GameObjectRenderer<ParallaxBackground> renderer;
   @Setter
   private ScenePosition position;
+  private final Type type;
 
+  public enum Type {
+    CEMETERY,
+    CEMETERY_NIGHT,
+    DESERT,
+    DESERT_RED,
+    GREEN_FOREST,
+    GREEN_MOUNTAINS,
+    NIGHT_FOREST,
+    PLAINS,
+    PURPLE_MOUNTAINS,
+    RED_PLAINS
+  }
 }

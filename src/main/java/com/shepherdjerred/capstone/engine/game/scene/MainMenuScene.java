@@ -10,12 +10,13 @@ import com.shepherdjerred.capstone.engine.engine.scene.Scene;
 import com.shepherdjerred.capstone.engine.engine.scene.SceneRenderer;
 import com.shepherdjerred.capstone.engine.engine.scene.attributes.Clickable;
 import com.shepherdjerred.capstone.engine.engine.scene.attributes.Hoverable;
+import com.shepherdjerred.capstone.engine.engine.scene.position.AbsoluteScenePosition;
+import com.shepherdjerred.capstone.engine.engine.scene.position.RelativeScenePosition;
+import com.shepherdjerred.capstone.engine.engine.scene.position.RelativeScenePosition.HorizontalPosition;
+import com.shepherdjerred.capstone.engine.engine.scene.position.RelativeScenePosition.VerticalPosition;
 import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
-import com.shepherdjerred.capstone.engine.game.scene.objects.Background;
-import com.shepherdjerred.capstone.engine.game.scene.objects.Background.Type;
 import com.shepherdjerred.capstone.engine.game.scene.objects.Button;
 import com.shepherdjerred.capstone.engine.game.scene.objects.Logo;
-import com.shepherdjerred.capstone.engine.game.scene.objects.rendering.BackgroundRenderer;
 import com.shepherdjerred.capstone.engine.game.scene.objects.rendering.ButtonRenderer;
 import com.shepherdjerred.capstone.engine.game.scene.objects.rendering.LogoRenderer;
 import com.shepherdjerred.capstone.events.Event;
@@ -53,117 +54,26 @@ public class MainMenuScene implements Scene {
   private void createGameObjects() {
     var button = new Button(
         new ButtonRenderer(textureLoader),
-        new SceneCoordinate(410, 410, -10),
+        new AbsoluteScenePosition(new SceneCoordinate(410, 410, -10)),
         100,
         100,
         () -> log.info("Hey there!"));
     var logo = new Logo(
         new LogoRenderer(textureLoader),
-        new SceneCoordinate((windowSize.getWidth() / 2), 50, 0),
+        new AbsoluteScenePosition(new SceneCoordinate((windowSize.getWidth() / 2), 50, 0)),
         1.485517919,
         200,
         Logo.Type.GAME);
-    logo.setPosition(new SceneCoordinate((windowSize.getWidth() - logo.getWidth()) / 2, 50, 0));
+    logo.setPosition(new RelativeScenePosition(HorizontalPosition.CENTER,
+        VerticalPosition.TOP,
+        0,
+        100,
+        windowSize,
+        logo.getWidth(),
+        logo.getHeight()));
 
-    createBackground();
-    createBackgroundWithOffsets();
-    createBackgroundWithOffsets2();
     gameObjects.add(button);
     gameObjects.add(logo);
-  }
-
-  private void createBackground() {
-    var backgroundA = new Background(
-        new BackgroundRenderer(textureLoader, windowSize),
-        new SceneCoordinate(0, 0, 0),
-        Type.PURPLE_MOUNTAINS_A);
-    var backgroundB = new Background(
-        new BackgroundRenderer(textureLoader, windowSize),
-        new SceneCoordinate(0, 0, 0),
-        Type.PURPLE_MOUNTAINS_B);
-    var backgroundC = new Background(
-        new BackgroundRenderer(textureLoader, windowSize),
-        new SceneCoordinate(0, 0, 0),
-        Type.PURPLE_MOUNTAINS_C);
-    var backgroundD = new Background(
-        new BackgroundRenderer(textureLoader, windowSize),
-        new SceneCoordinate(0, 0, 0),
-        Type.PURPLE_MOUNTAINS_D);
-    var backgroundE = new Background(
-        new BackgroundRenderer(textureLoader, windowSize),
-        new SceneCoordinate(0, 0, 0),
-        Type.PURPLE_MOUNTAINS_E);
-    gameObjects.add(backgroundA);
-    gameObjects.add(backgroundB);
-    gameObjects.add(backgroundC);
-    gameObjects.add(backgroundD);
-    gameObjects.add(backgroundE);
-  }
-
-  private void createBackgroundWithOffsets() {
-    var backgroundA = new Background(
-        new BackgroundRenderer(textureLoader, windowSize),
-        new SceneCoordinate(0, 0, 0),
-        Type.PURPLE_MOUNTAINS_A);
-    var backgroundB = new Background(
-        new BackgroundRenderer(textureLoader, windowSize),
-        new SceneCoordinate(0, 0, 0),
-        Type.PURPLE_MOUNTAINS_B);
-    var backgroundC = new Background(
-        new BackgroundRenderer(textureLoader, windowSize),
-        new SceneCoordinate(0, 0, 0),
-        Type.PURPLE_MOUNTAINS_C);
-    var backgroundD = new Background(
-        new BackgroundRenderer(textureLoader, windowSize),
-        new SceneCoordinate(0, 0, 0),
-        Type.PURPLE_MOUNTAINS_D);
-    var backgroundE = new Background(
-        new BackgroundRenderer(textureLoader, windowSize),
-        new SceneCoordinate(0, 0, 0),
-        Type.PURPLE_MOUNTAINS_E);
-    backgroundA.setPosition(new SceneCoordinate(windowSize.getWidth(), 0, 0));
-    backgroundB.setPosition(new SceneCoordinate(windowSize.getWidth(), 0, 0));
-    backgroundC.setPosition(new SceneCoordinate(windowSize.getWidth(), 0, 0));
-    backgroundD.setPosition(new SceneCoordinate(windowSize.getWidth(), 0, 0));
-    backgroundE.setPosition(new SceneCoordinate(windowSize.getWidth(), 0, 0));
-    gameObjects.add(backgroundA);
-    gameObjects.add(backgroundB);
-    gameObjects.add(backgroundC);
-    gameObjects.add(backgroundD);
-    gameObjects.add(backgroundE);
-  }
-
-  private void createBackgroundWithOffsets2() {
-    var backgroundA = new Background(
-        new BackgroundRenderer(textureLoader, windowSize),
-        new SceneCoordinate(0, 0, 0),
-        Type.PURPLE_MOUNTAINS_A);
-    var backgroundB = new Background(
-        new BackgroundRenderer(textureLoader, windowSize),
-        new SceneCoordinate(0, 0, 0),
-        Type.PURPLE_MOUNTAINS_B);
-    var backgroundC = new Background(
-        new BackgroundRenderer(textureLoader, windowSize),
-        new SceneCoordinate(0, 0, 0),
-        Type.PURPLE_MOUNTAINS_C);
-    var backgroundD = new Background(
-        new BackgroundRenderer(textureLoader, windowSize),
-        new SceneCoordinate(0, 0, 0),
-        Type.PURPLE_MOUNTAINS_D);
-    var backgroundE = new Background(
-        new BackgroundRenderer(textureLoader, windowSize),
-        new SceneCoordinate(0, 0, 0),
-        Type.PURPLE_MOUNTAINS_E);
-    backgroundA.setPosition(new SceneCoordinate(windowSize.getWidth() * 2, 0, 0));
-    backgroundB.setPosition(new SceneCoordinate(windowSize.getWidth() * 2, 0, 0));
-    backgroundC.setPosition(new SceneCoordinate(windowSize.getWidth() * 2, 0, 0));
-    backgroundD.setPosition(new SceneCoordinate(windowSize.getWidth() * 2, 0, 0));
-    backgroundE.setPosition(new SceneCoordinate(windowSize.getWidth() * 2, 0, 0));
-    gameObjects.add(backgroundA);
-    gameObjects.add(backgroundB);
-    gameObjects.add(backgroundC);
-    gameObjects.add(backgroundD);
-    gameObjects.add(backgroundE);
   }
 
   @Override
@@ -213,39 +123,36 @@ public class MainMenuScene implements Scene {
 
   @Override
   public void updateState(float interval) {
-    gameObjects.forEach(gameObject -> {
-      if (gameObject instanceof Background) {
-        var background = (Background) gameObject;
-        var pos = background.getPosition();
-        float step;
-        var type = background.getType();
-        switch (type) {
-          case PURPLE_MOUNTAINS_A:
-            step = 0f;
-            break;
-          case PURPLE_MOUNTAINS_B:
-            step = .2f;
-            break;
-          case PURPLE_MOUNTAINS_C:
-            step = .6f;
-            break;
-          case PURPLE_MOUNTAINS_D:
-            step = 1.2f;
-            break;
-          case PURPLE_MOUNTAINS_E:
-            step = 2.4f;
-            break;
-          default:
-            step = 0;
-            break;
-        }
-        var newPos = new SceneCoordinate(pos.getX() - step, pos.getY(), pos.getZ());
-        if (newPos.getX() < windowSize.getWidth() * -1) {
-          newPos = new SceneCoordinate(windowSize.getWidth() * 2, pos.getY(), pos.getZ());
-        }
-        background.setPosition(newPos);
-      }
-    });
+//    gameObjects.forEach(gameObject -> {
+//      if (gameObject instanceof Background) {
+//        var background = (Background) gameObject;
+//        var pos = background.getPosition();
+//        float step;
+//        var type = background.getType();
+//        switch (type) {
+//          case PURPLE_MOUNTAINS_B:
+//            step = .2f;
+//            break;
+//          case PURPLE_MOUNTAINS_C:
+//            step = .6f;
+//            break;
+//          case PURPLE_MOUNTAINS_D:
+//            step = 1.2f;
+//            break;
+//          case PURPLE_MOUNTAINS_E:
+//            step = 2.4f;
+//            break;
+//          default:
+//            step = 0;
+//            break;
+//        }
+//        var newPos = new SceneCoordinate(pos.getX() - step, pos.getY(), pos.getZ());
+//        if (newPos.getX() < windowSize.getWidth() * -1) {
+//          newPos = new SceneCoordinate(windowSize.getWidth() * 2, pos.getY(), pos.getZ());
+//        }
+//        background.setPosition(newPos);
+//      }
+//    });
   }
 
   @Override

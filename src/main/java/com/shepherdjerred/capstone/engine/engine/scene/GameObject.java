@@ -1,12 +1,12 @@
 package com.shepherdjerred.capstone.engine.engine.scene;
 
-import com.shepherdjerred.capstone.engine.game.scene.SceneCoordinate;
+import com.shepherdjerred.capstone.engine.engine.scene.position.ScenePosition;
 
 public interface GameObject {
 
-  SceneCoordinate getPosition();
+  ScenePosition getPosition();
 
-  void setPosition(SceneCoordinate sceneCoordinate);
+  void setPosition(ScenePosition scenePosition);
 
   GameObjectRenderer getRenderer();
 }

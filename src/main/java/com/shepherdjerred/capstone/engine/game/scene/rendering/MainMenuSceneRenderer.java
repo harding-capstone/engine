@@ -59,9 +59,9 @@ public class MainMenuSceneRenderer implements SceneRenderer<MainMenuScene> {
 
     scene.getGameObjects().forEach(element -> {
       var position = element.getPosition();
-      var modelMatrix = new ModelMatrix(new RendererCoordinate(position.getX(),
-          position.getY(),
-          position.getZ()), 0, 1);
+      var modelMatrix = new ModelMatrix(new RendererCoordinate(position.getSceneCoordinate().getX(),
+          position.getSceneCoordinate().getY(),
+          position.getSceneCoordinate().getZ()), 0, 1);
 
       if (element instanceof Text) {
         var text = (Text) element;
