@@ -40,15 +40,15 @@ public class PathBasedResourceFileLocator implements ResourceFileLocator {
         "ui/buttons/main-menu-active.png");
     textureFileNameHashMap.put(PURPLE_MOUNTAINS, "ui/backgrounds/purple mountains.png");
     textureFileNameHashMap.put(PURPLE_MOUNTAINS_A,
-        "ui/backgrounds/parallax/purple-mountains/Purple montains BGa.png");
+        "ui/backgrounds/parallax/purple-mountains/purple-mountains-a.png");
     textureFileNameHashMap.put(PURPLE_MOUNTAINS_B,
-        "ui/backgrounds/parallax/purple-mountains/Purple montains BGb.png");
+        "ui/backgrounds/parallax/purple-mountains/purple-mountains-b.png");
     textureFileNameHashMap.put(PURPLE_MOUNTAINS_C,
-        "ui/backgrounds/parallax/purple-mountains/Purple montains BGc.png");
+        "ui/backgrounds/parallax/purple-mountains/purple-mountains-c.png");
     textureFileNameHashMap.put(PURPLE_MOUNTAINS_D,
-        "ui/backgrounds/parallax/purple-mountains/Purple montains BGd.png");
+        "ui/backgrounds/parallax/purple-mountains/purple-mountains-d.png");
     textureFileNameHashMap.put(PURPLE_MOUNTAINS_E,
-        "ui/backgrounds/parallax/purple-mountains/Purple montains BGe.png");
+        "ui/backgrounds/parallax/purple-mountains/purple-mountains-e.png");
     textureFileNameHashMap.put(RED_PLAINS, "ui/backgrounds/red plains.png");
     textureFileNameHashMap.put(GAME_LOGO, "logos/game logo.png");
     textureFileNameHashMap.put(TEAM_LOGO, "logos/team logo.png");

@@ -17,8 +17,11 @@ import com.shepherdjerred.capstone.engine.engine.scene.position.RelativeScenePos
 import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
 import com.shepherdjerred.capstone.engine.game.scene.objects.Button;
 import com.shepherdjerred.capstone.engine.game.scene.objects.Logo;
+import com.shepherdjerred.capstone.engine.game.scene.objects.ParallaxBackground;
+import com.shepherdjerred.capstone.engine.game.scene.objects.ParallaxBackground.Type;
 import com.shepherdjerred.capstone.engine.game.scene.objects.rendering.ButtonRenderer;
 import com.shepherdjerred.capstone.engine.game.scene.objects.rendering.LogoRenderer;
+import com.shepherdjerred.capstone.engine.game.scene.objects.rendering.ParallaxBackgroundRenderer;
 import com.shepherdjerred.capstone.events.Event;
 import com.shepherdjerred.capstone.events.EventBus;
 import java.util.ArrayList;
@@ -58,6 +61,7 @@ public class MainMenuScene implements Scene {
         100,
         100,
         () -> log.info("Hey there!"));
+
     var logo = new Logo(
         new LogoRenderer(textureLoader),
         new AbsoluteScenePosition(new SceneCoordinate((windowSize.getWidth() / 2), 50, 0)),
@@ -72,6 +76,11 @@ public class MainMenuScene implements Scene {
         logo.getWidth(),
         logo.getHeight()));
 
+    var background = new ParallaxBackground(new ParallaxBackgroundRenderer(textureLoader,
+        windowSize),
+        Type.PURPLE_MOUNTAINS);
+
+    gameObjects.add(background);
     gameObjects.add(button);
     gameObjects.add(logo);
   }
@@ -123,36 +132,21 @@ public class MainMenuScene implements Scene {
 
   @Override
   public void updateState(float interval) {
-//    gameObjects.forEach(gameObject -> {
-//      if (gameObject instanceof Background) {
-//        var background = (Background) gameObject;
-//        var pos = background.getPosition();
-//        float step;
-//        var type = background.getType();
-//        switch (type) {
-//          case PURPLE_MOUNTAINS_B:
-//            step = .2f;
-//            break;
-//          case PURPLE_MOUNTAINS_C:
-//            step = .6f;
-//            break;
-//          case PURPLE_MOUNTAINS_D:
-//            step = 1.2f;
-//            break;
-//          case PURPLE_MOUNTAINS_E:
-//            step = 2.4f;
-//            break;
-//          default:
-//            step = 0;
-//            break;
-//        }
-//        var newPos = new SceneCoordinate(pos.getX() - step, pos.getY(), pos.getZ());
-//        if (newPos.getX() < windowSize.getWidth() * -1) {
-//          newPos = new SceneCoordinate(windowSize.getWidth() * 2, pos.getY(), pos.getZ());
-//        }
-//        background.setPosition(newPos);
-//      }
-//    });
+    gameObjects.forEach(gameObject -> {
+      if (gameObject instanceof ParallaxBackground) {
+        var bg = (ParallaxBackground) gameObject;
+        bg.getPositions().forEach((instance, layers) -> {
+          layers.forEach((layer, pos) -> {
+            bg.moveLayer(instance,
+                layer,
+                new AbsoluteScenePosition(new SceneCoordinate(
+                    pos.getSceneCoordinate().getX() - layer,
+                    pos.getSceneCoordinate().getY(),
+                    pos.getSceneCoordinate().getZ())));
+          });
+        });
+      }
+    });
   }
 
   @Override
