@@ -1,6 +1,7 @@
 package com.shepherdjerred.capstone.engine.game;
 
 import com.shepherdjerred.capstone.engine.engine.GameLogic;
+import com.shepherdjerred.capstone.engine.engine.graphics.OpenGlHelper;
 import com.shepherdjerred.capstone.engine.engine.graphics.font.FontLoader;
 import com.shepherdjerred.capstone.engine.engine.graphics.font.FontName;
 import com.shepherdjerred.capstone.engine.engine.graphics.shader.ShaderProgramLoader;
@@ -8,13 +9,13 @@ import com.shepherdjerred.capstone.engine.engine.graphics.shader.ShaderProgramNa
 import com.shepherdjerred.capstone.engine.engine.graphics.shader.code.ClasspathFileShaderCodeLoader;
 import com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureLoader;
 import com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName;
-import com.shepherdjerred.capstone.engine.engine.resource.ResourceManager;
 import com.shepherdjerred.capstone.engine.engine.resource.PathBasedResourceFileLocator;
 import com.shepherdjerred.capstone.engine.engine.resource.ResourceFileLocator;
-import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
-import com.shepherdjerred.capstone.engine.game.scenes.mainmenu.MainMenuScene;
+import com.shepherdjerred.capstone.engine.engine.resource.ResourceManager;
 import com.shepherdjerred.capstone.engine.engine.scene.SceneManager;
+import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
 import com.shepherdjerred.capstone.engine.game.scenes.mainmenu.MainMenuRenderer;
+import com.shepherdjerred.capstone.engine.game.scenes.mainmenu.MainMenuScene;
 import com.shepherdjerred.capstone.events.Event;
 import com.shepherdjerred.capstone.events.EventBus;
 import lombok.extern.log4j.Log4j2;
@@ -48,6 +49,10 @@ public class CastleCastersGame implements GameLogic {
 
   @Override
   public void initialize(WindowSize windowSize) throws Exception {
+    OpenGlHelper.enableDepthBuffer();
+    OpenGlHelper.enableTransparency();
+    OpenGlHelper.setClearColor();
+
     var sceneRenderer = new MainMenuRenderer(resourceManager, eventBus, windowSize);
     var scene = new MainMenuScene(sceneRenderer,
         resourceManager,
@@ -71,5 +76,6 @@ public class CastleCastersGame implements GameLogic {
 
   @Override
   public void cleanup() {
+    sceneManager.cleanup();
   }
 }

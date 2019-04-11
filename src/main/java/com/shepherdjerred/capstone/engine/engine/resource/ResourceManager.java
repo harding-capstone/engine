@@ -2,11 +2,13 @@ package com.shepherdjerred.capstone.engine.engine.resource;
 
 import java.util.HashMap;
 import java.util.Map;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Handles the loading and reference counting of resources. Useful to ensure that resources are
  * shared safely and cleaned up when possible.
  */
+@Log4j2
 public class ResourceManager {
 
   private final Map<ResourceIdentifier, Resource> resourceCache;
@@ -27,8 +29,10 @@ public class ResourceManager {
 
   @SuppressWarnings("unchecked")
   public <R extends Resource, I extends ResourceIdentifier> R get(I identifier) throws Exception {
-    var currentReferences = referenceCounter.getOrDefault(identifier, 0);
-    referenceCounter.put(identifier, currentReferences + 1);
+    var currentReferences = referenceCounter.getOrDefault(identifier, 0) + 1;
+    referenceCounter.put(identifier, currentReferences);
+
+    log.info("Allocating " + identifier + ". New usage:" + currentReferences);
 
     if (resourceCache.containsKey(identifier)) {
       return (R) resourceCache.get(identifier);
@@ -47,14 +51,17 @@ public class ResourceManager {
 
   public void free(ResourceIdentifier identifier) {
     var references = referenceCounter.get(identifier) - 1;
+    log.info("Freeing " + identifier + ". New usage: " + references);
     if (references < 0) {
       throw new IllegalStateException("Negative reference count");
     } else if (references == 0) {
+      log.info("Resource " + identifier + " no longer in use. Cleaning up.");
       resourceCache.get(identifier).cleanup();
       resourceCache.remove(identifier);
       referenceCounter.remove(identifier);
     } else {
       referenceCounter.put(identifier, references);
     }
+
   }
 }

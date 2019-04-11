@@ -1,13 +1,7 @@
 package com.shepherdjerred.capstone.engine.engine.events.handlers;
 
-import static org.lwjgl.opengl.GL11.GL_BLEND;
-import static org.lwjgl.opengl.GL11.GL_ONE_MINUS_SRC_ALPHA;
-import static org.lwjgl.opengl.GL11.glBlendFunc;
-import static org.lwjgl.opengl.GL11.glDisable;
-import static org.lwjgl.opengl.GL11.glEnable;
-import static org.lwjgl.opengl.GL11C.GL_SRC_ALPHA;
-
 import com.shepherdjerred.capstone.engine.engine.events.ToggleBlendingEvent;
+import com.shepherdjerred.capstone.engine.engine.graphics.OpenGlHelper;
 import com.shepherdjerred.capstone.events.handlers.EventHandler;
 import lombok.extern.log4j.Log4j2;
 
@@ -20,11 +14,11 @@ public class ToggleBlendingEventHandler implements EventHandler<ToggleBlendingEv
   public void handle(ToggleBlendingEvent toggleBlendingEvent) {
     isBlendingEnabled = !isBlendingEnabled;
     if (isBlendingEnabled) {
-      glEnable(GL_BLEND);
-      glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+      OpenGlHelper.enableTransparency();
     } else {
-      glDisable(GL_BLEND);
+      OpenGlHelper.disableTransparency();
     }
+
     log.info("Blending: " + isBlendingEnabled);
   }
 }

@@ -37,7 +37,7 @@ public class Font implements Resource {
   }
 
   public void unbind() {
-    OpenGlHelper.unbindTexture();
+    OpenGlHelper.unbind2dTexture();
   }
 
   public FontCharacter getFontCharacter(char c, int x, int y) {

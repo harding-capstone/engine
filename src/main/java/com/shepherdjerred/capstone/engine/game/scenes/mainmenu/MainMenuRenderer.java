@@ -1,25 +1,13 @@
 package com.shepherdjerred.capstone.engine.game.scenes.mainmenu;
 
-import static org.lwjgl.opengl.GL11.GL_BLEND;
-import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
-import static org.lwjgl.opengl.GL11.GL_DEPTH;
-import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
-import static org.lwjgl.opengl.GL11.GL_LEQUAL;
-import static org.lwjgl.opengl.GL11.GL_ONE_MINUS_SRC_ALPHA;
-import static org.lwjgl.opengl.GL11.glBlendFunc;
-import static org.lwjgl.opengl.GL11.glClear;
-import static org.lwjgl.opengl.GL11.glClearColor;
-import static org.lwjgl.opengl.GL11.glDepthFunc;
-import static org.lwjgl.opengl.GL11.glEnable;
-import static org.lwjgl.opengl.GL11C.GL_SRC_ALPHA;
-
 import com.shepherdjerred.capstone.engine.engine.events.WindowResizeEvent;
+import com.shepherdjerred.capstone.engine.engine.graphics.OpenGlHelper;
 import com.shepherdjerred.capstone.engine.engine.graphics.matrices.ProjectionMatrix;
 import com.shepherdjerred.capstone.engine.engine.graphics.shader.ShaderProgram;
 import com.shepherdjerred.capstone.engine.engine.graphics.shader.ShaderProgramName;
 import com.shepherdjerred.capstone.engine.engine.graphics.shader.ShaderUniform;
-import com.shepherdjerred.capstone.engine.engine.resource.ResourceManager;
 import com.shepherdjerred.capstone.engine.engine.object.GameObject;
+import com.shepherdjerred.capstone.engine.engine.resource.ResourceManager;
 import com.shepherdjerred.capstone.engine.engine.scene.SceneRenderer;
 import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
 import com.shepherdjerred.capstone.events.Event;
@@ -47,7 +35,7 @@ public class MainMenuRenderer implements SceneRenderer<MainMenuScene> {
 
   @Override
   public void render(MainMenuScene scene) {
-    clearScreen();
+    OpenGlHelper.clearScreen();
     updateProjectionMatrix();
 
     defaultShaderProgram.bind();
@@ -62,8 +50,6 @@ public class MainMenuRenderer implements SceneRenderer<MainMenuScene> {
   public void initialize(MainMenuScene scene) throws Exception {
     updateProjectionMatrix();
     createShaderProgram();
-    enableTransparency();
-    enableDepth();
     registerEventHandlers();
 
     for (GameObject gameObject : scene.getGameObjects()) {
@@ -88,23 +74,8 @@ public class MainMenuRenderer implements SceneRenderer<MainMenuScene> {
     textShaderProgram = resourceManager.get(ShaderProgramName.TEXT);
   }
 
-  private void enableDepth() {
-    glEnable(GL_DEPTH);
-    glDepthFunc(GL_LEQUAL);
-  }
-
-  private void enableTransparency() {
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-  }
-
   private void updateProjectionMatrix() {
     projectionMatrix = new ProjectionMatrix(windowSize);
-  }
-
-  public void clearScreen() {
-    glClearColor(0, 0, 0, 0);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   }
 
   @Override

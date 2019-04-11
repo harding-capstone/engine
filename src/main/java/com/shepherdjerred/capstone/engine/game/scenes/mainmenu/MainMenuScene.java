@@ -154,7 +154,7 @@ public class MainMenuScene implements Scene {
 
   @Override
   public void cleanup() {
-
+    gameObjects.forEach(gameObject -> gameObject.getRenderer().cleanup());
   }
 
   @Override

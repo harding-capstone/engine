@@ -28,4 +28,8 @@ public class SceneManager {
     scene = newScene;
     oldScene.cleanup();
   }
+
+  public void cleanup() {
+    scene.cleanup();
+  }
 }

@@ -76,22 +76,24 @@ public class ParallaxBackgroundRenderer implements
   public void render(WindowSize windowSize, ParallaxBackground gameObject) {
     shaderProgram.bind();
 
-    gameObject.getInstances().forEach((instance, layers) -> {
-      layers.forEach((layer, position) -> {
-        var xpos = position * windowSize.getWidth();
-        var model = new ModelMatrix(new RendererCoordinate(xpos, 0, -900 + layer),
-            0,
-            1).getMatrix();
-        shaderProgram.setUniform(ShaderUniform.MODEL_MATRIX, model);
-        var texture = textureMap.get(layer);
-        texture.bind();
-        mesh.render();
-      });
-    });
+    gameObject.getInstances().forEach((instance, layers) -> layers.forEach((layer, position) -> {
+      var xpos = position * windowSize.getWidth();
+      var model = new ModelMatrix(new RendererCoordinate(xpos, 0, -900),
+          0,
+          1).getMatrix();
+      shaderProgram.setUniform(ShaderUniform.MODEL_MATRIX, model);
+      var texture = textureMap.get(layer);
+      texture.bind();
+      mesh.render();
+    }));
     shaderProgram.unbind();
   }
 
   @Override
   public void cleanup() {
+    textureMap.values().forEach(texture -> {
+      resourceManager.free(texture.getTextureName());
+    });
+    resourceManager.free(ShaderProgramName.DEFAULT);
   }
 }
