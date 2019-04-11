@@ -63,12 +63,12 @@ public class MainMenuScene implements Scene {
         new LogoRenderer(resourceManager),
         new AbsoluteScenePositioner(new SceneCoordinate((windowSize.getWidth() / 2), 50, 0)),
         1.485517919,
-        200,
+        300,
         Logo.Type.GAME);
     logo.setPosition(new RelativeScenePositioner(HorizontalPosition.CENTER,
         VerticalPosition.TOP,
         0,
-        100,
+        50,
         windowSize,
         logo.getWidth(),
         logo.getHeight()));

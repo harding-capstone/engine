@@ -23,6 +23,7 @@ public class ParallaxTexturesMapper {
         textures.setLayerTexture(3, TextureName.PLAINS_C);
         textures.setLayerTexture(4, TextureName.PLAINS_D);
         textures.setLayerTexture(5, TextureName.PLAINS_E);
+        break;
       default:
         throw new UnsupportedOperationException("Unknown type: " + type);
     }
