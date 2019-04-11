@@ -3,6 +3,8 @@ package com.shepherdjerred.capstone.engine.game.scenes.mainmenu;
 import com.shepherdjerred.capstone.engine.engine.events.MouseButtonDownEvent;
 import com.shepherdjerred.capstone.engine.engine.events.MouseButtonUpEvent;
 import com.shepherdjerred.capstone.engine.engine.events.MouseMoveEvent;
+import com.shepherdjerred.capstone.engine.engine.graphics.Color;
+import com.shepherdjerred.capstone.engine.engine.graphics.font.FontName;
 import com.shepherdjerred.capstone.engine.engine.resource.ResourceManager;
 import com.shepherdjerred.capstone.engine.engine.object.GameObject;
 import com.shepherdjerred.capstone.engine.engine.scene.Scene;
@@ -22,6 +24,8 @@ import com.shepherdjerred.capstone.engine.game.objects.background.parallax.Paral
 import com.shepherdjerred.capstone.engine.game.objects.button.ButtonRenderer;
 import com.shepherdjerred.capstone.engine.game.objects.logo.LogoRenderer;
 import com.shepherdjerred.capstone.engine.game.objects.background.parallax.ParallaxBackgroundRenderer;
+import com.shepherdjerred.capstone.engine.game.objects.text.Text;
+import com.shepherdjerred.capstone.engine.game.objects.text.TextRenderer;
 import com.shepherdjerred.capstone.events.Event;
 import com.shepherdjerred.capstone.events.EventBus;
 import java.util.ArrayList;
@@ -52,16 +56,22 @@ public class MainMenuScene implements Scene {
   }
 
   private void createGameObjects() {
-    var button = new Button(
-        new ButtonRenderer(resourceManager),
-        new AbsoluteScenePositioner(new SceneCoordinate(410, 410, -10)),
+    var button = new Button(new ButtonRenderer(resourceManager),
+        new AbsoluteScenePositioner(new SceneCoordinate(0, 0, 0)),
         100,
         100,
         () -> log.info("Hey there!"));
+    button.setPosition(new RelativeScenePositioner(HorizontalPosition.CENTER,
+        VerticalPosition.CENTER,
+        0,
+        100,
+        windowSize,
+        button.getWidth(),
+        button.getHeight()));
 
     var logo = new Logo(
         new LogoRenderer(resourceManager),
-        new AbsoluteScenePositioner(new SceneCoordinate((windowSize.getWidth() / 2), 50, 0)),
+        new AbsoluteScenePositioner(new SceneCoordinate(0, 0, 0)),
         1.485517919,
         300,
         Logo.Type.GAME);
@@ -73,6 +83,22 @@ public class MainMenuScene implements Scene {
         logo.getWidth(),
         logo.getHeight()));
 
+    var text = new Text(
+        new TextRenderer(resourceManager),
+        "Castle Casters - Development Build",
+        FontName.M5X7,
+        new Color(1, 1, 1),
+        12,
+        new AbsoluteScenePositioner(new SceneCoordinate(0, 0, 0))
+    );
+    text.setPosition(new RelativeScenePositioner(HorizontalPosition.RIGHT,
+        VerticalPosition.BOTTOM,
+        0,
+        0,
+        windowSize,
+        text.getWidth(),
+        text.getHeight()));
+
     var background = new ParallaxBackground(new ParallaxBackgroundRenderer(resourceManager,
         windowSize),
         Type.PLAINS);
@@ -80,6 +106,7 @@ public class MainMenuScene implements Scene {
     gameObjects.add(background);
     gameObjects.add(button);
     gameObjects.add(logo);
+    gameObjects.add(text);
   }
 
   @Override

@@ -9,7 +9,9 @@ import static org.lwjgl.opengl.GL11C.GL_SRC_ALPHA;
 
 import com.shepherdjerred.capstone.engine.engine.events.ToggleBlendingEvent;
 import com.shepherdjerred.capstone.events.handlers.EventHandler;
+import lombok.extern.log4j.Log4j2;
 
+@Log4j2
 public class ToggleBlendingEventHandler implements EventHandler<ToggleBlendingEvent> {
 
   private boolean isBlendingEnabled = true;
@@ -23,5 +25,6 @@ public class ToggleBlendingEventHandler implements EventHandler<ToggleBlendingEv
     } else {
       glDisable(GL_BLEND);
     }
+    log.info("Blending: " + isBlendingEnabled);
   }
 }

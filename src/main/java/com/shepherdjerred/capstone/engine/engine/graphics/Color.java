@@ -13,4 +13,15 @@ public class Color {
   private final float blue;
   private final float green;
   private final float alpha;
+
+  public Color(float red, float blue, float green) {
+    this.red = red;
+    this.blue = blue;
+    this.green = green;
+    this.alpha = 1;
+  }
+
+  public float[] toRgbFloatArray() {
+    return new float[] {red, blue, green};
+  }
 }

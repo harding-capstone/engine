@@ -23,6 +23,14 @@ public class Text implements GameObject {
   @Setter
   private ScenePositioner position;
 
+  public int getHeight() {
+    return size;
+  }
+
+  public int getWidth() {
+    return size * text.length();
+  }
+
   @Override
   public void update(float interval) {
 
