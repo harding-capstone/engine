@@ -14,7 +14,7 @@ import com.shepherdjerred.capstone.engine.engine.resource.ResourceFileLocator;
 import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
 import com.shepherdjerred.capstone.engine.game.scenes.mainmenu.MainMenuScene;
 import com.shepherdjerred.capstone.engine.engine.scene.SceneManager;
-import com.shepherdjerred.capstone.engine.game.scenes.mainmenu.MainMenuSceneRenderer;
+import com.shepherdjerred.capstone.engine.game.scenes.mainmenu.MainMenuRenderer;
 import com.shepherdjerred.capstone.events.Event;
 import com.shepherdjerred.capstone.events.EventBus;
 import lombok.extern.log4j.Log4j2;
@@ -48,7 +48,7 @@ public class CastleCastersGame implements GameLogic {
 
   @Override
   public void initialize(WindowSize windowSize) throws Exception {
-    var sceneRenderer = new MainMenuSceneRenderer(resourceManager, eventBus, windowSize);
+    var sceneRenderer = new MainMenuRenderer(resourceManager, eventBus, windowSize);
     var scene = new MainMenuScene(sceneRenderer,
         resourceManager,
         eventBus,

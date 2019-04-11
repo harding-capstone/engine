@@ -28,7 +28,7 @@ import com.shepherdjerred.capstone.events.handlers.EventHandler;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-public class MainMenuSceneRenderer implements SceneRenderer<MainMenuScene> {
+public class MainMenuRenderer implements SceneRenderer<MainMenuScene> {
 
   private final ResourceManager resourceManager;
   private final EventBus<Event> eventBus;
@@ -37,7 +37,7 @@ public class MainMenuSceneRenderer implements SceneRenderer<MainMenuScene> {
   private ShaderProgram textShaderProgram;
   private ShaderProgram defaultShaderProgram;
 
-  public MainMenuSceneRenderer(ResourceManager resourceManager,
+  public MainMenuRenderer(ResourceManager resourceManager,
       EventBus<Event> eventBus,
       WindowSize windowSize) {
     this.resourceManager = resourceManager;
