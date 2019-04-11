@@ -11,6 +11,7 @@ import com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName;
 import com.shepherdjerred.capstone.engine.engine.resource.ResourceManager;
 import com.shepherdjerred.capstone.engine.engine.object.GameObjectRenderer;
 import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
+import java.util.Map.Entry;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import lombok.extern.log4j.Log4j2;
@@ -24,11 +25,13 @@ public class ParallaxBackgroundRenderer implements
   private final SortedMap<Integer, Texture> textureMap;
   private WindowSize windowSize;
   private ShaderProgram shaderProgram;
+  private final ParallaxTexturesMapper mapper;
 
   public ParallaxBackgroundRenderer(ResourceManager resourceManager, WindowSize windowSize) {
     this.resourceManager = resourceManager;
     this.windowSize = windowSize;
     this.textureMap = new TreeMap<>();
+    mapper = new ParallaxTexturesMapper();
   }
 
   @Override
@@ -39,36 +42,12 @@ public class ParallaxBackgroundRenderer implements
     var type = gameObject.getType();
 
     shaderProgram = resourceManager.get(ShaderProgramName.DEFAULT);
+    var textures = mapper.get(type);
 
-    switch (type) {
-      case PURPLE_MOUNTAINS:
-        var pma = (Texture) resourceManager.get(TextureName.PURPLE_MOUNTAINS_A);
-        var pmb = (Texture) resourceManager.get(TextureName.PURPLE_MOUNTAINS_B);
-        var pmc = (Texture) resourceManager.get(TextureName.PURPLE_MOUNTAINS_C);
-        var pmd = (Texture) resourceManager.get(TextureName.PURPLE_MOUNTAINS_D);
-        var pme = (Texture) resourceManager.get(TextureName.PURPLE_MOUNTAINS_E);
-
-        textureMap.put(1, pma);
-        textureMap.put(2, pmb);
-        textureMap.put(3, pmc);
-        textureMap.put(4, pmd);
-        textureMap.put(5, pme);
-        break;
-      case PLAINS:
-        var pa = (Texture) resourceManager.get(TextureName.PLAINS_A);
-        var pb = (Texture) resourceManager.get(TextureName.PLAINS_B);
-        var pc = (Texture) resourceManager.get(TextureName.PLAINS_C);
-        var pd = (Texture) resourceManager.get(TextureName.PLAINS_D);
-        var pe = (Texture) resourceManager.get(TextureName.PLAINS_E);
-
-        textureMap.put(1, pa);
-        textureMap.put(2, pb);
-        textureMap.put(3, pc);
-        textureMap.put(4, pd);
-        textureMap.put(5, pe);
-        break;
-      default:
-        throw new UnsupportedOperationException(gameObject.getType().toString());
+    for (Entry<Integer, TextureName> entry : textures.getTextures().entrySet()) {
+      Integer layer = entry.getKey();
+      TextureName texture = entry.getValue();
+      textureMap.put(layer, resourceManager.get(texture));
     }
 
     var vertices = new float[] {
