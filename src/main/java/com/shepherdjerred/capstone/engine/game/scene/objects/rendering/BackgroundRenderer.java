@@ -22,19 +22,19 @@ public class BackgroundRenderer implements
   }
 
   @Override
-  public void init(Background sceneElement) {
+  public void init(Background gameObject) {
     var width = windowSize.getWidth();
     var height = windowSize.getHeight();
 
     Texture texture;
-    var type = sceneElement.getType();
+    var type = gameObject.getType();
 
     switch (type) {
       case PURPLE_MOUNTAINS:
         texture = textureProvider.get(TextureName.PURPLE_MOUNTAINS);
         break;
       default:
-        throw new UnsupportedOperationException(sceneElement.getType().toString());
+        throw new UnsupportedOperationException(gameObject.getType().toString());
     }
 
     var vertices = new float[] {
@@ -61,7 +61,7 @@ public class BackgroundRenderer implements
   }
 
   @Override
-  public void render(Background sceneElement) {
+  public void render(WindowSize windowSize, Background sceneElement) {
     texturedMesh.render();
   }
 

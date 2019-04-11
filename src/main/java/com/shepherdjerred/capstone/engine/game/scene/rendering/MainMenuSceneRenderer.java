@@ -17,6 +17,7 @@ import com.shepherdjerred.capstone.engine.engine.event.WindowResizeEvent;
 import com.shepherdjerred.capstone.engine.engine.graphics.matrices.ProjectionMatrix;
 import com.shepherdjerred.capstone.engine.engine.graphics.shader.ShaderProgram;
 import com.shepherdjerred.capstone.engine.engine.graphics.shader.ShaderProgramName;
+import com.shepherdjerred.capstone.engine.engine.graphics.shader.ShaderUniform;
 import com.shepherdjerred.capstone.engine.engine.resource.ResourceManager;
 import com.shepherdjerred.capstone.engine.engine.scene.GameObject;
 import com.shepherdjerred.capstone.engine.engine.scene.SceneRenderer;
@@ -49,7 +50,13 @@ public class MainMenuSceneRenderer implements SceneRenderer<MainMenuScene> {
   public void render(MainMenuScene scene) {
     clearScreen();
     updateProjectionMatrix();
-    scene.getGameObjects().forEach(element -> element.getRenderer().render(element));
+
+    defaultShaderProgram.bind();
+    defaultShaderProgram.setUniform(ShaderUniform.PROJECTION_MATRIX, projectionMatrix.getMatrix());
+    textShaderProgram.bind();
+    textShaderProgram.setUniform(ShaderUniform.PROJECTION_MATRIX, projectionMatrix.getMatrix());
+
+    scene.getGameObjects().forEach(element -> element.getRenderer().render(windowSize, element));
   }
 
   @Override
@@ -76,7 +83,8 @@ public class MainMenuSceneRenderer implements SceneRenderer<MainMenuScene> {
   }
 
   private void createShaderProgram() throws Exception {
-
+    defaultShaderProgram = resourceManager.get(ShaderProgramName.DEFAULT);
+    textShaderProgram = resourceManager.get(ShaderProgramName.TEXT);
   }
 
   private void enableDepth() {

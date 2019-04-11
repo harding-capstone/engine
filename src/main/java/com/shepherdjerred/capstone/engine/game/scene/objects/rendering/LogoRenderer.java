@@ -1,11 +1,17 @@
 package com.shepherdjerred.capstone.engine.game.scene.objects.rendering;
 
+import com.shepherdjerred.capstone.engine.engine.graphics.RendererCoordinate;
+import com.shepherdjerred.capstone.engine.engine.graphics.matrices.ModelMatrix;
 import com.shepherdjerred.capstone.engine.engine.graphics.mesh.Mesh;
 import com.shepherdjerred.capstone.engine.engine.graphics.mesh.TexturedMesh;
+import com.shepherdjerred.capstone.engine.engine.graphics.shader.ShaderProgram;
+import com.shepherdjerred.capstone.engine.engine.graphics.shader.ShaderProgramName;
+import com.shepherdjerred.capstone.engine.engine.graphics.shader.ShaderUniform;
 import com.shepherdjerred.capstone.engine.engine.graphics.texture.Texture;
 import com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName;
 import com.shepherdjerred.capstone.engine.engine.resource.ResourceManager;
 import com.shepherdjerred.capstone.engine.engine.scene.GameObjectRenderer;
+import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
 import com.shepherdjerred.capstone.engine.game.scene.objects.Logo;
 import com.shepherdjerred.capstone.engine.game.scene.objects.Logo.Type;
 
@@ -14,21 +20,24 @@ public class LogoRenderer implements
 
   private final ResourceManager resourceManager;
   private TexturedMesh texturedMesh;
+  private ShaderProgram defaultShaderProgram;
 
   public LogoRenderer(ResourceManager resourceManager) {
     this.resourceManager = resourceManager;
   }
 
   @Override
-  public void init(Logo sceneElement) throws Exception {
-    var width = sceneElement.getWidth();
-    var height = sceneElement.getHeight();
+  public void init(Logo gameObject) throws Exception {
+    var width = gameObject.getWidth();
+    var height = gameObject.getHeight();
+
+    defaultShaderProgram = resourceManager.get(ShaderProgramName.DEFAULT);
 
     Texture texture;
-    if (sceneElement.getType() == Type.GAME) {
+    if (gameObject.getType() == Type.GAME) {
       texture = resourceManager.get(TextureName.GAME_LOGO);
     } else {
-      throw new UnsupportedOperationException(sceneElement.getType().toString());
+      throw new UnsupportedOperationException(gameObject.getType().toString());
     }
 
     var vertices = new float[] {
@@ -55,8 +64,18 @@ public class LogoRenderer implements
   }
 
   @Override
-  public void render(Logo sceneElement) {
+  public void render(WindowSize windowSize, Logo sceneElement) {
+    var pos = sceneElement.getPosition().getSceneCoordinate();
+    var model = new ModelMatrix(new RendererCoordinate(pos.getX(), pos.getY(), pos.getZ()),
+        0,
+        1).getMatrix();
+
+    defaultShaderProgram.bind();
+    defaultShaderProgram.setUniform(ShaderUniform.MODEL_MATRIX, model);
+
     texturedMesh.render();
+
+    defaultShaderProgram.unbind();
   }
 
   @Override

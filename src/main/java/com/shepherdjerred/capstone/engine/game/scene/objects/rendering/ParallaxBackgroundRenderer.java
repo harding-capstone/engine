@@ -2,7 +2,6 @@ package com.shepherdjerred.capstone.engine.game.scene.objects.rendering;
 
 import com.shepherdjerred.capstone.engine.engine.graphics.RendererCoordinate;
 import com.shepherdjerred.capstone.engine.engine.graphics.matrices.ModelMatrix;
-import com.shepherdjerred.capstone.engine.engine.graphics.matrices.ProjectionMatrix;
 import com.shepherdjerred.capstone.engine.engine.graphics.mesh.Mesh;
 import com.shepherdjerred.capstone.engine.engine.graphics.shader.ShaderProgram;
 import com.shepherdjerred.capstone.engine.engine.graphics.shader.ShaderProgramName;
@@ -15,7 +14,9 @@ import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
 import com.shepherdjerred.capstone.engine.game.scene.objects.ParallaxBackground;
 import java.util.SortedMap;
 import java.util.TreeMap;
+import lombok.extern.log4j.Log4j2;
 
+@Log4j2
 public class ParallaxBackgroundRenderer implements
     GameObjectRenderer<ParallaxBackground> {
 
@@ -32,11 +33,11 @@ public class ParallaxBackgroundRenderer implements
   }
 
   @Override
-  public void init(ParallaxBackground sceneElement) throws Exception {
+  public void init(ParallaxBackground gameObject) throws Exception {
     var width = windowSize.getWidth();
     var height = windowSize.getHeight();
 
-    var type = sceneElement.getType();
+    var type = gameObject.getType();
 
     shaderProgram = resourceManager.get(ShaderProgramName.DEFAULT);
 
@@ -55,7 +56,7 @@ public class ParallaxBackgroundRenderer implements
         textureMap.put(5, pme);
         break;
       default:
-        throw new UnsupportedOperationException(sceneElement.getType().toString());
+        throw new UnsupportedOperationException(gameObject.getType().toString());
     }
 
     var vertices = new float[] {
@@ -81,16 +82,16 @@ public class ParallaxBackgroundRenderer implements
   }
 
   @Override
-  public void render(ParallaxBackground sceneElement) {
-    var model = new ModelMatrix(new RendererCoordinate(0, 0, 0), 0, 1).getMatrix();
-    var projection = new ProjectionMatrix(windowSize).getMatrix();
-
+  public void render(WindowSize windowSize, ParallaxBackground gameObject) {
     shaderProgram.bind();
-    shaderProgram.setUniform(ShaderUniform.MODEL_MATRIX, model);
-    shaderProgram.setUniform(ShaderUniform.PROJECTION_MATRIX, projection);
-    // TODO move the mesh.. somehow
-    sceneElement.getPositions().forEach((instance, layers) -> {
+
+    gameObject.getInstances().forEach((instance, layers) -> {
       layers.forEach((layer, position) -> {
+        var xpos = position * windowSize.getWidth();
+        var model = new ModelMatrix(new RendererCoordinate(xpos, 0, layer),
+            0,
+            1).getMatrix();
+        shaderProgram.setUniform(ShaderUniform.MODEL_MATRIX, model);
         var texture = textureMap.get(layer);
         texture.bind();
         mesh.render();

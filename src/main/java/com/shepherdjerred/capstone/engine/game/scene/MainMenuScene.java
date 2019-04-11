@@ -131,14 +131,11 @@ public class MainMenuScene implements Scene {
     gameObjects.forEach(gameObject -> {
       if (gameObject instanceof ParallaxBackground) {
         var bg = (ParallaxBackground) gameObject;
-        bg.getPositions().forEach((instance, layers) -> {
+        bg.getInstances().forEach((instance, layers) -> {
           layers.forEach((layer, pos) -> {
-            bg.moveLayer(instance,
-                layer,
-                new AbsoluteScenePosition(new SceneCoordinate(
-                    pos.getSceneCoordinate().getX() - layer,
-                    pos.getSceneCoordinate().getY(),
-                    pos.getSceneCoordinate().getZ())));
+            if (layer != 1) {
+              bg.moveLayer(instance, layer, (float) (pos - ((Math.pow(layer, 2)) * .00005)));
+            }
           });
         });
       }

@@ -22,35 +22,45 @@ public class ParallaxBackground implements GameObject {
   @Setter
   private ScenePosition position;
   private final Type type;
-  private SortedMap<Integer, SortedMap<Integer, ScenePosition>> positions;
+  private SortedMap<Integer, SortedMap<Integer, Float>> instances;
 
   public ParallaxBackground(GameObjectRenderer<ParallaxBackground> renderer, Type type) {
     this.renderer = renderer;
     this.position = new AbsoluteScenePosition(new SceneCoordinate(0, 0, 0));
     this.type = type;
-    this.positions = new TreeMap<>();
+    this.instances = new TreeMap<>();
 
-    positions.put(1, new TreeMap<>());
-    positions.put(2, new TreeMap<>());
+    instances.put(1, new TreeMap<>());
+    instances.put(2, new TreeMap<>());
 
-    var origin = new AbsoluteScenePosition(new SceneCoordinate(0, 0, 0));
+    int numLayers;
     if (type == Type.PURPLE_MOUNTAINS) {
-      positions.forEach((instance, layerMap) -> {
-        layerMap.put(1, origin);
-        layerMap.put(2, origin);
-        layerMap.put(3, origin);
-        layerMap.put(4, origin);
-        layerMap.put(5, origin);
-      });
+      numLayers = 5;
+    } else {
+      numLayers = 0;
+    }
+
+    for (int i = 1; i <= numLayers; i++) {
+      instances.get(1).put(i, 0f);
+    }
+
+    for (int i = 1; i <= numLayers; i++) {
+      instances.get(2).put(i, 1f);
     }
   }
 
-  public void moveLayer(int instance, int layer, ScenePosition scenePosition) {
-    positions.get(instance).put(layer, scenePosition);
+  public void moveLayer(int instance, int layer, float newPosition) {
+    if (newPosition < -1) {
+      newPosition = 1;
+    }
+    if (newPosition > 1) {
+      newPosition = -1;
+    }
+    instances.get(instance).put(layer, newPosition);
   }
 
-  public ScenePosition getLayerPosition(int instance, int layer) {
-    return positions.get(instance).get(layer);
+  public float getLayerPosition(int instance, int layer) {
+    return instances.get(instance).get(layer);
   }
 
   public enum Type {
