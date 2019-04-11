@@ -18,7 +18,7 @@ import static org.lwjgl.stb.STBTruetype.stbtt_GetFontVMetrics;
 import static org.lwjgl.stb.STBTruetype.stbtt_InitFont;
 
 import com.shepherdjerred.capstone.engine.engine.resource.ResourceLoader;
-import com.shepherdjerred.capstone.engine.engine.util.ResourceFileLocator;
+import com.shepherdjerred.capstone.engine.engine.resource.ResourceFileLocator;
 import java.io.FileInputStream;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;

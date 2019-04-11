@@ -1,5 +1,6 @@
 package com.shepherdjerred.capstone.engine.engine.scene;
 
+import com.shepherdjerred.capstone.engine.engine.object.GameObject;
 import java.util.List;
 
 public interface Scene {

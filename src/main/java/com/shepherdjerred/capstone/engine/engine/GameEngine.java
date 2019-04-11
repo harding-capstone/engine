@@ -1,15 +1,15 @@
 package com.shepherdjerred.capstone.engine.engine;
 
-import com.shepherdjerred.capstone.engine.engine.event.KeyReleasedEvent;
-import com.shepherdjerred.capstone.engine.engine.event.MouseMoveEvent;
-import com.shepherdjerred.capstone.engine.engine.event.ToggleBlendingEvent;
-import com.shepherdjerred.capstone.engine.engine.event.ToggleWireframeEvent;
-import com.shepherdjerred.capstone.engine.engine.event.WindowResizeEvent;
-import com.shepherdjerred.capstone.engine.engine.event.handler.KeyReleasedEventHandler;
-import com.shepherdjerred.capstone.engine.engine.event.handler.MouseMoveEventHandler;
-import com.shepherdjerred.capstone.engine.engine.event.handler.ToggleBlendingEventHandler;
-import com.shepherdjerred.capstone.engine.engine.event.handler.ToggleWireframeEventHandler;
-import com.shepherdjerred.capstone.engine.engine.event.handler.WindowResizedEventHandler;
+import com.shepherdjerred.capstone.engine.engine.events.KeyReleasedEvent;
+import com.shepherdjerred.capstone.engine.engine.events.MouseMoveEvent;
+import com.shepherdjerred.capstone.engine.engine.events.ToggleBlendingEvent;
+import com.shepherdjerred.capstone.engine.engine.events.ToggleWireframeEvent;
+import com.shepherdjerred.capstone.engine.engine.events.WindowResizeEvent;
+import com.shepherdjerred.capstone.engine.engine.events.handlers.KeyReleasedEventHandler;
+import com.shepherdjerred.capstone.engine.engine.events.handlers.MouseMoveEventHandler;
+import com.shepherdjerred.capstone.engine.engine.events.handlers.ToggleBlendingEventHandler;
+import com.shepherdjerred.capstone.engine.engine.events.handlers.ToggleWireframeEventHandler;
+import com.shepherdjerred.capstone.engine.engine.events.handlers.WindowResizedEventHandler;
 import com.shepherdjerred.capstone.engine.engine.input.mouse.MouseTracker;
 import com.shepherdjerred.capstone.engine.engine.window.GlfwWindow;
 import com.shepherdjerred.capstone.engine.engine.window.Window;

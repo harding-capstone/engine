@@ -18,7 +18,7 @@ import static org.lwjgl.stb.STBImage.stbi_image_free;
 import static org.lwjgl.stb.STBImage.stbi_load;
 
 import com.shepherdjerred.capstone.engine.engine.resource.ResourceLoader;
-import com.shepherdjerred.capstone.engine.engine.util.ResourceFileLocator;
+import com.shepherdjerred.capstone.engine.engine.resource.ResourceFileLocator;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.util.HashMap;

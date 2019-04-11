@@ -1,7 +1,7 @@
 package com.shepherdjerred.capstone.engine.engine.graphics.font;
 
 import com.shepherdjerred.capstone.engine.engine.graphics.Quad;
-import com.shepherdjerred.capstone.engine.engine.graphics.TextureQuad;
+import com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureQuad;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;

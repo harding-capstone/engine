@@ -9,12 +9,12 @@ import com.shepherdjerred.capstone.engine.engine.graphics.shader.code.ClasspathF
 import com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureLoader;
 import com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName;
 import com.shepherdjerred.capstone.engine.engine.resource.ResourceManager;
-import com.shepherdjerred.capstone.engine.engine.util.PathBasedResourceFileLocator;
-import com.shepherdjerred.capstone.engine.engine.util.ResourceFileLocator;
+import com.shepherdjerred.capstone.engine.engine.resource.PathBasedResourceFileLocator;
+import com.shepherdjerred.capstone.engine.engine.resource.ResourceFileLocator;
 import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
-import com.shepherdjerred.capstone.engine.game.scene.MainMenuScene;
-import com.shepherdjerred.capstone.engine.game.scene.SceneManager;
-import com.shepherdjerred.capstone.engine.game.scene.rendering.MainMenuSceneRenderer;
+import com.shepherdjerred.capstone.engine.game.scenes.mainmenu.MainMenuScene;
+import com.shepherdjerred.capstone.engine.engine.scene.SceneManager;
+import com.shepherdjerred.capstone.engine.game.scenes.mainmenu.MainMenuSceneRenderer;
 import com.shepherdjerred.capstone.events.Event;
 import com.shepherdjerred.capstone.events.EventBus;
 import lombok.extern.log4j.Log4j2;

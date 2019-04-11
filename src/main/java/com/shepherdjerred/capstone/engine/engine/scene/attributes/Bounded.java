@@ -1,9 +1,9 @@
 package com.shepherdjerred.capstone.engine.engine.scene.attributes;
 
-import com.shepherdjerred.capstone.engine.game.scene.SceneCoordinate;
+import com.shepherdjerred.capstone.engine.engine.scene.SceneCoordinate;
 
 /**
- * An object that takes up space in a scene.
+ * An object that takes up space in a scenes.
  */
 public interface Bounded {
 

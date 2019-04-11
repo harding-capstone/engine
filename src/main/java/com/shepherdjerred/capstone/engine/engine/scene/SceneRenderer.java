@@ -1,7 +1,7 @@
 package com.shepherdjerred.capstone.engine.engine.scene;
 
 /**
- * Renders an entire scene on the screen.
+ * Renders an entire scenes on the screen.
  */
 public interface SceneRenderer<T extends Scene> {
 
