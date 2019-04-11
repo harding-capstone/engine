@@ -71,6 +71,8 @@ public class TextRenderer implements GameObjectRenderer<Text> {
         1).getMatrix();
 
     textShaderProgram.setUniform(ShaderUniform.MODEL_MATRIX, model);
+    textShaderProgram.setUniform(ShaderUniform.TEXT_COLOR,
+        sceneElement.getColor().toRgbFloatArray());
 
     char[] textCharacters = sceneElement.getText().toCharArray();
     for (int i = 0; i < textCharacters.length; i++) {

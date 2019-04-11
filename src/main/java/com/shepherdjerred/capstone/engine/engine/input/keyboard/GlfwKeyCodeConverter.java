@@ -3,6 +3,7 @@ package com.shepherdjerred.capstone.engine.engine.input.keyboard;
 import static com.shepherdjerred.capstone.engine.engine.input.keyboard.Key.*;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_A;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_B;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_D;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_ESCAPE;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_W;
 

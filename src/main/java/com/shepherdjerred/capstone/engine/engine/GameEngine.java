@@ -3,13 +3,16 @@ package com.shepherdjerred.capstone.engine.engine;
 import com.shepherdjerred.capstone.engine.engine.events.KeyReleasedEvent;
 import com.shepherdjerred.capstone.engine.engine.events.MouseMoveEvent;
 import com.shepherdjerred.capstone.engine.engine.events.ToggleBlendingEvent;
+import com.shepherdjerred.capstone.engine.engine.events.ToggleDepthEvent;
 import com.shepherdjerred.capstone.engine.engine.events.ToggleWireframeEvent;
 import com.shepherdjerred.capstone.engine.engine.events.WindowResizeEvent;
 import com.shepherdjerred.capstone.engine.engine.events.handlers.KeyReleasedEventHandler;
 import com.shepherdjerred.capstone.engine.engine.events.handlers.MouseMoveEventHandler;
 import com.shepherdjerred.capstone.engine.engine.events.handlers.ToggleBlendingEventHandler;
+import com.shepherdjerred.capstone.engine.engine.events.handlers.ToggleDepthEventHandler;
 import com.shepherdjerred.capstone.engine.engine.events.handlers.ToggleWireframeEventHandler;
 import com.shepherdjerred.capstone.engine.engine.events.handlers.WindowResizedEventHandler;
+import com.shepherdjerred.capstone.engine.engine.input.mouse.MouseCoordinate;
 import com.shepherdjerred.capstone.engine.engine.input.mouse.MouseTracker;
 import com.shepherdjerred.capstone.engine.engine.window.GlfwWindow;
 import com.shepherdjerred.capstone.engine.engine.window.Window;
@@ -34,7 +37,7 @@ public class GameEngine {
   public GameEngine(GameLogic gameLogic, WindowSettings windowSettings, EventBus<Event> eventBus) {
     this.gameLogic = gameLogic;
     this.eventBus = eventBus;
-    this.mouseTracker = new MouseTracker();
+    this.mouseTracker = new MouseTracker(false, new MouseCoordinate(-1, -1));
     window = new GlfwWindow(windowSettings, mouseTracker, eventBus);
     gameLoop = new GameLoop(gameLogic,
         window,
@@ -62,5 +65,6 @@ public class GameEngine {
     eventBus.registerHandler(ToggleWireframeEvent.class, new ToggleWireframeEventHandler());
     eventBus.registerHandler(ToggleBlendingEvent.class, new ToggleBlendingEventHandler());
     eventBus.registerHandler(KeyReleasedEvent.class, new KeyReleasedEventHandler(eventBus));
+    eventBus.registerHandler(ToggleDepthEvent.class, new ToggleDepthEventHandler());
   }
 }
