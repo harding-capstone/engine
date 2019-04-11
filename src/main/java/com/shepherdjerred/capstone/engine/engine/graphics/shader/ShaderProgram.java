@@ -25,6 +25,7 @@ import static org.lwjgl.opengl.GL20.glUseProgram;
 import static org.lwjgl.opengl.GL20.glValidateProgram;
 
 import com.shepherdjerred.capstone.engine.engine.graphics.shader.code.ShaderCodeLoader;
+import com.shepherdjerred.capstone.engine.engine.resource.Resource;
 import java.io.IOException;
 import java.nio.FloatBuffer;
 import java.util.HashMap;
@@ -34,7 +35,7 @@ import org.joml.Matrix4f;
 import org.lwjgl.system.MemoryStack;
 
 @Log4j2
-public class ShaderProgram {
+public class ShaderProgram implements Resource {
 
   private final ShaderCodeLoader shaderCodeLoader;
   private final Map<ShaderUniform, Integer> uniformIdMap;

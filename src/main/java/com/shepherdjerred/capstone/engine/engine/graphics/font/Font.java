@@ -2,6 +2,7 @@ package com.shepherdjerred.capstone.engine.engine.graphics.font;
 
 import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
 import static org.lwjgl.opengl.GL11.glBindTexture;
+import static org.lwjgl.opengl.GL11.glDeleteTextures;
 import static org.lwjgl.stb.STBTruetype.stbtt_GetBakedQuad;
 
 import com.google.common.base.Preconditions;
@@ -10,6 +11,7 @@ import com.shepherdjerred.capstone.engine.engine.graphics.Quad;
 import com.shepherdjerred.capstone.engine.engine.graphics.RendererCoordinate;
 import com.shepherdjerred.capstone.engine.engine.graphics.TextureCoordinate;
 import com.shepherdjerred.capstone.engine.engine.graphics.TextureQuad;
+import com.shepherdjerred.capstone.engine.engine.resource.Resource;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
@@ -20,7 +22,7 @@ import org.lwjgl.system.MemoryStack;
 @Getter
 @ToString
 @AllArgsConstructor
-public class Font {
+public class Font implements Resource {
 
   private final int ascent;
   private final int descent;
@@ -75,5 +77,10 @@ public class Font {
               new TextureCoordinate(quad.s1(), quad.t0())
           ));
     }
+  }
+
+  @Override
+  public void cleanup() {
+    glDeleteTextures(glTextureName);
   }
 }

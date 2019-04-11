@@ -1,6 +1,8 @@
 package com.shepherdjerred.capstone.engine.engine.graphics.texture;
 
-public enum TextureName {
+import com.shepherdjerred.capstone.engine.engine.resource.ResourceIdentifier;
+
+public enum TextureName implements ResourceIdentifier {
   FROST_WALL,
   FIRE_WIZARD_FRONT,
   TERRAIN,

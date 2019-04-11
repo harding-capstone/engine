@@ -17,6 +17,7 @@ import static org.lwjgl.stb.STBTruetype.stbtt_BakeFontBitmap;
 import static org.lwjgl.stb.STBTruetype.stbtt_GetFontVMetrics;
 import static org.lwjgl.stb.STBTruetype.stbtt_InitFont;
 
+import com.shepherdjerred.capstone.engine.engine.resource.ResourceLoader;
 import com.shepherdjerred.capstone.engine.engine.util.ResourceFileLocator;
 import java.io.FileInputStream;
 import java.nio.ByteBuffer;
@@ -30,11 +31,11 @@ import org.lwjgl.system.MemoryStack;
 
 @Log4j2
 @AllArgsConstructor
-public class FontLoader {
+public class FontLoader implements ResourceLoader<FontName, Font> {
 
   private final ResourceFileLocator fileLocator;
 
-  public Font load(FontName fontName) throws Exception {
+  public Font get(FontName fontName) throws Exception {
     ByteBuffer fontDataBuffer;
     var filePath = fileLocator.getFontPath(fontName);
 

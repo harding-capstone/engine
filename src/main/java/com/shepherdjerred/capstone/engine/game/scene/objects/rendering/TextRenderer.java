@@ -25,7 +25,7 @@ public class TextRenderer implements GameObjectRenderer<Text> {
 
   @Override
   public void init(Text sceneElement) throws Exception {
-    font = fontLoader.load(sceneElement.getFontName());
+    font = fontLoader.get(sceneElement.getFontName());
     var chars = sceneElement.getText().toCharArray();
 
     var currX = 0;

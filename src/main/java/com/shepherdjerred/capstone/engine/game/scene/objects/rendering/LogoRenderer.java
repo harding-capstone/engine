@@ -3,8 +3,8 @@ package com.shepherdjerred.capstone.engine.game.scene.objects.rendering;
 import com.shepherdjerred.capstone.engine.engine.graphics.mesh.Mesh;
 import com.shepherdjerred.capstone.engine.engine.graphics.mesh.TexturedMesh;
 import com.shepherdjerred.capstone.engine.engine.graphics.texture.Texture;
-import com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureLoader;
 import com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName;
+import com.shepherdjerred.capstone.engine.engine.resource.ResourceManager;
 import com.shepherdjerred.capstone.engine.engine.scene.GameObjectRenderer;
 import com.shepherdjerred.capstone.engine.game.scene.objects.Logo;
 import com.shepherdjerred.capstone.engine.game.scene.objects.Logo.Type;
@@ -12,21 +12,21 @@ import com.shepherdjerred.capstone.engine.game.scene.objects.Logo.Type;
 public class LogoRenderer implements
     GameObjectRenderer<Logo> {
 
+  private final ResourceManager resourceManager;
   private TexturedMesh texturedMesh;
-  private TextureLoader textureLoader;
 
-  public LogoRenderer(TextureLoader textureLoader) {
-    this.textureLoader = textureLoader;
+  public LogoRenderer(ResourceManager resourceManager) {
+    this.resourceManager = resourceManager;
   }
 
   @Override
-  public void init(Logo sceneElement) {
+  public void init(Logo sceneElement) throws Exception {
     var width = sceneElement.getWidth();
     var height = sceneElement.getHeight();
 
     Texture texture;
     if (sceneElement.getType() == Type.GAME) {
-      texture = textureLoader.loadTexture(TextureName.GAME_LOGO);
+      texture = resourceManager.get(TextureName.GAME_LOGO);
     } else {
       throw new UnsupportedOperationException(sceneElement.getType().toString());
     }

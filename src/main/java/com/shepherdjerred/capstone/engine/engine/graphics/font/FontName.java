@@ -1,5 +1,7 @@
 package com.shepherdjerred.capstone.engine.engine.graphics.font;
 
-public enum FontName {
+import com.shepherdjerred.capstone.engine.engine.resource.ResourceIdentifier;
+
+public enum FontName implements ResourceIdentifier {
   M5X7, FIRA_CODE
 }

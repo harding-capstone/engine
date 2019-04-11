@@ -24,7 +24,7 @@ public class Main {
 
   private static void run() throws Exception {
     var settings = getSettings();
-    var logic = new CastleCastersGame(eventBus, settings.getWindowSize());
+    var logic = new CastleCastersGame(eventBus);
     var engine = new GameEngine(logic, settings, eventBus);
     engine.run();
   }

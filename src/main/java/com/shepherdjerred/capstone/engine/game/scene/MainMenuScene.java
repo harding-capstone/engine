@@ -3,8 +3,7 @@ package com.shepherdjerred.capstone.engine.game.scene;
 import com.shepherdjerred.capstone.engine.engine.event.MouseButtonDownEvent;
 import com.shepherdjerred.capstone.engine.engine.event.MouseButtonUpEvent;
 import com.shepherdjerred.capstone.engine.engine.event.MouseMoveEvent;
-import com.shepherdjerred.capstone.engine.engine.graphics.font.FontLoader;
-import com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureLoader;
+import com.shepherdjerred.capstone.engine.engine.resource.ResourceManager;
 import com.shepherdjerred.capstone.engine.engine.scene.GameObject;
 import com.shepherdjerred.capstone.engine.engine.scene.Scene;
 import com.shepherdjerred.capstone.engine.engine.scene.SceneRenderer;
@@ -32,23 +31,20 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class MainMenuScene implements Scene {
 
+  private final ResourceManager resourceManager;
   private final EventBus<Event> eventBus;
   @Getter
   private final List<GameObject> gameObjects;
-  private final TextureLoader textureLoader;
-  private final FontLoader fontLoader;
   private final WindowSize windowSize;
   private final SceneRenderer<MainMenuScene> renderer;
 
   public MainMenuScene(SceneRenderer<MainMenuScene> renderer,
+      ResourceManager resourceManager,
       EventBus<Event> eventBus,
-      TextureLoader textureLoader,
-      FontLoader fontLoader,
       WindowSize windowSize) {
     this.renderer = renderer;
+    this.resourceManager = resourceManager;
     this.eventBus = eventBus;
-    this.fontLoader = fontLoader;
-    this.textureLoader = textureLoader;
     this.windowSize = windowSize;
     gameObjects = new ArrayList<>();
     createGameObjects();
@@ -56,14 +52,14 @@ public class MainMenuScene implements Scene {
 
   private void createGameObjects() {
     var button = new Button(
-        new ButtonRenderer(textureLoader),
+        new ButtonRenderer(resourceManager),
         new AbsoluteScenePosition(new SceneCoordinate(410, 410, -10)),
         100,
         100,
         () -> log.info("Hey there!"));
 
     var logo = new Logo(
-        new LogoRenderer(textureLoader),
+        new LogoRenderer(resourceManager),
         new AbsoluteScenePosition(new SceneCoordinate((windowSize.getWidth() / 2), 50, 0)),
         1.485517919,
         200,
@@ -76,7 +72,7 @@ public class MainMenuScene implements Scene {
         logo.getWidth(),
         logo.getHeight()));
 
-    var background = new ParallaxBackground(new ParallaxBackgroundRenderer(textureLoader,
+    var background = new ParallaxBackground(new ParallaxBackgroundRenderer(resourceManager,
         windowSize),
         Type.PURPLE_MOUNTAINS);
 

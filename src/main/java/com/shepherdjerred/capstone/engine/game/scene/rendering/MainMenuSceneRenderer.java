@@ -14,18 +14,14 @@ import static org.lwjgl.opengl.GL11.glEnable;
 import static org.lwjgl.opengl.GL11C.GL_SRC_ALPHA;
 
 import com.shepherdjerred.capstone.engine.engine.event.WindowResizeEvent;
-import com.shepherdjerred.capstone.engine.engine.graphics.RendererCoordinate;
-import com.shepherdjerred.capstone.engine.engine.graphics.matrices.ModelMatrix;
 import com.shepherdjerred.capstone.engine.engine.graphics.matrices.ProjectionMatrix;
 import com.shepherdjerred.capstone.engine.engine.graphics.shader.ShaderProgram;
-import com.shepherdjerred.capstone.engine.engine.graphics.shader.ShaderUniform;
-import com.shepherdjerred.capstone.engine.engine.graphics.shader.code.ClasspathFileShaderCodeLoader;
-import com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureLoader;
+import com.shepherdjerred.capstone.engine.engine.graphics.shader.ShaderProgramName;
+import com.shepherdjerred.capstone.engine.engine.resource.ResourceManager;
 import com.shepherdjerred.capstone.engine.engine.scene.GameObject;
 import com.shepherdjerred.capstone.engine.engine.scene.SceneRenderer;
 import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
 import com.shepherdjerred.capstone.engine.game.scene.MainMenuScene;
-import com.shepherdjerred.capstone.engine.game.scene.objects.Text;
 import com.shepherdjerred.capstone.events.Event;
 import com.shepherdjerred.capstone.events.EventBus;
 import com.shepherdjerred.capstone.events.handlers.EventHandler;
@@ -34,54 +30,26 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class MainMenuSceneRenderer implements SceneRenderer<MainMenuScene> {
 
+  private final ResourceManager resourceManager;
   private final EventBus<Event> eventBus;
-  private ShaderProgram shaderProgram;
-  private ShaderProgram textShaderProgram;
   private WindowSize windowSize;
-  private final TextureLoader textureLoader;
   private ProjectionMatrix projectionMatrix;
+  private ShaderProgram textShaderProgram;
+  private ShaderProgram defaultShaderProgram;
 
-  public MainMenuSceneRenderer(EventBus<Event> eventBus,
-      ShaderProgram shaderProgram,
-      WindowSize windowSize,
-      TextureLoader textureLoader) {
+  public MainMenuSceneRenderer(ResourceManager resourceManager,
+      EventBus<Event> eventBus,
+      WindowSize windowSize) {
+    this.resourceManager = resourceManager;
     this.eventBus = eventBus;
-    this.shaderProgram = shaderProgram;
     this.windowSize = windowSize;
-    this.textureLoader = textureLoader;
   }
 
   @Override
   public void render(MainMenuScene scene) {
     clearScreen();
-
     updateProjectionMatrix();
-
-    scene.getGameObjects().forEach(element -> {
-      var position = element.getPosition();
-      var modelMatrix = new ModelMatrix(new RendererCoordinate(position.getSceneCoordinate().getX(),
-          position.getSceneCoordinate().getY(),
-          position.getSceneCoordinate().getZ()), 0, 1);
-
-      if (element instanceof Text) {
-        var text = (Text) element;
-        var color = text.getColor();
-        textShaderProgram.bind();
-        textShaderProgram.setUniform(ShaderUniform.TEXTURE_SAMPLER, 0);
-        textShaderProgram.setUniform(ShaderUniform.PROJECTION_MATRIX, projectionMatrix.getMatrix());
-        textShaderProgram.setUniform(ShaderUniform.MODEL_MATRIX, modelMatrix.getMatrix());
-        textShaderProgram.setUniform(ShaderUniform.TEXT_COLOR,
-            new float[] {color.getRed(), color.getBlue(), color.getGreen()});
-      } else {
-        shaderProgram.bind();
-        shaderProgram.setUniform(ShaderUniform.TEXTURE_SAMPLER, 0);
-        shaderProgram.setUniform(ShaderUniform.PROJECTION_MATRIX, projectionMatrix.getMatrix());
-        shaderProgram.setUniform(ShaderUniform.MODEL_MATRIX, modelMatrix.getMatrix());
-      }
-      element.getRenderer().render(element);
-    });
-
-    shaderProgram.unbind();
+    scene.getGameObjects().forEach(element -> element.getRenderer().render(element));
   }
 
   @Override
@@ -108,25 +76,7 @@ public class MainMenuSceneRenderer implements SceneRenderer<MainMenuScene> {
   }
 
   private void createShaderProgram() throws Exception {
-    var shaderLoader = new ClasspathFileShaderCodeLoader("/shaders/");
-    shaderProgram = new ShaderProgram(shaderLoader);
-    shaderProgram.createVertexShader("vertex.glsl");
-    shaderProgram.createFragmentShader("fragment.glsl");
-    shaderProgram.link();
 
-    shaderProgram.createUniform(ShaderUniform.PROJECTION_MATRIX);
-    shaderProgram.createUniform(ShaderUniform.MODEL_MATRIX);
-    shaderProgram.createUniform(ShaderUniform.TEXTURE_SAMPLER);
-
-    textShaderProgram = new ShaderProgram(shaderLoader);
-    textShaderProgram.createVertexShader("vertex.glsl");
-    textShaderProgram.createFragmentShader("textFragment.glsl");
-    textShaderProgram.link();
-
-    textShaderProgram.createUniform(ShaderUniform.PROJECTION_MATRIX);
-    textShaderProgram.createUniform(ShaderUniform.MODEL_MATRIX);
-    textShaderProgram.createUniform(ShaderUniform.TEXTURE_SAMPLER);
-    textShaderProgram.createUniform(ShaderUniform.TEXT_COLOR);
   }
 
   private void enableDepth() {
@@ -150,9 +100,8 @@ public class MainMenuSceneRenderer implements SceneRenderer<MainMenuScene> {
 
   @Override
   public void cleanup() {
-    if (shaderProgram != null) {
-      shaderProgram.cleanup();
-    }
+    resourceManager.free(ShaderProgramName.TEXT);
+    resourceManager.free(ShaderProgramName.DEFAULT);
     removeEventHandlers();
   }
 

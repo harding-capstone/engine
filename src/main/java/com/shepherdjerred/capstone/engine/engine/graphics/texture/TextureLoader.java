@@ -17,6 +17,7 @@ import static org.lwjgl.stb.STBImage.stbi_failure_reason;
 import static org.lwjgl.stb.STBImage.stbi_image_free;
 import static org.lwjgl.stb.STBImage.stbi_load;
 
+import com.shepherdjerred.capstone.engine.engine.resource.ResourceLoader;
 import com.shepherdjerred.capstone.engine.engine.util.ResourceFileLocator;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
@@ -29,7 +30,7 @@ import org.lwjgl.system.MemoryStack;
  * Loads a texture.
  */
 @ToString
-public class TextureLoader {
+public class TextureLoader implements ResourceLoader<TextureName, Texture> {
 
   private final ResourceFileLocator resourceFileLocator;
   private final Map<TextureName, Texture> textureMap;
@@ -42,7 +43,7 @@ public class TextureLoader {
   /**
    * Loads a texture from disk into memory.
    */
-  public Texture loadTexture(TextureName textureName) {
+  public Texture get(TextureName textureName) {
     var textureFilePath = resourceFileLocator.getTexturePath(textureName);
 
     int textureWidth;

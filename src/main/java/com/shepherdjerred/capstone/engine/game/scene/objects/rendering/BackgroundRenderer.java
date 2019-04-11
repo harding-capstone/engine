@@ -13,11 +13,11 @@ public class BackgroundRenderer implements
     GameObjectRenderer<Background> {
 
   private TexturedMesh texturedMesh;
-  private TextureLoader textureLoader;
+  private TextureLoader textureProvider;
   private WindowSize windowSize;
 
-  public BackgroundRenderer(TextureLoader textureLoader, WindowSize windowSize) {
-    this.textureLoader = textureLoader;
+  public BackgroundRenderer(TextureLoader textureProvider, WindowSize windowSize) {
+    this.textureProvider = textureProvider;
     this.windowSize = windowSize;
   }
 
@@ -31,7 +31,7 @@ public class BackgroundRenderer implements
 
     switch (type) {
       case PURPLE_MOUNTAINS:
-        texture = textureLoader.loadTexture(TextureName.PURPLE_MOUNTAINS);
+        texture = textureProvider.get(TextureName.PURPLE_MOUNTAINS);
         break;
       default:
         throw new UnsupportedOperationException(sceneElement.getType().toString());
