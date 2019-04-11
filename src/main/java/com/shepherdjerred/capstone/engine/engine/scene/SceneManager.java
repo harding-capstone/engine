@@ -31,5 +31,6 @@ public class SceneManager {
 
   public void cleanup() {
     scene.cleanup();
+    scene.getSceneRenderer().cleanup();
   }
 }

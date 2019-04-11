@@ -79,5 +79,8 @@ public class LogoRenderer implements
 
   @Override
   public void cleanup() {
+    resourceManager.free(texturedMesh.getTexture().getTextureName());
+    resourceManager.free(defaultShaderProgram.getShaderProgramName());
+    texturedMesh.getMesh().cleanup();
   }
 }

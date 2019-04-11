@@ -24,6 +24,7 @@ import org.lwjgl.system.MemoryStack;
 @AllArgsConstructor
 public class Font implements Resource {
 
+  private final FontName fontName;
   private final int ascent;
   private final int descent;
   private final int gap;

@@ -57,7 +57,7 @@ public class CastleCastersGame implements GameLogic {
     var scene = new MainMenuScene(sceneRenderer,
         resourceManager,
         eventBus,
-        new WindowSize(1360, 768));
+        windowSize);
     scene.initialize();
     sceneRenderer.initialize(scene);
     this.sceneManager = new SceneManager(scene);
@@ -77,5 +77,11 @@ public class CastleCastersGame implements GameLogic {
   @Override
   public void cleanup() {
     sceneManager.cleanup();
+    var references = resourceManager.getReferenceCounter();
+    if (references.size() > 0) {
+      log.warn("Resource leak(s) detected. " + references);
+    } else {
+      log.info("No resource leaks detected :)");
+    }
   }
 }

@@ -94,6 +94,6 @@ public class ParallaxBackgroundRenderer implements
     textureMap.values().forEach(texture -> {
       resourceManager.free(texture.getTextureName());
     });
-    resourceManager.free(ShaderProgramName.DEFAULT);
+    resourceManager.free(shaderProgram.getShaderProgramName());
   }
 }

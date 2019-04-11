@@ -2,6 +2,7 @@ package com.shepherdjerred.capstone.engine.engine.resource;
 
 import java.util.HashMap;
 import java.util.Map;
+import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -12,6 +13,7 @@ import lombok.extern.log4j.Log4j2;
 public class ResourceManager {
 
   private final Map<ResourceIdentifier, Resource> resourceCache;
+  @Getter
   private final Map<ResourceIdentifier, Integer> referenceCounter;
   private final Map<Class<ResourceIdentifier>, ResourceLoader> loaders;
 
@@ -32,7 +34,7 @@ public class ResourceManager {
     var currentReferences = referenceCounter.getOrDefault(identifier, 0) + 1;
     referenceCounter.put(identifier, currentReferences);
 
-    log.info("Allocating " + identifier + ". New usage:" + currentReferences);
+    log.info("Allocating " + identifier + ". New usage: " + currentReferences);
 
     if (resourceCache.containsKey(identifier)) {
       return (R) resourceCache.get(identifier);
@@ -62,6 +64,5 @@ public class ResourceManager {
     } else {
       referenceCounter.put(identifier, references);
     }
-
   }
 }

@@ -1,5 +1,9 @@
 package com.shepherdjerred.capstone.engine.game.objects.button;
 
+import static com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName.MAIN_MENU_BUTTON;
+import static com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName.MAIN_MENU_BUTTON_CLICKED;
+import static com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName.MAIN_MENU_BUTTON_HOVERED;
+
 import com.shepherdjerred.capstone.engine.engine.graphics.RendererCoordinate;
 import com.shepherdjerred.capstone.engine.engine.graphics.matrices.ModelMatrix;
 import com.shepherdjerred.capstone.engine.engine.graphics.mesh.Mesh;
@@ -8,9 +12,8 @@ import com.shepherdjerred.capstone.engine.engine.graphics.shader.ShaderProgram;
 import com.shepherdjerred.capstone.engine.engine.graphics.shader.ShaderProgramName;
 import com.shepherdjerred.capstone.engine.engine.graphics.shader.ShaderUniform;
 import com.shepherdjerred.capstone.engine.engine.graphics.texture.Texture;
-import com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName;
-import com.shepherdjerred.capstone.engine.engine.resource.ResourceManager;
 import com.shepherdjerred.capstone.engine.engine.object.GameObjectRenderer;
+import com.shepherdjerred.capstone.engine.engine.resource.ResourceManager;
 import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
 import com.shepherdjerred.capstone.engine.game.objects.button.Button.State;
 
@@ -31,9 +34,9 @@ public class ButtonRenderer implements GameObjectRenderer<Button> {
     var width = gameObject.getWidth();
     var height = gameObject.getHeight();
 
-    var normalTexture = (Texture) resourceManager.get(TextureName.MAIN_MENU_BUTTON);
-    var hoveredTexture = (Texture) resourceManager.get(TextureName.MAIN_MENU_BUTTON_HOVERED);
-    var clickedTexture = (Texture) resourceManager.get(TextureName.MAIN_MENU_BUTTON_CLICKED);
+    var normalTexture = (Texture) resourceManager.get(MAIN_MENU_BUTTON);
+    var hoveredTexture = (Texture) resourceManager.get(MAIN_MENU_BUTTON_HOVERED);
+    var clickedTexture = (Texture) resourceManager.get(MAIN_MENU_BUTTON_CLICKED);
 
     shaderProgram = resourceManager.get(ShaderProgramName.DEFAULT);
 
@@ -86,5 +89,12 @@ public class ButtonRenderer implements GameObjectRenderer<Button> {
 
   @Override
   public void cleanup() {
+    clickedMesh.getMesh().cleanup();
+    hoveredMesh.getMesh().cleanup();
+    normalMesh.getMesh().cleanup();
+    resourceManager.free(MAIN_MENU_BUTTON);
+    resourceManager.free(MAIN_MENU_BUTTON_HOVERED);
+    resourceManager.free(MAIN_MENU_BUTTON_CLICKED);
+    resourceManager.free(shaderProgram.getShaderProgramName());
   }
 }

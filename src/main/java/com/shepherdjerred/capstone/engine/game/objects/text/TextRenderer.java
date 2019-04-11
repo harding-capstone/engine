@@ -86,6 +86,8 @@ public class TextRenderer implements GameObjectRenderer<Text> {
 
   @Override
   public void cleanup() {
+    resourceManager.free(font.getFontName());
+    resourceManager.free(textShaderProgram.getShaderProgramName());
     characterMeshMap.values().forEach(Mesh::cleanup);
   }
 }

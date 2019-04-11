@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.nio.FloatBuffer;
 import java.util.HashMap;
 import java.util.Map;
+import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 import org.joml.Matrix4f;
 import org.lwjgl.system.MemoryStack;
@@ -37,13 +38,16 @@ import org.lwjgl.system.MemoryStack;
 @Log4j2
 public class ShaderProgram implements Resource {
 
+  @Getter
+  private final ShaderProgramName shaderProgramName;
   private final ShaderCodeLoader shaderCodeLoader;
   private final Map<ShaderUniform, Integer> uniformIdMap;
   private final int shaderProgramId;
   private int vertexShaderId;
   private int fragmentShaderId;
 
-  public ShaderProgram(ShaderCodeLoader shaderCodeLoader) {
+  public ShaderProgram(ShaderProgramName shaderProgramName, ShaderCodeLoader shaderCodeLoader) {
+    this.shaderProgramName = shaderProgramName;
     this.shaderCodeLoader = shaderCodeLoader;
     shaderProgramId = glCreateProgram();
     if (shaderProgramId == 0) {

@@ -102,6 +102,13 @@ public class FontLoader implements ResourceLoader<FontName, Font> {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-    return new Font(ascent, descent, gap, glTextureName, bitmapWidth, bitmapHeight, characters);
+    return new Font(fontName,
+        ascent,
+        descent,
+        gap,
+        glTextureName,
+        bitmapWidth,
+        bitmapHeight,
+        characters);
   }
 }

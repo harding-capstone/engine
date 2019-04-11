@@ -22,7 +22,8 @@ public class ShaderProgramLoader implements ResourceLoader<ShaderProgramName, Sh
   }
 
   private ShaderProgram getDefaultShaderProgram() throws Exception {
-    ShaderProgram defaultShaderProgram = new ShaderProgram(shaderCodeLoader);
+    ShaderProgram defaultShaderProgram = new ShaderProgram(ShaderProgramName.DEFAULT,
+        shaderCodeLoader);
     defaultShaderProgram.createVertexShader("vertex.glsl");
     defaultShaderProgram.createFragmentShader("fragment.glsl");
     defaultShaderProgram.link();
@@ -34,7 +35,7 @@ public class ShaderProgramLoader implements ResourceLoader<ShaderProgramName, Sh
   }
 
   private ShaderProgram getTextShaderProgram() throws Exception {
-    ShaderProgram textShaderProgram = new ShaderProgram(shaderCodeLoader);
+    ShaderProgram textShaderProgram = new ShaderProgram(ShaderProgramName.TEXT, shaderCodeLoader);
     textShaderProgram.createVertexShader("vertex.glsl");
     textShaderProgram.createFragmentShader("textFragment.glsl");
     textShaderProgram.link();

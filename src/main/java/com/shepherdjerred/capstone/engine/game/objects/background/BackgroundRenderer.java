@@ -3,25 +3,25 @@ package com.shepherdjerred.capstone.engine.game.objects.background;
 import com.shepherdjerred.capstone.engine.engine.graphics.mesh.Mesh;
 import com.shepherdjerred.capstone.engine.engine.graphics.mesh.TexturedMesh;
 import com.shepherdjerred.capstone.engine.engine.graphics.texture.Texture;
-import com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureLoader;
 import com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName;
 import com.shepherdjerred.capstone.engine.engine.object.GameObjectRenderer;
+import com.shepherdjerred.capstone.engine.engine.resource.ResourceManager;
 import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
 
 public class BackgroundRenderer implements
     GameObjectRenderer<Background> {
 
   private TexturedMesh texturedMesh;
-  private TextureLoader textureProvider;
+  private final ResourceManager resourceManager;
   private WindowSize windowSize;
 
-  public BackgroundRenderer(TextureLoader textureProvider, WindowSize windowSize) {
-    this.textureProvider = textureProvider;
+  public BackgroundRenderer(ResourceManager resourceManager, WindowSize windowSize) {
     this.windowSize = windowSize;
+    this.resourceManager = resourceManager;
   }
 
   @Override
-  public void init(Background gameObject) {
+  public void init(Background gameObject) throws Exception {
     var width = windowSize.getWidth();
     var height = windowSize.getHeight();
 
@@ -30,7 +30,7 @@ public class BackgroundRenderer implements
 
     switch (type) {
       case PURPLE_MOUNTAINS:
-        texture = textureProvider.get(TextureName.PURPLE_MOUNTAINS);
+        texture = resourceManager.get(TextureName.PURPLE_MOUNTAINS);
         break;
       default:
         throw new UnsupportedOperationException(gameObject.getType().toString());
@@ -61,10 +61,13 @@ public class BackgroundRenderer implements
 
   @Override
   public void render(WindowSize windowSize, Background sceneElement) {
+    // TODO bind shader program, etc.
     texturedMesh.render();
   }
 
   @Override
   public void cleanup() {
+    resourceManager.free(texturedMesh.getTexture().getTextureName());
+    texturedMesh.getMesh().cleanup();
   }
 }
