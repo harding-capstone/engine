@@ -11,7 +11,6 @@ public class SceneManager {
   private Scene scene;
 
   public void initialize() {
-
   }
 
   public void update(float interval) {
@@ -22,9 +21,10 @@ public class SceneManager {
     scene.getSceneRenderer().render(scene);
   }
 
-  public void transition(Scene newScene) {
-    newScene.initialize();
+  public void transition(Scene newScene) throws Exception {
     var oldScene = scene;
+    newScene.initialize();
+    newScene.getSceneRenderer().initialize(newScene);
     scene = newScene;
     oldScene.cleanup();
   }

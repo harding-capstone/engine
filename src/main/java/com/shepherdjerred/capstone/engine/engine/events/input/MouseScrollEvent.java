@@ -1,4 +1,4 @@
-package com.shepherdjerred.capstone.engine.engine.events;
+package com.shepherdjerred.capstone.engine.engine.events.input;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

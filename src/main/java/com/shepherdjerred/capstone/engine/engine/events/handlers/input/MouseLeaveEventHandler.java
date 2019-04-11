@@ -1,6 +1,6 @@
-package com.shepherdjerred.capstone.engine.engine.events.handlers;
+package com.shepherdjerred.capstone.engine.engine.events.handlers.input;
 
-import com.shepherdjerred.capstone.engine.engine.events.MouseLeaveEvent;
+import com.shepherdjerred.capstone.engine.engine.events.input.MouseLeaveEvent;
 import com.shepherdjerred.capstone.engine.engine.input.mouse.MouseTracker;
 import com.shepherdjerred.capstone.events.handlers.EventHandler;
 import lombok.AllArgsConstructor;

@@ -1,13 +1,13 @@
 package com.shepherdjerred.capstone.engine.engine;
 
-import com.shepherdjerred.capstone.engine.engine.events.KeyReleasedEvent;
-import com.shepherdjerred.capstone.engine.engine.events.MouseMoveEvent;
+import com.shepherdjerred.capstone.engine.engine.events.input.KeyReleasedEvent;
+import com.shepherdjerred.capstone.engine.engine.events.input.MouseMoveEvent;
 import com.shepherdjerred.capstone.engine.engine.events.ToggleBlendingEvent;
 import com.shepherdjerred.capstone.engine.engine.events.ToggleDepthEvent;
 import com.shepherdjerred.capstone.engine.engine.events.ToggleWireframeEvent;
 import com.shepherdjerred.capstone.engine.engine.events.WindowResizeEvent;
-import com.shepherdjerred.capstone.engine.engine.events.handlers.KeyReleasedEventHandler;
-import com.shepherdjerred.capstone.engine.engine.events.handlers.MouseMoveEventHandler;
+import com.shepherdjerred.capstone.engine.engine.events.handlers.input.KeyReleasedEventHandler;
+import com.shepherdjerred.capstone.engine.engine.events.handlers.input.MouseMoveEventHandler;
 import com.shepherdjerred.capstone.engine.engine.events.handlers.ToggleBlendingEventHandler;
 import com.shepherdjerred.capstone.engine.engine.events.handlers.ToggleDepthEventHandler;
 import com.shepherdjerred.capstone.engine.engine.events.handlers.ToggleWireframeEventHandler;

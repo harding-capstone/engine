@@ -1,8 +1,8 @@
 package com.shepherdjerred.capstone.engine.game.scenes.mainmenu;
 
-import com.shepherdjerred.capstone.engine.engine.events.MouseButtonDownEvent;
-import com.shepherdjerred.capstone.engine.engine.events.MouseButtonUpEvent;
-import com.shepherdjerred.capstone.engine.engine.events.MouseMoveEvent;
+import com.shepherdjerred.capstone.engine.engine.events.input.MouseButtonDownEvent;
+import com.shepherdjerred.capstone.engine.engine.events.input.MouseButtonUpEvent;
+import com.shepherdjerred.capstone.engine.engine.events.input.MouseMoveEvent;
 import com.shepherdjerred.capstone.engine.engine.graphics.Color;
 import com.shepherdjerred.capstone.engine.engine.graphics.font.FontName;
 import com.shepherdjerred.capstone.engine.engine.resource.ResourceManager;

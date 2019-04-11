@@ -1,10 +1,10 @@
-package com.shepherdjerred.capstone.engine.engine.events.handlers;
+package com.shepherdjerred.capstone.engine.engine.events.handlers.input;
 
 import static com.shepherdjerred.capstone.engine.engine.input.keyboard.Key.B;
 import static com.shepherdjerred.capstone.engine.engine.input.keyboard.Key.D;
 import static com.shepherdjerred.capstone.engine.engine.input.keyboard.Key.W;
 
-import com.shepherdjerred.capstone.engine.engine.events.KeyReleasedEvent;
+import com.shepherdjerred.capstone.engine.engine.events.input.KeyReleasedEvent;
 import com.shepherdjerred.capstone.engine.engine.events.ToggleBlendingEvent;
 import com.shepherdjerred.capstone.engine.engine.events.ToggleDepthEvent;
 import com.shepherdjerred.capstone.engine.engine.events.ToggleWireframeEvent;

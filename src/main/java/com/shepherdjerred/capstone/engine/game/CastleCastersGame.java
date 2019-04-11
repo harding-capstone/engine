@@ -1,6 +1,8 @@
 package com.shepherdjerred.capstone.engine.game;
 
 import com.shepherdjerred.capstone.engine.engine.GameLogic;
+import com.shepherdjerred.capstone.engine.engine.events.handlers.scene.SceneTransitionEventHandler;
+import com.shepherdjerred.capstone.engine.engine.events.scene.SceneTransitionEvent;
 import com.shepherdjerred.capstone.engine.engine.graphics.OpenGlHelper;
 import com.shepherdjerred.capstone.engine.engine.graphics.font.FontLoader;
 import com.shepherdjerred.capstone.engine.engine.graphics.font.FontName;
@@ -14,8 +16,8 @@ import com.shepherdjerred.capstone.engine.engine.resource.ResourceFileLocator;
 import com.shepherdjerred.capstone.engine.engine.resource.ResourceManager;
 import com.shepherdjerred.capstone.engine.engine.scene.SceneManager;
 import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
-import com.shepherdjerred.capstone.engine.game.scenes.mainmenu.MainMenuRenderer;
-import com.shepherdjerred.capstone.engine.game.scenes.mainmenu.MainMenuScene;
+import com.shepherdjerred.capstone.engine.game.scenes.teamintro.TeamIntroRenderer;
+import com.shepherdjerred.capstone.engine.game.scenes.teamintro.TeamIntroScene;
 import com.shepherdjerred.capstone.events.Event;
 import com.shepherdjerred.capstone.events.EventBus;
 import lombok.extern.log4j.Log4j2;
@@ -53,8 +55,8 @@ public class CastleCastersGame implements GameLogic {
     OpenGlHelper.enableTransparency();
     OpenGlHelper.setClearColor();
 
-    var sceneRenderer = new MainMenuRenderer(resourceManager, eventBus, windowSize);
-    var scene = new MainMenuScene(sceneRenderer,
+    var sceneRenderer = new TeamIntroRenderer(resourceManager, eventBus, windowSize);
+    var scene = new TeamIntroScene(sceneRenderer,
         resourceManager,
         eventBus,
         windowSize);
@@ -62,6 +64,8 @@ public class CastleCastersGame implements GameLogic {
     sceneRenderer.initialize(scene);
     this.sceneManager = new SceneManager(scene);
     sceneManager.initialize();
+
+    eventBus.registerHandler(SceneTransitionEvent.class, new SceneTransitionEventHandler(sceneManager));
   }
 
   @Override

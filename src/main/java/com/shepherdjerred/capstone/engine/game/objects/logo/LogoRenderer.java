@@ -35,6 +35,8 @@ public class LogoRenderer implements
     Texture texture;
     if (gameObject.getType() == Type.GAME) {
       texture = resourceManager.get(TextureName.GAME_LOGO);
+    } else if (gameObject.getType() == Type.TEAM) {
+      texture = resourceManager.get(TextureName.TEAM_LOGO);
     } else {
       throw new UnsupportedOperationException(gameObject.getType().toString());
     }
