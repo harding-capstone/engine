@@ -16,12 +16,13 @@ public class RelativeScenePositioner implements ScenePositioner {
   private final WindowSize windowSize;
   private final float elementWidth;
   private final float elementHeight;
+  private final float z;
 
   @Override
   public SceneCoordinate getSceneCoordinate() {
     var x = getXCoordinate() + horizontalOffset;
     var y = getYCoordinate() + verticalOffset;
-    return new SceneCoordinate(x, y, 0);
+    return new SceneCoordinate(x, y, z);
   }
 
   private float getXCoordinate() {

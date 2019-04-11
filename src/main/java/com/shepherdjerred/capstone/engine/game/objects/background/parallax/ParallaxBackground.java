@@ -23,24 +23,21 @@ public class ParallaxBackground implements GameObject {
   private ScenePositioner position;
   private final Type type;
   private SortedMap<Integer, SortedMap<Integer, Float>> instances;
+  private final ParallaxTexturesMapper texturesMapper;
+  private final ParallaxBackgroundData parallaxBackgroundData;
 
   public ParallaxBackground(GameObjectRenderer<ParallaxBackground> renderer, Type type) {
     this.renderer = renderer;
     this.position = new AbsoluteScenePositioner(new SceneCoordinate(0, 0, 0));
     this.type = type;
     this.instances = new TreeMap<>();
+    this.texturesMapper = new ParallaxTexturesMapper();
 
     instances.put(1, new TreeMap<>());
     instances.put(2, new TreeMap<>());
 
-    int numLayers;
-    if (type == Type.PURPLE_MOUNTAINS) {
-      numLayers = 5;
-    } else if (type == Type.PLAINS) {
-      numLayers = 5;
-    } else {
-      numLayers = 0;
-    }
+    parallaxBackgroundData = texturesMapper.get(type);
+    var numLayers = parallaxBackgroundData.getNumberOfLayers();
 
     for (int i = 1; i <= numLayers; i++) {
       instances.get(1).put(i, 0f);
@@ -67,13 +64,13 @@ public class ParallaxBackground implements GameObject {
 
   @Override
   public void update(float interval) {
-    getInstances().forEach((instance, layers) -> {
-      layers.forEach((layer, pos) -> {
-        if (layer != 1) {
-          moveLayer(instance, layer, (float) (pos - ((Math.pow(layer, 2)) * .00005)));
-        }
-      });
-    });
+    var spread = 4;
+    var minifier = .000001;
+    getInstances().forEach((instance, layers) -> layers.forEach((layer, pos) -> {
+      if (!parallaxBackgroundData.getLayerData(layer).isStatic()) {
+        moveLayer(instance, layer, (float) (pos - ((Math.pow(layer, spread)) * minifier)));
+      }
+    }));
   }
 
   public enum Type {

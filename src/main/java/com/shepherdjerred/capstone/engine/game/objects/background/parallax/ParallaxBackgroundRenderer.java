@@ -44,9 +44,9 @@ public class ParallaxBackgroundRenderer implements
     shaderProgram = resourceManager.get(ShaderProgramName.DEFAULT);
     var textures = mapper.get(type);
 
-    for (Entry<Integer, TextureName> entry : textures.getTextures().entrySet()) {
+    for (Entry<Integer, LayerData> entry : textures.getLayers().entrySet()) {
       Integer layer = entry.getKey();
-      TextureName texture = entry.getValue();
+      TextureName texture = entry.getValue().getTextureName();
       textureMap.put(layer, resourceManager.get(texture));
     }
 
@@ -79,7 +79,7 @@ public class ParallaxBackgroundRenderer implements
     gameObject.getInstances().forEach((instance, layers) -> {
       layers.forEach((layer, position) -> {
         var xpos = position * windowSize.getWidth();
-        var model = new ModelMatrix(new RendererCoordinate(xpos, 0, layer),
+        var model = new ModelMatrix(new RendererCoordinate(xpos, 0, -900 + layer),
             0,
             1).getMatrix();
         shaderProgram.setUniform(ShaderUniform.MODEL_MATRIX, model);

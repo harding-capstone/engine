@@ -20,7 +20,7 @@ public class ModelMatrix {
   // https://learnopengl.com/Getting-started/Transformations
   public Matrix4f getMatrix() {
     return new Matrix4f()
-        .translate(translation.getX(), translation.getY(), 0)
+        .translate(translation.getX(), translation.getY(), translation.getZ())
         .rotate((float) Math.toRadians(rotation), 0, 0, 1)
         .scale(scale, scale, 1);
   }

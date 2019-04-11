@@ -4,25 +4,25 @@ import com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName;
 
 public class ParallaxTexturesMapper {
 
-  public ParallaxTextures get(ParallaxBackground.Type type) {
-    ParallaxTextures textures;
+  public ParallaxBackgroundData get(ParallaxBackground.Type type) {
+    ParallaxBackgroundData textures;
 
     switch (type) {
       case PURPLE_MOUNTAINS:
-        textures = new ParallaxTextures(5);
-        textures.setLayerTexture(1, TextureName.PURPLE_MOUNTAINS_A);
-        textures.setLayerTexture(2, TextureName.PURPLE_MOUNTAINS_B);
-        textures.setLayerTexture(3, TextureName.PURPLE_MOUNTAINS_C);
-        textures.setLayerTexture(4, TextureName.PURPLE_MOUNTAINS_D);
-        textures.setLayerTexture(5, TextureName.PURPLE_MOUNTAINS_E);
+        textures = new ParallaxBackgroundData(5);
+        textures.setLayerData(1, new LayerData(TextureName.PURPLE_MOUNTAINS_A, true));
+        textures.setLayerData(2, new LayerData(TextureName.PURPLE_MOUNTAINS_B, false));
+        textures.setLayerData(3, new LayerData(TextureName.PURPLE_MOUNTAINS_C, false));
+        textures.setLayerData(4, new LayerData(TextureName.PURPLE_MOUNTAINS_D, false));
+        textures.setLayerData(5, new LayerData(TextureName.PURPLE_MOUNTAINS_E, false));
         break;
       case PLAINS:
-        textures = new ParallaxTextures(5);
-        textures.setLayerTexture(1, TextureName.PLAINS_A);
-        textures.setLayerTexture(2, TextureName.PLAINS_B);
-        textures.setLayerTexture(3, TextureName.PLAINS_C);
-        textures.setLayerTexture(4, TextureName.PLAINS_D);
-        textures.setLayerTexture(5, TextureName.PLAINS_E);
+        textures = new ParallaxBackgroundData(5);
+        textures.setLayerData(1, new LayerData(TextureName.PLAINS_A, true));
+        textures.setLayerData(2, new LayerData(TextureName.PLAINS_B, true));
+        textures.setLayerData(3, new LayerData(TextureName.PLAINS_C, false));
+        textures.setLayerData(4, new LayerData(TextureName.PLAINS_D, false));
+        textures.setLayerData(5, new LayerData(TextureName.PLAINS_E, false));
         break;
       default:
         throw new UnsupportedOperationException("Unknown type: " + type);

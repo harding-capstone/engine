@@ -7,7 +7,6 @@ import static org.lwjgl.opengl.GL11.GL_TEXTURE_MIN_FILTER;
 import static org.lwjgl.opengl.GL11.GL_UNPACK_ALIGNMENT;
 import static org.lwjgl.opengl.GL11.GL_UNSIGNED_BYTE;
 import static org.lwjgl.opengl.GL11.glBindTexture;
-import static org.lwjgl.opengl.GL11.glDeleteTextures;
 import static org.lwjgl.opengl.GL11.glGenTextures;
 import static org.lwjgl.opengl.GL11.glPixelStorei;
 import static org.lwjgl.opengl.GL11.glTexImage2D;
@@ -17,12 +16,10 @@ import static org.lwjgl.stb.STBImage.stbi_failure_reason;
 import static org.lwjgl.stb.STBImage.stbi_image_free;
 import static org.lwjgl.stb.STBImage.stbi_load;
 
-import com.shepherdjerred.capstone.engine.engine.resource.ResourceLoader;
 import com.shepherdjerred.capstone.engine.engine.resource.ResourceFileLocator;
+import com.shepherdjerred.capstone.engine.engine.resource.ResourceLoader;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
-import java.util.HashMap;
-import java.util.Map;
 import lombok.ToString;
 import org.lwjgl.system.MemoryStack;
 
@@ -33,11 +30,9 @@ import org.lwjgl.system.MemoryStack;
 public class TextureLoader implements ResourceLoader<TextureName, Texture> {
 
   private final ResourceFileLocator resourceFileLocator;
-  private final Map<TextureName, Texture> textureMap;
 
   public TextureLoader(ResourceFileLocator resourceFileLocator) {
     this.resourceFileLocator = resourceFileLocator;
-    textureMap = new HashMap<>();
   }
 
   /**
@@ -104,9 +99,5 @@ public class TextureLoader implements ResourceLoader<TextureName, Texture> {
     glBindTexture(GL_TEXTURE_2D, 0);
 
     return openGlTextureId;
-  }
-
-  public void cleanup(TextureName textureName) {
-    glDeleteTextures(textureMap.get(textureName).getGlTextureId());
   }
 }

@@ -67,7 +67,8 @@ public class MainMenuScene implements Scene {
         100,
         windowSize,
         button.getWidth(),
-        button.getHeight()));
+        button.getHeight(),
+        100));
 
     var logo = new Logo(
         new LogoRenderer(resourceManager),
@@ -81,7 +82,8 @@ public class MainMenuScene implements Scene {
         50,
         windowSize,
         logo.getWidth(),
-        logo.getHeight()));
+        logo.getHeight(),
+        100));
 
     var text = new Text(
         new TextRenderer(resourceManager),
@@ -97,16 +99,17 @@ public class MainMenuScene implements Scene {
         0,
         windowSize,
         text.getWidth(),
-        text.getHeight()));
+        text.getHeight(),
+        100));
 
     var background = new ParallaxBackground(new ParallaxBackgroundRenderer(resourceManager,
         windowSize),
         Type.PLAINS);
 
-    gameObjects.add(background);
     gameObjects.add(button);
     gameObjects.add(logo);
     gameObjects.add(text);
+    gameObjects.add(background);
   }
 
   @Override

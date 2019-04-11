@@ -60,7 +60,7 @@ public class MainMenuRenderer implements SceneRenderer<MainMenuScene> {
 
   @Override
   public void initialize(MainMenuScene scene) throws Exception {
-    projectionMatrix = new ProjectionMatrix(windowSize);
+    updateProjectionMatrix();
     createShaderProgram();
     enableTransparency();
     enableDepth();
@@ -75,9 +75,11 @@ public class MainMenuRenderer implements SceneRenderer<MainMenuScene> {
     var windowResizeEventHandler = new EventHandler<WindowResizeEvent>() {
       @Override
       public void handle(WindowResizeEvent windowResizeEvent) {
-        projectionMatrix = new ProjectionMatrix(windowResizeEvent.getNewWindowSize());
+        windowSize = windowResizeEvent.getNewWindowSize();
+        updateProjectionMatrix();
       }
     };
+
     eventBus.registerHandler(WindowResizeEvent.class, windowResizeEventHandler);
   }
 
