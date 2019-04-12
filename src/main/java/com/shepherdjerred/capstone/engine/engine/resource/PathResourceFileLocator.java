@@ -13,14 +13,14 @@ import lombok.ToString;
  * Returns the path to a texture file.
  */
 @ToString
-public class PathBasedResourceFileLocator implements ResourceFileLocator {
+public class PathResourceFileLocator implements ResourceFileLocator {
 
   private final String texturesBasePath;
   private final String fontsBasePath;
   private final HashMap<TextureName, String> textureFileNameHashMap;
   private final HashMap<FontName, String> fontFileNameHashMap;
 
-  public PathBasedResourceFileLocator(String texturesBasePath, String fontsBasePath) {
+  public PathResourceFileLocator(String texturesBasePath, String fontsBasePath) {
     this.texturesBasePath = texturesBasePath;
     this.fontsBasePath = fontsBasePath;
     textureFileNameHashMap = new HashMap<>();

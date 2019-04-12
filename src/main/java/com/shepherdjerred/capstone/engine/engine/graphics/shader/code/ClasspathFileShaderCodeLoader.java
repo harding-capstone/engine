@@ -16,12 +16,12 @@ public class ClasspathFileShaderCodeLoader implements ShaderCodeLoader {
 
   @Override
   public String getShaderCode(String shaderFileName) throws IOException {
-    var stream = this.getClass().getResourceAsStream(basePath + shaderFileName);
-    if (stream == null) {
-      throw new FileNotFoundException(shaderFileName);
+    try (var stream = this.getClass().getResourceAsStream(basePath + shaderFileName)) {
+      if (stream == null) {
+        throw new FileNotFoundException(shaderFileName);
+      }
+      var bytes = stream.readAllBytes();
+      return new String(bytes, StandardCharsets.UTF_8);
     }
-    var bytes = stream.readAllBytes();
-    stream.close();
-    return new String(bytes, StandardCharsets.UTF_8);
   }
 }

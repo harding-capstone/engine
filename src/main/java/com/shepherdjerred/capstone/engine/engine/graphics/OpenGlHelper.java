@@ -6,7 +6,7 @@ import static org.lwjgl.opengl.GL11.GL_DEPTH;
 import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.GL_FILL;
 import static org.lwjgl.opengl.GL11.GL_FRONT_AND_BACK;
-import static org.lwjgl.opengl.GL11.GL_GEQUAL;
+import static org.lwjgl.opengl.GL11.GL_LEQUAL;
 import static org.lwjgl.opengl.GL11.GL_LINE;
 import static org.lwjgl.opengl.GL11.GL_ONE_MINUS_SRC_ALPHA;
 import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
@@ -48,7 +48,7 @@ public class OpenGlHelper {
 
   public static void enableDepthBuffer() {
     glEnable(GL_DEPTH);
-    glDepthFunc(GL_GEQUAL);
+    glDepthFunc(GL_LEQUAL);
   }
 
   public static void disableDepthBuffer() {

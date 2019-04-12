@@ -32,6 +32,7 @@ public class Main {
   private static WindowSettings getSettings() {
     return new WindowSettings("Castle Casters",
         new WindowSize(1360, 768),
+        true,
         true);
   }
 }

@@ -49,7 +49,7 @@ public class TeamIntroRenderer implements SceneRenderer<TeamIntroScene> {
     updateProjectionMatrix();
     createShaderProgram();
     registerEventHandlers();
-    OpenGlHelper.setClearColor(new Color(1, 1, 1));
+    OpenGlHelper.setClearColor(Color.white());
 
     for (GameObject gameObject : scene.getGameObjects()) {
       gameObject.getRenderer().init(gameObject);

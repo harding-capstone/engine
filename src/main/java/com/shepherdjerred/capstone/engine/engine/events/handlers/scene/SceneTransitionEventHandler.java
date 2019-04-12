@@ -15,7 +15,7 @@ public class SceneTransitionEventHandler implements EventHandler<SceneTransition
     try {
       sceneManager.transition(sceneTransitionEvent.getNewScene());
     } catch (Exception e) {
-      throw new RuntimeException("Error transitioning scenes");
+      throw new RuntimeException("Error transitioning scenes", e);
     }
   }
 }

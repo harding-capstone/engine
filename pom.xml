@@ -347,6 +347,17 @@
       <scope>runtime</scope>
     </dependency>
     <dependency>
+      <groupId>org.lwjgl</groupId>
+      <artifactId>lwjgl-openal</artifactId>
+      <version>${lwjgl.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.lwjgl</groupId>
+      <artifactId>lwjgl-openal</artifactId>
+      <version>${lwjgl.version}</version>
+      <classifier>${native.target}</classifier>
+    </dependency>
+    <dependency>
       <groupId>org.joml</groupId>
       <artifactId>joml</artifactId>
       <version>1.9.13</version>

@@ -12,20 +12,22 @@ import static org.lwjgl.opengl.GL11.glPixelStorei;
 import static org.lwjgl.opengl.GL11.glTexImage2D;
 import static org.lwjgl.opengl.GL11.glTexParameteri;
 import static org.lwjgl.opengl.GL11C.GL_TEXTURE_2D;
-import static org.lwjgl.stb.STBImage.stbi_failure_reason;
-import static org.lwjgl.stb.STBImage.stbi_image_free;
-import static org.lwjgl.stb.STBImage.stbi_load;
+import static org.lwjgl.stb.STBImage.stbi_load_from_memory;
 
+import com.shepherdjerred.capstone.engine.engine.resource.ByteBufferLoader;
 import com.shepherdjerred.capstone.engine.engine.resource.ResourceFileLocator;
 import com.shepherdjerred.capstone.engine.engine.resource.ResourceLoader;
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import lombok.ToString;
+import lombok.extern.log4j.Log4j2;
 import org.lwjgl.system.MemoryStack;
 
 /**
  * Loads a texture.
  */
+@Log4j2
 @ToString
 public class TextureLoader implements ResourceLoader<TextureName, Texture> {
 
@@ -38,13 +40,15 @@ public class TextureLoader implements ResourceLoader<TextureName, Texture> {
   /**
    * Loads a texture from disk into memory.
    */
-  public Texture get(TextureName textureName) {
+  public Texture get(TextureName textureName) throws IOException {
     var textureFilePath = resourceFileLocator.getTexturePath(textureName);
+    var textureBuffer = new ByteBufferLoader().load(textureFilePath);
 
     int textureWidth;
     int textureHeight;
     int numberOfChannelsInTexture;
-    ByteBuffer textureBuffer;
+
+    ByteBuffer buffer;
 
     // Use stbi to load the texture
     try (MemoryStack stack = MemoryStack.stackPush()) {
@@ -52,16 +56,11 @@ public class TextureLoader implements ResourceLoader<TextureName, Texture> {
       IntBuffer stackTextureHeight = stack.mallocInt(1);
       IntBuffer stackNumberOfChannelsInTexture = stack.mallocInt(1);
 
-      textureBuffer = stbi_load(textureFilePath,
+      buffer = stbi_load_from_memory(textureBuffer,
           stackTextureWidth,
           stackTextureHeight,
           stackNumberOfChannelsInTexture,
-          4);
-
-      if (textureBuffer == null) {
-        throw new RuntimeException(
-            "Texture " + textureName + " not loaded: " + stbi_failure_reason());
-      }
+          0);
 
       // Assign variables from data loaded by stbi
       textureWidth = stackTextureWidth.get();
@@ -69,9 +68,7 @@ public class TextureLoader implements ResourceLoader<TextureName, Texture> {
       numberOfChannelsInTexture = stackNumberOfChannelsInTexture.get();
     }
 
-    var openGlTextureId = sendToOpenGl(textureBuffer, textureWidth, textureHeight);
-
-    stbi_image_free(textureBuffer);
+    var openGlTextureId = sendToOpenGl(buffer, textureWidth, textureHeight);
 
     return new Texture(textureName,
         openGlTextureId,

@@ -17,11 +17,9 @@ import static org.lwjgl.stb.STBTruetype.stbtt_BakeFontBitmap;
 import static org.lwjgl.stb.STBTruetype.stbtt_GetFontVMetrics;
 import static org.lwjgl.stb.STBTruetype.stbtt_InitFont;
 
-import com.shepherdjerred.capstone.engine.engine.resource.ResourceLoader;
+import com.shepherdjerred.capstone.engine.engine.resource.ByteBufferLoader;
 import com.shepherdjerred.capstone.engine.engine.resource.ResourceFileLocator;
-import java.io.FileInputStream;
-import java.nio.ByteBuffer;
-import java.nio.channels.FileChannel;
+import com.shepherdjerred.capstone.engine.engine.resource.ResourceLoader;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.lwjgl.BufferUtils;
@@ -36,19 +34,11 @@ public class FontLoader implements ResourceLoader<FontName, Font> {
   private final ResourceFileLocator fileLocator;
 
   public Font get(FontName fontName) throws Exception {
-    ByteBuffer fontDataBuffer;
     var filePath = fileLocator.getFontPath(fontName);
-
-    FileInputStream inputStream = new FileInputStream(filePath);
-    FileChannel fileChannel = inputStream.getChannel();
-    fontDataBuffer = fileChannel.map(FileChannel.MapMode.READ_ONLY, 0, fileChannel.size());
-    fileChannel.close();
-    inputStream.close();
-
-    fontDataBuffer.flip();
+    var fontBuffer = ByteBufferLoader.ioResourceToByteBuffer(filePath, 512 * 1024);
 
     var info = STBTTFontinfo.create();
-    if (!stbtt_InitFont(info, fontDataBuffer)) {
+    if (!stbtt_InitFont(info, fontBuffer)) {
       throw new Exception("Unable to create font");
     }
 
@@ -73,7 +63,7 @@ public class FontLoader implements ResourceLoader<FontName, Font> {
     var characters = STBTTBakedChar.malloc(96);
     var bitmapBuffer = BufferUtils.createByteBuffer(bitmapWidth * bitmapHeight);
 
-    var value = stbtt_BakeFontBitmap(fontDataBuffer,
+    var value = stbtt_BakeFontBitmap(fontBuffer,
         24,
         bitmapBuffer,
         bitmapWidth,

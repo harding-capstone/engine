@@ -7,4 +7,5 @@ module com.shepherdjerred.capstone.engine {
   requires org.lwjgl.stb;
   requires com.google.common;
   requires com.shepherdjerred.capstone.events;
+  requires org.lwjgl.openal;
 }

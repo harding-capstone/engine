@@ -12,4 +12,5 @@ public class WindowSettings {
   private final String title;
   private final WindowSize windowSize;
   private final boolean isVsyncEnabled;
+  private final boolean isDebugEnabled;
 }

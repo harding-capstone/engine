@@ -11,11 +11,14 @@ import com.shepherdjerred.capstone.engine.engine.graphics.shader.ShaderProgramNa
 import com.shepherdjerred.capstone.engine.engine.graphics.shader.code.ClasspathFileShaderCodeLoader;
 import com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureLoader;
 import com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName;
-import com.shepherdjerred.capstone.engine.engine.resource.PathBasedResourceFileLocator;
+import com.shepherdjerred.capstone.engine.engine.resource.PathResourceFileLocator;
 import com.shepherdjerred.capstone.engine.engine.resource.ResourceFileLocator;
 import com.shepherdjerred.capstone.engine.engine.resource.ResourceManager;
+import com.shepherdjerred.capstone.engine.engine.scene.Scene;
 import com.shepherdjerred.capstone.engine.engine.scene.SceneManager;
 import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
+import com.shepherdjerred.capstone.engine.game.scenes.mainmenu.MainMenuRenderer;
+import com.shepherdjerred.capstone.engine.game.scenes.mainmenu.MainMenuScene;
 import com.shepherdjerred.capstone.engine.game.scenes.teamintro.TeamIntroRenderer;
 import com.shepherdjerred.capstone.engine.game.scenes.teamintro.TeamIntroScene;
 import com.shepherdjerred.capstone.events.Event;
@@ -36,9 +39,9 @@ public class CastleCastersGame implements GameLogic {
   }
 
   private void registerLoaders() {
-    ResourceFileLocator resourceFileLocator = new PathBasedResourceFileLocator(
-        "/Users/jerred/programming/capstone/engine/src/main/resources/textures/",
-        "/Users/jerred/programming/capstone/engine/src/main/resources/fonts/"
+    ResourceFileLocator resourceFileLocator = new PathResourceFileLocator(
+        "/textures/",
+        "/fonts/"
     );
     var textureLoader = new TextureLoader(resourceFileLocator);
     var shaderLoader = new ShaderProgramLoader(new ClasspathFileShaderCodeLoader("/shaders/"));
@@ -55,17 +58,34 @@ public class CastleCastersGame implements GameLogic {
     OpenGlHelper.enableTransparency();
     OpenGlHelper.setClearColor();
 
+    var scene = getTeamScene(windowSize);
+
+    scene.initialize();
+    scene.getSceneRenderer().initialize(scene);
+
+    this.sceneManager = new SceneManager(scene);
+    sceneManager.initialize();
+
+    eventBus.registerHandler(SceneTransitionEvent.class,
+        new SceneTransitionEventHandler(sceneManager));
+  }
+
+  private Scene getTeamScene(WindowSize windowSize) {
     var sceneRenderer = new TeamIntroRenderer(resourceManager, eventBus, windowSize);
     var scene = new TeamIntroScene(sceneRenderer,
         resourceManager,
         eventBus,
         windowSize);
-    scene.initialize();
-    sceneRenderer.initialize(scene);
-    this.sceneManager = new SceneManager(scene);
-    sceneManager.initialize();
+    return scene;
+  }
 
-    eventBus.registerHandler(SceneTransitionEvent.class, new SceneTransitionEventHandler(sceneManager));
+  private Scene getMainMenuScene(WindowSize windowSize) {
+    var sceneRenderer = new MainMenuRenderer(resourceManager, eventBus, windowSize);
+    var scene = new MainMenuScene(sceneRenderer,
+        resourceManager,
+        eventBus,
+        windowSize);
+    return scene;
   }
 
   @Override

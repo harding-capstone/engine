@@ -86,7 +86,13 @@ public class GlfwWindow implements Window {
 
   @Override
   public void initialize() {
-    Configuration.DEBUG.set(true);
+    if (windowSettings.isDebugEnabled()) {
+      Configuration.DEBUG.set(true);
+      Configuration.DEBUG_LOADER.set(true);
+      Configuration.DEBUG_MEMORY_ALLOCATOR.set(true);
+      Configuration.DEBUG_STACK.set(true);
+      Configuration.DEBUG_STREAM.set(System.out);
+    }
 
     if (!glfwInit()) {
       throw new IllegalStateException("Unable to initialize GLFW");

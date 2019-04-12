@@ -89,7 +89,7 @@ public class MainMenuScene implements Scene {
         new TextRenderer(resourceManager),
         "Castle Casters - Development Build",
         FontName.M5X7,
-        new Color(1, 1, 1),
+        Color.white(),
         12,
         new AbsoluteScenePositioner(new SceneCoordinate(0, 0, 0))
     );
@@ -104,7 +104,7 @@ public class MainMenuScene implements Scene {
 
     var background = new ParallaxBackground(new ParallaxBackgroundRenderer(resourceManager,
         windowSize),
-        Type.PLAINS);
+        Type.PURPLE_MOUNTAINS);
 
     gameObjects.add(button);
     gameObjects.add(logo);

@@ -1,5 +1,8 @@
 package com.shepherdjerred.capstone.engine.engine;
 
+import static org.lwjgl.opengl.GL11.glGetError;
+
+import com.shepherdjerred.capstone.engine.engine.graphics.ErrorConverter;
 import com.shepherdjerred.capstone.engine.engine.input.mouse.MouseTracker;
 import com.shepherdjerred.capstone.engine.engine.window.Window;
 import com.shepherdjerred.capstone.events.Event;
@@ -89,6 +92,8 @@ public class GameLoop implements Runnable {
       if (!window.getWindowSettings().isVsyncEnabled()) {
         sync();
       }
+
+      printOpenGlErrors();
     }
   }
 
@@ -97,6 +102,14 @@ public class GameLoop implements Runnable {
       gameLoopThread.run();
     } else {
       gameLoopThread.start();
+    }
+  }
+
+  private void printOpenGlErrors() {
+    int errCode = glGetError();
+    if (errCode != 0) {
+      var converter = new ErrorConverter();
+      log.error("OpenGL error: " + converter.convert(errCode));
     }
   }
 
