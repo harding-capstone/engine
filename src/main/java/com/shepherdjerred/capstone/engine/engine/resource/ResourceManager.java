@@ -67,6 +67,7 @@ public class ResourceManager {
   }
 
   public void freeAll() {
+    log.info("Freeing all resources");
     resourceCache.values().forEach(Resource::cleanup);
   }
 }

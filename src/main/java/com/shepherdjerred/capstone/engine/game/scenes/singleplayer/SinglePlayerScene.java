@@ -6,9 +6,10 @@ import com.shepherdjerred.capstone.engine.engine.object.GameObject;
 import com.shepherdjerred.capstone.engine.engine.resource.ResourceManager;
 import com.shepherdjerred.capstone.engine.engine.scene.Scene;
 import com.shepherdjerred.capstone.engine.engine.scene.SceneAudio;
-import com.shepherdjerred.capstone.engine.engine.scene.SceneCoordinate;
 import com.shepherdjerred.capstone.engine.engine.scene.SceneRenderer;
-import com.shepherdjerred.capstone.engine.engine.scene.position.AbsoluteScenePositioner;
+import com.shepherdjerred.capstone.engine.engine.scene.position.WindowRelativeScenePositioner;
+import com.shepherdjerred.capstone.engine.engine.scene.position.WindowRelativeScenePositioner.HorizontalPosition;
+import com.shepherdjerred.capstone.engine.engine.scene.position.WindowRelativeScenePositioner.VerticalPosition;
 import com.shepherdjerred.capstone.engine.game.objects.text.Text;
 import com.shepherdjerred.capstone.engine.game.objects.text.TextRenderer;
 import com.shepherdjerred.capstone.events.Event;
@@ -46,7 +47,11 @@ public class SinglePlayerScene implements Scene {
         FontName.M5X7,
         Color.white(),
         12,
-        new AbsoluteScenePositioner(new SceneCoordinate(200, 200, 0)));
+        new WindowRelativeScenePositioner(HorizontalPosition.CENTER,
+            VerticalPosition.CENTER,
+            0,
+            0,
+            0));
 
     gameObjects.add(text);
   }

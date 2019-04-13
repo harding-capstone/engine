@@ -66,7 +66,8 @@ public class LogoRenderer implements
 
   @Override
   public void render(WindowSize windowSize, Logo sceneElement) {
-    var pos = sceneElement.getPosition().getSceneCoordinate();
+    var pos = sceneElement.getPosition()
+        .getSceneCoordinate(windowSize, sceneElement.getWidth(), sceneElement.getHeight());
     var model = new ModelMatrix(new RendererCoordinate(pos.getX(), pos.getY(), pos.getZ()),
         0,
         1).getMatrix();

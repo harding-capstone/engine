@@ -24,7 +24,11 @@ public class Button implements GameObject, Clickable, Hoverable {
   private boolean isHovered;
   public State state = State.INACTIVE;
 
-  public Button(GameObjectRenderer<Button> renderer, ScenePositioner position, int width, int height, Runnable onClick) {
+  public Button(GameObjectRenderer<Button> renderer,
+      ScenePositioner position,
+      int width,
+      int height,
+      Runnable onClick) {
     this.renderer = renderer;
     this.position = position;
     this.width = width;
@@ -69,15 +73,8 @@ public class Button implements GameObject, Clickable, Hoverable {
 
   @Override
   public boolean contains(SceneCoordinate coordinate) {
-    var maxX = position.getSceneCoordinate().getX() + width;
-    var minX = position.getSceneCoordinate().getX();
-    var maxY = position.getSceneCoordinate().getY() + height;
-    var minY = position.getSceneCoordinate().getY();
-
-    return coordinate.getX() <= maxX
-        && coordinate.getX() >= minX
-        && coordinate.getY() <= maxY
-        && coordinate.getY() >= minY;
+    // TODO
+    return false;
   }
 
   @Override

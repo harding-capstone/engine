@@ -5,12 +5,10 @@ import com.shepherdjerred.capstone.engine.engine.object.GameObject;
 import com.shepherdjerred.capstone.engine.engine.resource.ResourceManager;
 import com.shepherdjerred.capstone.engine.engine.scene.Scene;
 import com.shepherdjerred.capstone.engine.engine.scene.SceneAudio;
-import com.shepherdjerred.capstone.engine.engine.scene.SceneCoordinate;
 import com.shepherdjerred.capstone.engine.engine.scene.SceneRenderer;
-import com.shepherdjerred.capstone.engine.engine.scene.position.AbsoluteScenePositioner;
-import com.shepherdjerred.capstone.engine.engine.scene.position.RelativeScenePositioner;
-import com.shepherdjerred.capstone.engine.engine.scene.position.RelativeScenePositioner.HorizontalPosition;
-import com.shepherdjerred.capstone.engine.engine.scene.position.RelativeScenePositioner.VerticalPosition;
+import com.shepherdjerred.capstone.engine.engine.scene.position.WindowRelativeScenePositioner;
+import com.shepherdjerred.capstone.engine.engine.scene.position.WindowRelativeScenePositioner.HorizontalPosition;
+import com.shepherdjerred.capstone.engine.engine.scene.position.WindowRelativeScenePositioner.VerticalPosition;
 import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
 import com.shepherdjerred.capstone.engine.game.objects.logo.Logo;
 import com.shepherdjerred.capstone.engine.game.objects.logo.LogoRenderer;
@@ -55,18 +53,14 @@ public class TeamIntroScene implements Scene {
   private void createGameObjects() {
     var logo = new Logo(
         new LogoRenderer(resourceManager),
-        new AbsoluteScenePositioner(new SceneCoordinate(0, 0, 0)),
+        new WindowRelativeScenePositioner(HorizontalPosition.CENTER,
+            VerticalPosition.CENTER,
+            0,
+            0,
+            100),
         1.102292769,
         300,
         Logo.Type.TEAM);
-    logo.setPosition(new RelativeScenePositioner(HorizontalPosition.CENTER,
-        VerticalPosition.CENTER,
-        0,
-        0,
-        windowSize,
-        logo.getWidth(),
-        logo.getHeight(),
-        100));
 
     gameObjects.add(logo);
   }

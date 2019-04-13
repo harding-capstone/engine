@@ -7,43 +7,40 @@ import lombok.ToString;
 
 @ToString
 @AllArgsConstructor
-public class RelativeScenePositioner implements ScenePositioner {
+public class WindowRelativeScenePositioner implements ScenePositioner {
 
   private final HorizontalPosition horizontalPosition;
   private final VerticalPosition verticalPosition;
   private final float horizontalOffset;
   private final float verticalOffset;
-  private final WindowSize windowSize;
-  private final float elementWidth;
-  private final float elementHeight;
   private final float z;
 
   @Override
-  public SceneCoordinate getSceneCoordinate() {
-    var x = getXCoordinate() + horizontalOffset;
-    var y = getYCoordinate() + verticalOffset;
+  public SceneCoordinate getSceneCoordinate(WindowSize windowSize, int width, int height) {
+    var x = getXCoordinate(windowSize, width) + horizontalOffset;
+    var y = getYCoordinate(windowSize, height) + verticalOffset;
     return new SceneCoordinate(x, y, z);
   }
 
-  private float getXCoordinate() {
+  private float getXCoordinate(WindowSize windowSize, int width) {
     if (horizontalPosition == HorizontalPosition.LEFT) {
       return 0;
     } else if (horizontalPosition == HorizontalPosition.RIGHT) {
-      return windowSize.getWidth() - elementWidth;
+      return windowSize.getWidth() - width;
     } else if (horizontalPosition == HorizontalPosition.CENTER) {
-      return (windowSize.getWidth() - elementWidth) / 2;
+      return (windowSize.getWidth() - width) / 2;
     } else {
       throw new UnsupportedOperationException();
     }
   }
 
-  private float getYCoordinate() {
+  private float getYCoordinate(WindowSize windowSize, int height) {
     if (verticalPosition == VerticalPosition.TOP) {
       return 0;
     } else if (verticalPosition == VerticalPosition.BOTTOM) {
-      return windowSize.getHeight() - elementHeight;
+      return windowSize.getHeight() - height;
     } else if (verticalPosition == VerticalPosition.CENTER) {
-      return (windowSize.getHeight() - elementHeight) / 2;
+      return (windowSize.getHeight() - height) / 2;
     } else {
       throw new UnsupportedOperationException();
     }

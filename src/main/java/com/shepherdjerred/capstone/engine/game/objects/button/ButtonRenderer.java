@@ -68,7 +68,8 @@ public class ButtonRenderer implements GameObjectRenderer<Button> {
 
   @Override
   public void render(WindowSize windowSize, Button gameObject) {
-    var pos = gameObject.getPosition().getSceneCoordinate();
+    var pos = gameObject.getPosition()
+        .getSceneCoordinate(windowSize, gameObject.getWidth(), gameObject.getHeight());
     var model = new ModelMatrix(new RendererCoordinate(pos.getX(), pos.getY(), pos.getZ()),
         0,
         1).getMatrix();
