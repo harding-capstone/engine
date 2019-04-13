@@ -1,6 +1,7 @@
 package com.shepherdjerred.capstone.engine.game;
 
 import com.shepherdjerred.capstone.engine.engine.GameLogic;
+import com.shepherdjerred.capstone.engine.engine.audio.AudioPlayer;
 import com.shepherdjerred.capstone.engine.engine.events.handlers.scene.SceneTransitionEventHandler;
 import com.shepherdjerred.capstone.engine.engine.events.scene.SceneTransitionEvent;
 import com.shepherdjerred.capstone.engine.engine.graphics.OpenGlHelper;
@@ -31,10 +32,12 @@ public class CastleCastersGame implements GameLogic {
   private final EventBus<Event> eventBus;
   private final ResourceManager resourceManager;
   private SceneManager sceneManager;
+  private AudioPlayer audioPlayer;
 
   public CastleCastersGame(EventBus<Event> eventBus) {
     this.eventBus = eventBus;
     this.resourceManager = new ResourceManager();
+    this.audioPlayer = new AudioPlayer(resourceManager, eventBus);
     registerLoaders();
   }
 
@@ -68,6 +71,8 @@ public class CastleCastersGame implements GameLogic {
 
     eventBus.registerHandler(SceneTransitionEvent.class,
         new SceneTransitionEventHandler(sceneManager));
+
+    audioPlayer.initialize();
   }
 
   private Scene getTeamScene(WindowSize windowSize) {
