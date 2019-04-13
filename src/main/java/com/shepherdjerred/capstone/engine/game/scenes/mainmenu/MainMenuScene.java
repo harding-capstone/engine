@@ -3,6 +3,7 @@ package com.shepherdjerred.capstone.engine.game.scenes.mainmenu;
 import com.shepherdjerred.capstone.engine.engine.events.input.MouseButtonDownEvent;
 import com.shepherdjerred.capstone.engine.engine.events.input.MouseButtonUpEvent;
 import com.shepherdjerred.capstone.engine.engine.events.input.MouseMoveEvent;
+import com.shepherdjerred.capstone.engine.engine.events.scene.SceneTransitionEvent;
 import com.shepherdjerred.capstone.engine.engine.graphics.Color;
 import com.shepherdjerred.capstone.engine.engine.graphics.font.FontName;
 import com.shepherdjerred.capstone.engine.engine.resource.ResourceManager;
@@ -26,6 +27,8 @@ import com.shepherdjerred.capstone.engine.game.objects.logo.LogoRenderer;
 import com.shepherdjerred.capstone.engine.game.objects.background.parallax.ParallaxBackgroundRenderer;
 import com.shepherdjerred.capstone.engine.game.objects.text.Text;
 import com.shepherdjerred.capstone.engine.game.objects.text.TextRenderer;
+import com.shepherdjerred.capstone.engine.game.scenes.singleplayer.SinglePlayerRenderer;
+import com.shepherdjerred.capstone.engine.game.scenes.singleplayer.SinglePlayerScene;
 import com.shepherdjerred.capstone.events.Event;
 import com.shepherdjerred.capstone.events.EventBus;
 import java.util.ArrayList;
@@ -60,7 +63,14 @@ public class MainMenuScene implements Scene {
         new AbsoluteScenePositioner(new SceneCoordinate(0, 0, 0)),
         100,
         100,
-        () -> log.info("Hey there!"));
+        () -> {
+          var scene = new SinglePlayerScene(eventBus,
+              resourceManager,
+              new SinglePlayerRenderer(resourceManager,
+                  eventBus,
+                  windowSize));
+          eventBus.dispatch(new SceneTransitionEvent(scene));
+        });
     button.setPosition(new RelativeScenePositioner(HorizontalPosition.CENTER,
         VerticalPosition.CENTER,
         0,

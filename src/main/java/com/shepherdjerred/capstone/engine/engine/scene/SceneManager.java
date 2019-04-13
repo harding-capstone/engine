@@ -1,14 +1,19 @@
 package com.shepherdjerred.capstone.engine.engine.scene;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.extern.log4j.Log4j2;
 
 // I have an irrational hatred towards classes named "Manager"
-@AllArgsConstructor
+@Log4j2
 public class SceneManager {
 
   @Getter
   private Scene scene;
+  private boolean isTransitioning;
+
+  public SceneManager(Scene scene) {
+    this.scene = scene;
+  }
 
   public void initialize() {
   }
@@ -22,11 +27,17 @@ public class SceneManager {
   }
 
   public void transition(Scene newScene) throws Exception {
-    var oldScene = scene;
-    newScene.initialize();
-    newScene.getSceneRenderer().initialize(newScene);
-    scene = newScene;
-    oldScene.cleanup();
+    if (!isTransitioning) {
+      isTransitioning = true;
+      var oldScene = scene;
+      newScene.initialize();
+      newScene.getSceneRenderer().initialize(newScene);
+      scene = newScene;
+      oldScene.cleanup();
+      isTransitioning = false;
+    } else {
+      log.info("Ignoring transition because one is already in progress");
+    }
   }
 
   public void cleanup() {

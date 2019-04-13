@@ -82,6 +82,7 @@ public class Font implements Resource {
 
   @Override
   public void cleanup() {
+    characterBuffer.free();
     glDeleteTextures(glTextureName);
   }
 }

@@ -1,4 +1,4 @@
-package com.shepherdjerred.capstone.engine.game.scenes.mainmenu;
+package com.shepherdjerred.capstone.engine.game.scenes.singleplayer;
 
 import com.shepherdjerred.capstone.engine.engine.events.WindowResizeEvent;
 import com.shepherdjerred.capstone.engine.engine.graphics.Color;
@@ -17,16 +17,15 @@ import com.shepherdjerred.capstone.events.handlers.EventHandler;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-public class MainMenuRenderer implements SceneRenderer<MainMenuScene> {
+public class SinglePlayerRenderer implements SceneRenderer<SinglePlayerScene> {
 
   private final ResourceManager resourceManager;
   private final EventBus<Event> eventBus;
   private WindowSize windowSize;
   private ProjectionMatrix projectionMatrix;
-  private ShaderProgram textShaderProgram;
   private ShaderProgram defaultShaderProgram;
 
-  public MainMenuRenderer(ResourceManager resourceManager,
+  public SinglePlayerRenderer(ResourceManager resourceManager,
       EventBus<Event> eventBus,
       WindowSize windowSize) {
     this.resourceManager = resourceManager;
@@ -35,25 +34,22 @@ public class MainMenuRenderer implements SceneRenderer<MainMenuScene> {
   }
 
   @Override
-  public void render(MainMenuScene scene) {
-    OpenGlHelper.setClearColor(Color.black());
-    OpenGlHelper.enableDepthBuffer();
+  public void render(SinglePlayerScene scene) {
     OpenGlHelper.clearScreen();
     updateProjectionMatrix();
 
     defaultShaderProgram.bind();
     defaultShaderProgram.setUniform(ShaderUniform.PROJECTION_MATRIX, projectionMatrix.getMatrix());
-    textShaderProgram.bind();
-    textShaderProgram.setUniform(ShaderUniform.PROJECTION_MATRIX, projectionMatrix.getMatrix());
 
     scene.getGameObjects().forEach(element -> element.getRenderer().render(windowSize, element));
   }
 
   @Override
-  public void initialize(MainMenuScene scene) throws Exception {
+  public void initialize(SinglePlayerScene scene) throws Exception {
     updateProjectionMatrix();
     createShaderProgram();
     registerEventHandlers();
+    OpenGlHelper.setClearColor(Color.black());
 
     for (GameObject gameObject : scene.getGameObjects()) {
       gameObject.getRenderer().init(gameObject);
@@ -74,7 +70,6 @@ public class MainMenuRenderer implements SceneRenderer<MainMenuScene> {
 
   private void createShaderProgram() throws Exception {
     defaultShaderProgram = resourceManager.get(ShaderProgramName.DEFAULT);
-    textShaderProgram = resourceManager.get(ShaderProgramName.TEXT);
   }
 
   private void updateProjectionMatrix() {
@@ -83,7 +78,6 @@ public class MainMenuRenderer implements SceneRenderer<MainMenuScene> {
 
   @Override
   public void cleanup() {
-    resourceManager.free(ShaderProgramName.TEXT);
     resourceManager.free(ShaderProgramName.DEFAULT);
     removeEventHandlers();
   }

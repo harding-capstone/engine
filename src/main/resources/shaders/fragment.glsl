@@ -10,4 +10,7 @@ uniform sampler2D texture_sampler;
 
 void main() {
     outColor = texture(texture_sampler, inputs.textureCoordinate);
+    if (outColor.a == 0) {
+        discard;
+    }
 }
