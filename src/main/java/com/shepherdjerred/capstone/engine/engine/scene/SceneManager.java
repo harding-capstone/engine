@@ -42,7 +42,9 @@ public class SceneManager {
       var oldScene = scene;
       newScene.initialize();
       newScene.getSceneRenderer().initialize(newScene);
-      newScene.getSceneAudio().initialize();
+      if (newScene.getSceneAudio() != null) {
+        newScene.getSceneAudio().initialize();
+      }
       scene = newScene;
       oldScene.cleanup();
       isTransitioning = false;

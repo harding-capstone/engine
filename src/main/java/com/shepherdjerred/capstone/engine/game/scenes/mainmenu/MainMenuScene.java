@@ -34,6 +34,7 @@ import com.shepherdjerred.capstone.events.Event;
 import com.shepherdjerred.capstone.events.EventBus;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 
@@ -119,7 +120,7 @@ public class MainMenuScene implements Scene {
 
     var background = new ParallaxBackground(new ParallaxBackgroundRenderer(resourceManager,
         windowSize),
-        Type.PURPLE_MOUNTAINS);
+        randomType());
 
     gameObjects.add(button);
     gameObjects.add(logo);
@@ -180,5 +181,13 @@ public class MainMenuScene implements Scene {
   @Override
   public SceneRenderer getSceneRenderer() {
     return renderer;
+  }
+
+  private Type randomType() {
+    var random = new Random();
+    List<Type> types = new ArrayList<>();
+    types.add(Type.PLAINS);
+    types.add(Type.PURPLE_MOUNTAINS);
+    return types.get(random.nextInt(types.size()));
   }
 }
