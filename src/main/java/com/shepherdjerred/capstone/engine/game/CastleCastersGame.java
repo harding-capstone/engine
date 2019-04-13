@@ -107,5 +107,6 @@ public class CastleCastersGame implements GameLogic {
     } else {
       log.info("No resource leaks detected :)");
     }
+    resourceManager.freeAll();
   }
 }

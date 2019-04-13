@@ -31,6 +31,7 @@ import static org.lwjgl.glfw.GLFW.glfwSetWindowPos;
 import static org.lwjgl.glfw.GLFW.glfwShowWindow;
 import static org.lwjgl.glfw.GLFW.glfwSwapBuffers;
 import static org.lwjgl.glfw.GLFW.glfwSwapInterval;
+import static org.lwjgl.glfw.GLFW.glfwTerminate;
 import static org.lwjgl.glfw.GLFW.glfwWindowHint;
 import static org.lwjgl.glfw.GLFW.glfwWindowShouldClose;
 import static org.lwjgl.opengl.GL11.GL_FALSE;
@@ -63,6 +64,7 @@ import org.lwjgl.glfw.Callbacks;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
+import org.lwjgl.system.Callback;
 import org.lwjgl.system.Configuration;
 
 @Log4j2
@@ -75,6 +77,7 @@ public class GlfwWindow implements Window {
   private final GlfwMouseCodeConverter mouseCodeConverter;
   private final EventBus<Event> eventBus;
   private final MouseTracker mouseTracker;
+  private Callback errorCallback;
 
   public GlfwWindow(WindowSettings windowSettings,
       MouseTracker mouseTracker,
@@ -93,7 +96,6 @@ public class GlfwWindow implements Window {
       Configuration.DEBUG_LOADER.set(true);
       Configuration.DEBUG_MEMORY_ALLOCATOR.set(true);
       Configuration.DEBUG_STACK.set(true);
-      Configuration.DEBUG_STREAM.set(System.out);
     }
 
     if (!glfwInit()) {
@@ -133,9 +135,10 @@ public class GlfwWindow implements Window {
   }
 
   private void createCallbacks() {
-    glfwSetErrorCallback((error, description) -> log.error(
-        "GLFW error [" + Integer.toHexString(error) + "]: " + GLFWErrorCallback.getDescription(
-            description)));
+    errorCallback = glfwSetErrorCallback((error, description) -> log.error(String.format(
+        "GLFW error [%s]: %s",
+        Integer.toHexString(error),
+        GLFWErrorCallback.getDescription(description))));
 
     glfwSetKeyCallback(windowHandle,
         (window, glfwKey, scancode, action, mods) -> {
@@ -235,7 +238,9 @@ public class GlfwWindow implements Window {
 
   public void cleanup() {
     Callbacks.glfwFreeCallbacks(windowHandle);
+//    errorCallback.free();
     glfwDestroyWindow(windowHandle);
-    GL.destroy();
+    glfwMakeContextCurrent(NULL);
+    glfwTerminate();
   }
 }

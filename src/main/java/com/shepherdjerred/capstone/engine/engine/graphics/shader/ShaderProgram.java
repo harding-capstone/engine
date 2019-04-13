@@ -10,6 +10,7 @@ import static org.lwjgl.opengl.GL20.glCompileShader;
 import static org.lwjgl.opengl.GL20.glCreateProgram;
 import static org.lwjgl.opengl.GL20.glCreateShader;
 import static org.lwjgl.opengl.GL20.glDeleteProgram;
+import static org.lwjgl.opengl.GL20.glDeleteShader;
 import static org.lwjgl.opengl.GL20.glDetachShader;
 import static org.lwjgl.opengl.GL20.glGetProgramInfoLog;
 import static org.lwjgl.opengl.GL20.glGetProgrami;
@@ -142,8 +143,8 @@ public class ShaderProgram implements Resource {
 
   public void cleanup() {
     unbind();
-    if (shaderProgramId != 0) {
-      glDeleteProgram(shaderProgramId);
-    }
+    glDeleteShader(vertexShaderId);
+    glDeleteShader(fragmentShaderId);
+    glDeleteProgram(shaderProgramId);
   }
 }

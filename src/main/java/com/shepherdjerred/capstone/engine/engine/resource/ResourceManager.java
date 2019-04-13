@@ -65,4 +65,8 @@ public class ResourceManager {
       referenceCounter.put(identifier, references);
     }
   }
+
+  public void freeAll() {
+    resourceCache.values().forEach(Resource::cleanup);
+  }
 }
