@@ -1,6 +1,8 @@
 package com.shepherdjerred.capstone.engine.game;
 
 import com.shepherdjerred.capstone.engine.engine.GameLogic;
+import com.shepherdjerred.capstone.engine.engine.audio.AudioLoader;
+import com.shepherdjerred.capstone.engine.engine.audio.AudioName;
 import com.shepherdjerred.capstone.engine.engine.audio.AudioPlayer;
 import com.shepherdjerred.capstone.engine.engine.events.handlers.scene.SceneTransitionEventHandler;
 import com.shepherdjerred.capstone.engine.engine.events.scene.SceneTransitionEvent;
@@ -12,6 +14,7 @@ import com.shepherdjerred.capstone.engine.engine.graphics.shader.ShaderProgramNa
 import com.shepherdjerred.capstone.engine.engine.graphics.shader.code.ClasspathFileShaderCodeLoader;
 import com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureLoader;
 import com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName;
+import com.shepherdjerred.capstone.engine.engine.resource.ByteBufferLoader;
 import com.shepherdjerred.capstone.engine.engine.resource.PathResourceFileLocator;
 import com.shepherdjerred.capstone.engine.engine.resource.ResourceFileLocator;
 import com.shepherdjerred.capstone.engine.engine.resource.ResourceManager;
@@ -44,15 +47,18 @@ public class CastleCastersGame implements GameLogic {
   private void registerLoaders() {
     ResourceFileLocator resourceFileLocator = new PathResourceFileLocator(
         "/textures/",
-        "/fonts/"
+        "/fonts/",
+        "/audio/"
     );
     var textureLoader = new TextureLoader(resourceFileLocator);
     var shaderLoader = new ShaderProgramLoader(new ClasspathFileShaderCodeLoader("/shaders/"));
     var fontLoader = new FontLoader(resourceFileLocator);
+    var audioLoader = new AudioLoader(resourceFileLocator, new ByteBufferLoader());
 
     resourceManager.registerLoader(TextureName.class, textureLoader);
     resourceManager.registerLoader(ShaderProgramName.class, shaderLoader);
     resourceManager.registerLoader(FontName.class, fontLoader);
+    resourceManager.registerLoader(AudioName.class, audioLoader);
   }
 
   @Override
@@ -112,6 +118,7 @@ public class CastleCastersGame implements GameLogic {
     } else {
       log.info("No resource leaks detected :)");
     }
+    audioPlayer.cleanup();
     resourceManager.freeAll();
   }
 }

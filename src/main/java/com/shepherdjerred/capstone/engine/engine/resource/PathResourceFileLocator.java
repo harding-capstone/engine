@@ -4,6 +4,7 @@ import static com.shepherdjerred.capstone.engine.engine.graphics.font.FontName.F
 import static com.shepherdjerred.capstone.engine.engine.graphics.font.FontName.M5X7;
 import static com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName.*;
 
+import com.shepherdjerred.capstone.engine.engine.audio.AudioName;
 import com.shepherdjerred.capstone.engine.engine.graphics.font.FontName;
 import com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName;
 import java.util.HashMap;
@@ -17,16 +18,31 @@ public class PathResourceFileLocator implements ResourceFileLocator {
 
   private final String texturesBasePath;
   private final String fontsBasePath;
+  private final String audioBasePath;
   private final HashMap<TextureName, String> textureFileNameHashMap;
   private final HashMap<FontName, String> fontFileNameHashMap;
+  private final HashMap<AudioName, String> audioFileHashMap;
 
-  public PathResourceFileLocator(String texturesBasePath, String fontsBasePath) {
+  public PathResourceFileLocator(String texturesBasePath,
+      String fontsBasePath,
+      String audioBasePath) {
     this.texturesBasePath = texturesBasePath;
     this.fontsBasePath = fontsBasePath;
+    this.audioBasePath = audioBasePath;
+
     textureFileNameHashMap = new HashMap<>();
     fontFileNameHashMap = new HashMap<>();
+    audioFileHashMap = new HashMap<>();
+
     initializeTextureMap();
     initializeFontMap();
+    initializeAudioMap();
+  }
+
+  private void initializeAudioMap() {
+    audioFileHashMap.put(AudioName.THEME_MUSIC, "music/theme.ogg");
+    audioFileHashMap.put(AudioName.VICTORY_MUSIC, "music/victory.ogg");
+    audioFileHashMap.put(AudioName.DEFEAT_MUSIC, "music/defeat.ogg");
   }
 
   private void initializeTextureMap() {
@@ -78,5 +94,10 @@ public class PathResourceFileLocator implements ResourceFileLocator {
   @Override
   public String getFontPath(FontName fontName) {
     return fontsBasePath + fontFileNameHashMap.get(fontName);
+  }
+
+  @Override
+  public String getAudioPath(AudioName audioName) {
+    return audioBasePath + audioFileHashMap.get(audioName);
   }
 }

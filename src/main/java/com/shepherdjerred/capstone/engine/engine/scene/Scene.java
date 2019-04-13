@@ -5,6 +5,8 @@ import java.util.List;
 
 public interface Scene {
 
+  void makeActive();
+
   void initialize();
 
   void cleanup();

@@ -35,6 +35,11 @@ public class SinglePlayerScene implements Scene {
   }
 
   @Override
+  public void makeActive() {
+
+  }
+
+  @Override
   public void initialize() {
     var text = new Text(new TextRenderer(resourceManager),
         "Single Player",

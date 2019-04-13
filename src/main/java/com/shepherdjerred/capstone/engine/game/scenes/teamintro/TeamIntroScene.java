@@ -66,6 +66,11 @@ public class TeamIntroScene implements Scene {
   }
 
   @Override
+  public void makeActive() {
+
+  }
+
+  @Override
   public void initialize() {
   }
 

@@ -1,5 +1,7 @@
 package com.shepherdjerred.capstone.engine.game.scenes.mainmenu;
 
+import com.shepherdjerred.capstone.engine.engine.audio.AudioName;
+import com.shepherdjerred.capstone.engine.engine.events.audio.PlayAudioEvent;
 import com.shepherdjerred.capstone.engine.engine.events.input.MouseButtonDownEvent;
 import com.shepherdjerred.capstone.engine.engine.events.input.MouseButtonUpEvent;
 import com.shepherdjerred.capstone.engine.engine.events.input.MouseMoveEvent;
@@ -120,6 +122,11 @@ public class MainMenuScene implements Scene {
     gameObjects.add(logo);
     gameObjects.add(text);
     gameObjects.add(background);
+  }
+
+  @Override
+  public void makeActive() {
+    eventBus.dispatch(new PlayAudioEvent(AudioName.THEME_MUSIC));
   }
 
   @Override

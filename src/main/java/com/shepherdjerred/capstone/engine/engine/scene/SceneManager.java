@@ -33,6 +33,7 @@ public class SceneManager {
       newScene.initialize();
       newScene.getSceneRenderer().initialize(newScene);
       scene = newScene;
+      scene.makeActive();
       oldScene.cleanup();
       isTransitioning = false;
     } else {

@@ -1,5 +1,7 @@
 package com.shepherdjerred.capstone.engine.engine;
 
+import static org.lwjgl.openal.AL10.AL_NO_ERROR;
+import static org.lwjgl.openal.AL10.alGetError;
 import static org.lwjgl.opengl.GL11.glGetError;
 
 import com.shepherdjerred.capstone.engine.engine.graphics.ErrorConverter;
@@ -95,6 +97,7 @@ public class GameLoop implements Runnable {
       }
 
       printOpenGlErrors();
+      printOpenAlErrors();
     }
   }
 
@@ -111,6 +114,13 @@ public class GameLoop implements Runnable {
     if (errCode != 0) {
       var converter = new ErrorConverter();
       log.error("OpenGL error: " + converter.convert(errCode));
+    }
+  }
+
+  private void printOpenAlErrors() {
+    int error = alGetError();
+    if (error != AL_NO_ERROR) {
+      log.error("OpenAL error: " + error);
     }
   }
 
