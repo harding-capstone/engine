@@ -34,8 +34,9 @@ public class FontLoader implements ResourceLoader<FontName, Font> {
   private final ResourceFileLocator fileLocator;
 
   public Font get(FontName fontName) throws Exception {
+    var loader = new ByteBufferLoader();
     var filePath = fileLocator.getFontPath(fontName);
-    var fontBuffer = ByteBufferLoader.ioResourceToByteBuffer(filePath, 512 * 1024);
+    var fontBuffer = loader.load(filePath);
 
     var info = STBTTFontinfo.create();
     if (!stbtt_InitFont(info, fontBuffer)) {

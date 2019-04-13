@@ -11,4 +11,6 @@ public interface Window {
   void pollEvents();
 
   WindowSettings getWindowSettings();
+
+  void cleanup();
 }

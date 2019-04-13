@@ -12,6 +12,7 @@ import static org.lwjgl.opengl.GL11.glPixelStorei;
 import static org.lwjgl.opengl.GL11.glTexImage2D;
 import static org.lwjgl.opengl.GL11.glTexParameteri;
 import static org.lwjgl.opengl.GL11C.GL_TEXTURE_2D;
+import static org.lwjgl.stb.STBImage.stbi_image_free;
 import static org.lwjgl.stb.STBImage.stbi_load_from_memory;
 
 import com.shepherdjerred.capstone.engine.engine.resource.ByteBufferLoader;
@@ -50,7 +51,7 @@ public class TextureLoader implements ResourceLoader<TextureName, Texture> {
 
     ByteBuffer buffer;
 
-    // Use stbi to load the texture
+    // Use stb to load the texture
     try (MemoryStack stack = MemoryStack.stackPush()) {
       IntBuffer stackTextureWidth = stack.mallocInt(1);
       IntBuffer stackTextureHeight = stack.mallocInt(1);
@@ -62,7 +63,7 @@ public class TextureLoader implements ResourceLoader<TextureName, Texture> {
           stackNumberOfChannelsInTexture,
           0);
 
-      // Assign variables from data loaded by stbi
+      // Assign variables from data loaded by stb
       textureWidth = stackTextureWidth.get();
       textureHeight = stackTextureHeight.get();
       numberOfChannelsInTexture = stackNumberOfChannelsInTexture.get();
@@ -94,6 +95,8 @@ public class TextureLoader implements ResourceLoader<TextureName, Texture> {
 
     // Unbind the texture
     glBindTexture(GL_TEXTURE_2D, 0);
+
+    stbi_image_free(texture);
 
     return openGlTextureId;
   }

@@ -13,6 +13,7 @@ import static org.lwjgl.glfw.GLFW.GLFW_TRUE;
 import static org.lwjgl.glfw.GLFW.GLFW_VISIBLE;
 import static org.lwjgl.glfw.GLFW.glfwCreateWindow;
 import static org.lwjgl.glfw.GLFW.glfwDefaultWindowHints;
+import static org.lwjgl.glfw.GLFW.glfwDestroyWindow;
 import static org.lwjgl.glfw.GLFW.glfwGetPrimaryMonitor;
 import static org.lwjgl.glfw.GLFW.glfwGetVideoMode;
 import static org.lwjgl.glfw.GLFW.glfwInit;
@@ -37,6 +38,7 @@ import static org.lwjgl.opengl.GL11.GL_TRUE;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
 import com.shepherdjerred.capstone.engine.engine.events.CloseApplicationEvent;
+import com.shepherdjerred.capstone.engine.engine.events.WindowResizeEvent;
 import com.shepherdjerred.capstone.engine.engine.events.input.InputEvent;
 import com.shepherdjerred.capstone.engine.engine.events.input.KeyPressedEvent;
 import com.shepherdjerred.capstone.engine.engine.events.input.KeyReleasedEvent;
@@ -46,7 +48,6 @@ import com.shepherdjerred.capstone.engine.engine.events.input.MouseEnterEvent;
 import com.shepherdjerred.capstone.engine.engine.events.input.MouseLeaveEvent;
 import com.shepherdjerred.capstone.engine.engine.events.input.MouseMoveEvent;
 import com.shepherdjerred.capstone.engine.engine.events.input.MouseScrollEvent;
-import com.shepherdjerred.capstone.engine.engine.events.WindowResizeEvent;
 import com.shepherdjerred.capstone.engine.engine.input.keyboard.GlfwKeyCodeConverter;
 import com.shepherdjerred.capstone.engine.engine.input.keyboard.Key;
 import com.shepherdjerred.capstone.engine.engine.input.mouse.GlfwMouseCodeConverter;
@@ -58,6 +59,7 @@ import com.shepherdjerred.capstone.events.EventBus;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
+import org.lwjgl.glfw.Callbacks;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
@@ -135,28 +137,30 @@ public class GlfwWindow implements Window {
         "GLFW error [" + Integer.toHexString(error) + "]: " + GLFWErrorCallback.getDescription(
             description)));
 
-    glfwSetKeyCallback(windowHandle, (window, glfwKey, scancode, action, mods) -> {
-      Optional<Key> key = keyCodeConverter.fromGlfwKey(glfwKey);
+    glfwSetKeyCallback(windowHandle,
+        (window, glfwKey, scancode, action, mods) -> {
+          Optional<Key> key = keyCodeConverter.fromGlfwKey(glfwKey);
 
-      if (key.isPresent()) {
-        InputEvent event = null;
+          if (key.isPresent()) {
+            InputEvent event = null;
 
-        if (action == GLFW_PRESS) {
-          event = new KeyPressedEvent(key.get());
-        } else if (action == GLFW_RELEASE) {
-          event = new KeyReleasedEvent(key.get());
-        }
+            if (action == GLFW_PRESS) {
+              event = new KeyPressedEvent(key.get());
+            } else if (action == GLFW_RELEASE) {
+              event = new KeyReleasedEvent(key.get());
+            }
 
-        if (event != null) {
+            if (event != null) {
+              eventBus.dispatch(event);
+            }
+          }
+        });
+
+    glfwSetFramebufferSizeCallback(windowHandle,
+        (window, width, height) -> {
+          var event = new WindowResizeEvent(new WindowSize(width, height));
           eventBus.dispatch(event);
-        }
-      }
-    });
-
-    glfwSetFramebufferSizeCallback(windowHandle, (window, width, height) -> {
-      var event = new WindowResizeEvent(new WindowSize(width, height));
-      eventBus.dispatch(event);
-    });
+        });
 
     glfwSetCursorPosCallback(windowHandle, (windowHandle, x, y) -> {
       // TODO fix casting?
@@ -164,22 +168,23 @@ public class GlfwWindow implements Window {
       eventBus.dispatch(event);
     });
 
-    glfwSetMouseButtonCallback(windowHandle, (windowHandle, glfwButton, action, mode) -> {
-      Optional<MouseButton> mouseButton = mouseCodeConverter.fromGlfwButton(glfwButton);
+    glfwSetMouseButtonCallback(windowHandle,
+        (windowHandle, glfwButton, action, mode) -> {
+          Optional<MouseButton> mouseButton = mouseCodeConverter.fromGlfwButton(glfwButton);
 
-      if (mouseButton.isPresent()) {
-        Event event = null;
-        if (action == GLFW_PRESS) {
-          event = new MouseButtonDownEvent(mouseButton.get(), mouseTracker.getMousePosition());
-        } else if (action == GLFW_RELEASE) {
-          event = new MouseButtonUpEvent(mouseButton.get(), mouseTracker.getMousePosition());
-        }
+          if (mouseButton.isPresent()) {
+            Event event = null;
+            if (action == GLFW_PRESS) {
+              event = new MouseButtonDownEvent(mouseButton.get(), mouseTracker.getMousePosition());
+            } else if (action == GLFW_RELEASE) {
+              event = new MouseButtonUpEvent(mouseButton.get(), mouseTracker.getMousePosition());
+            }
 
-        if (event != null) {
-          eventBus.dispatch(event);
-        }
-      }
-    });
+            if (event != null) {
+              eventBus.dispatch(event);
+            }
+          }
+        });
 
     glfwSetCursorEnterCallback(windowHandle, (windowHandle, entered) -> {
       Event event;
@@ -226,5 +231,11 @@ public class GlfwWindow implements Window {
 
   private void setupOpenGl() {
     GL.createCapabilities();
+  }
+
+  public void cleanup() {
+    Callbacks.glfwFreeCallbacks(windowHandle);
+    glfwDestroyWindow(windowHandle);
+    GL.destroy();
   }
 }

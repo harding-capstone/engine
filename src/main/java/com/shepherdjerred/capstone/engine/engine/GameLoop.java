@@ -60,6 +60,7 @@ public class GameLoop implements Runnable {
 
   private void cleanup() {
     gameLogic.cleanup();
+    window.cleanup();
   }
 
   @Override
