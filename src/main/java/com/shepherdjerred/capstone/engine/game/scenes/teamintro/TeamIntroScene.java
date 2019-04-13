@@ -4,6 +4,7 @@ import com.shepherdjerred.capstone.engine.engine.events.scene.SceneTransitionEve
 import com.shepherdjerred.capstone.engine.engine.object.GameObject;
 import com.shepherdjerred.capstone.engine.engine.resource.ResourceManager;
 import com.shepherdjerred.capstone.engine.engine.scene.Scene;
+import com.shepherdjerred.capstone.engine.engine.scene.SceneAudio;
 import com.shepherdjerred.capstone.engine.engine.scene.SceneCoordinate;
 import com.shepherdjerred.capstone.engine.engine.scene.SceneRenderer;
 import com.shepherdjerred.capstone.engine.engine.scene.position.AbsoluteScenePositioner;
@@ -13,6 +14,7 @@ import com.shepherdjerred.capstone.engine.engine.scene.position.RelativeScenePos
 import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
 import com.shepherdjerred.capstone.engine.game.objects.logo.Logo;
 import com.shepherdjerred.capstone.engine.game.objects.logo.LogoRenderer;
+import com.shepherdjerred.capstone.engine.game.scenes.mainmenu.MainMenuAudio;
 import com.shepherdjerred.capstone.engine.game.scenes.mainmenu.MainMenuRenderer;
 import com.shepherdjerred.capstone.engine.game.scenes.mainmenu.MainMenuScene;
 import com.shepherdjerred.capstone.events.Event;
@@ -33,12 +35,16 @@ public class TeamIntroScene implements Scene {
   private final SceneRenderer<TeamIntroScene> renderer;
   private float time = 0;
   private boolean hasTransitioned = false;
+  @Getter
+  private final SceneAudio sceneAudio;
 
   public TeamIntroScene(SceneRenderer<TeamIntroScene> renderer,
+      SceneAudio sceneAudio,
       ResourceManager resourceManager,
       EventBus<Event> eventBus,
       WindowSize windowSize) {
     this.renderer = renderer;
+    this.sceneAudio = sceneAudio;
     this.resourceManager = resourceManager;
     this.eventBus = eventBus;
     this.windowSize = windowSize;
@@ -66,11 +72,6 @@ public class TeamIntroScene implements Scene {
   }
 
   @Override
-  public void makeActive() {
-
-  }
-
-  @Override
   public void initialize() {
   }
 
@@ -89,7 +90,8 @@ public class TeamIntroScene implements Scene {
           windowSize),
           resourceManager,
           eventBus,
-          windowSize)));
+          windowSize,
+          new MainMenuAudio(eventBus, resourceManager))));
       hasTransitioned = true;
     }
   }

@@ -1,7 +1,5 @@
 package com.shepherdjerred.capstone.engine.game.scenes.mainmenu;
 
-import com.shepherdjerred.capstone.engine.engine.audio.AudioName;
-import com.shepherdjerred.capstone.engine.engine.events.audio.PlayAudioEvent;
 import com.shepherdjerred.capstone.engine.engine.events.input.MouseButtonDownEvent;
 import com.shepherdjerred.capstone.engine.engine.events.input.MouseButtonUpEvent;
 import com.shepherdjerred.capstone.engine.engine.events.input.MouseMoveEvent;
@@ -11,6 +9,7 @@ import com.shepherdjerred.capstone.engine.engine.graphics.font.FontName;
 import com.shepherdjerred.capstone.engine.engine.resource.ResourceManager;
 import com.shepherdjerred.capstone.engine.engine.object.GameObject;
 import com.shepherdjerred.capstone.engine.engine.scene.Scene;
+import com.shepherdjerred.capstone.engine.engine.scene.SceneAudio;
 import com.shepherdjerred.capstone.engine.engine.scene.SceneRenderer;
 import com.shepherdjerred.capstone.engine.engine.scene.attributes.Clickable;
 import com.shepherdjerred.capstone.engine.engine.scene.attributes.Hoverable;
@@ -47,15 +46,19 @@ public class MainMenuScene implements Scene {
   private final List<GameObject> gameObjects;
   private final WindowSize windowSize;
   private final SceneRenderer<MainMenuScene> renderer;
+  @Getter
+  private final SceneAudio sceneAudio;
 
   public MainMenuScene(SceneRenderer<MainMenuScene> renderer,
       ResourceManager resourceManager,
       EventBus<Event> eventBus,
-      WindowSize windowSize) {
+      WindowSize windowSize,
+      SceneAudio sceneAudio) {
     this.renderer = renderer;
     this.resourceManager = resourceManager;
     this.eventBus = eventBus;
     this.windowSize = windowSize;
+    this.sceneAudio = sceneAudio;
     gameObjects = new ArrayList<>();
     createGameObjects();
   }
@@ -70,7 +73,7 @@ public class MainMenuScene implements Scene {
               resourceManager,
               new SinglePlayerRenderer(resourceManager,
                   eventBus,
-                  windowSize));
+                  windowSize), null);
           eventBus.dispatch(new SceneTransitionEvent(scene));
         });
     button.setPosition(new RelativeScenePositioner(HorizontalPosition.CENTER,
@@ -122,11 +125,6 @@ public class MainMenuScene implements Scene {
     gameObjects.add(logo);
     gameObjects.add(text);
     gameObjects.add(background);
-  }
-
-  @Override
-  public void makeActive() {
-    eventBus.dispatch(new PlayAudioEvent(AudioName.THEME_MUSIC));
   }
 
   @Override

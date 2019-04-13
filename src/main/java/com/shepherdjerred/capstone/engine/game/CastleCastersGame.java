@@ -21,6 +21,7 @@ import com.shepherdjerred.capstone.engine.engine.resource.ResourceManager;
 import com.shepherdjerred.capstone.engine.engine.scene.Scene;
 import com.shepherdjerred.capstone.engine.engine.scene.SceneManager;
 import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
+import com.shepherdjerred.capstone.engine.game.scenes.mainmenu.MainMenuAudio;
 import com.shepherdjerred.capstone.engine.game.scenes.mainmenu.MainMenuRenderer;
 import com.shepherdjerred.capstone.engine.game.scenes.mainmenu.MainMenuScene;
 import com.shepherdjerred.capstone.engine.game.scenes.teamintro.TeamIntroRenderer;
@@ -40,7 +41,7 @@ public class CastleCastersGame implements GameLogic {
   public CastleCastersGame(EventBus<Event> eventBus) {
     this.eventBus = eventBus;
     this.resourceManager = new ResourceManager();
-    this.audioPlayer = new AudioPlayer(resourceManager, eventBus);
+    this.audioPlayer = new AudioPlayer(eventBus);
     registerLoaders();
   }
 
@@ -68,11 +69,7 @@ public class CastleCastersGame implements GameLogic {
     OpenGlHelper.setClearColor();
 
     var scene = getTeamScene(windowSize);
-
-    scene.initialize();
-    scene.getSceneRenderer().initialize(scene);
-
-    this.sceneManager = new SceneManager(scene);
+    this.sceneManager = new SceneManager(eventBus, scene);
     sceneManager.initialize();
 
     eventBus.registerHandler(SceneTransitionEvent.class,
@@ -84,6 +81,7 @@ public class CastleCastersGame implements GameLogic {
   private Scene getTeamScene(WindowSize windowSize) {
     var sceneRenderer = new TeamIntroRenderer(resourceManager, eventBus, windowSize);
     var scene = new TeamIntroScene(sceneRenderer,
+        null,
         resourceManager,
         eventBus,
         windowSize);
@@ -95,7 +93,8 @@ public class CastleCastersGame implements GameLogic {
     var scene = new MainMenuScene(sceneRenderer,
         resourceManager,
         eventBus,
-        windowSize);
+        windowSize,
+        new MainMenuAudio(eventBus, resourceManager));
     return scene;
   }
 

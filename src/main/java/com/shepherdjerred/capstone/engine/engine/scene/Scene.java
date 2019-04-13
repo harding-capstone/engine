@@ -5,8 +5,6 @@ import java.util.List;
 
 public interface Scene {
 
-  void makeActive();
-
   void initialize();
 
   void cleanup();
@@ -16,4 +14,6 @@ public interface Scene {
   List<GameObject> getGameObjects();
 
   SceneRenderer getSceneRenderer();
+
+  SceneAudio getSceneAudio();
 }

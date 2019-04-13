@@ -5,6 +5,7 @@ import com.shepherdjerred.capstone.engine.engine.graphics.font.FontName;
 import com.shepherdjerred.capstone.engine.engine.object.GameObject;
 import com.shepherdjerred.capstone.engine.engine.resource.ResourceManager;
 import com.shepherdjerred.capstone.engine.engine.scene.Scene;
+import com.shepherdjerred.capstone.engine.engine.scene.SceneAudio;
 import com.shepherdjerred.capstone.engine.engine.scene.SceneCoordinate;
 import com.shepherdjerred.capstone.engine.engine.scene.SceneRenderer;
 import com.shepherdjerred.capstone.engine.engine.scene.position.AbsoluteScenePositioner;
@@ -24,19 +25,18 @@ public class SinglePlayerScene implements Scene {
   private final SceneRenderer<SinglePlayerScene> sceneRenderer;
   @Getter
   private final List<GameObject> gameObjects;
+  @Getter
+  private final SceneAudio sceneAudio;
 
   public SinglePlayerScene(EventBus<Event> eventBus,
       ResourceManager resourceManager,
-      SceneRenderer<SinglePlayerScene> sceneRenderer) {
+      SceneRenderer<SinglePlayerScene> sceneRenderer,
+      SceneAudio sceneAudio) {
     this.eventBus = eventBus;
     this.resourceManager = resourceManager;
     this.sceneRenderer = sceneRenderer;
     this.gameObjects = new ArrayList<>();
-  }
-
-  @Override
-  public void makeActive() {
-
+    this.sceneAudio = sceneAudio;
   }
 
   @Override
