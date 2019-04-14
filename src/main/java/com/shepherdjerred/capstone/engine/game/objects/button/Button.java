@@ -1,11 +1,15 @@
 package com.shepherdjerred.capstone.engine.game.objects.button;
 
+import com.shepherdjerred.capstone.engine.engine.collision.ButtonCollisionDetector;
+import com.shepherdjerred.capstone.engine.engine.collision.CollisionDetector;
 import com.shepherdjerred.capstone.engine.engine.object.GameObject;
 import com.shepherdjerred.capstone.engine.engine.object.GameObjectRenderer;
+import com.shepherdjerred.capstone.engine.engine.resource.ResourceManager;
 import com.shepherdjerred.capstone.engine.engine.scene.attributes.Clickable;
 import com.shepherdjerred.capstone.engine.engine.scene.attributes.Hoverable;
 import com.shepherdjerred.capstone.engine.engine.scene.position.ScenePositioner;
 import com.shepherdjerred.capstone.engine.engine.scene.SceneCoordinate;
+import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -15,6 +19,7 @@ import lombok.ToString;
 public class Button implements GameObject, Clickable, Hoverable {
 
   private final GameObjectRenderer<Button> renderer;
+  private final CollisionDetector collisionDetector;
   @Setter
   private ScenePositioner position;
   private final int width;
@@ -24,12 +29,14 @@ public class Button implements GameObject, Clickable, Hoverable {
   private boolean isHovered;
   public State state = State.INACTIVE;
 
-  public Button(GameObjectRenderer<Button> renderer,
+  public Button(ResourceManager resourceManager,
+      WindowSize windowSize,
       ScenePositioner position,
       int width,
       int height,
       Runnable onClick) {
-    this.renderer = renderer;
+    this.renderer = new ButtonRenderer(resourceManager);
+    this.collisionDetector = new ButtonCollisionDetector(this, windowSize);
     this.position = position;
     this.width = width;
     this.height = height;
@@ -73,13 +80,11 @@ public class Button implements GameObject, Clickable, Hoverable {
 
   @Override
   public boolean contains(SceneCoordinate coordinate) {
-    // TODO
-    return false;
+    return collisionDetector.hasCollision(coordinate);
   }
 
   @Override
   public void update(float interval) {
-
   }
 
   public enum State {

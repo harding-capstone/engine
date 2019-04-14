@@ -15,7 +15,7 @@ public class ByteBufferLoader {
       var bytes = stream.readAllBytes();
       var buffer = BufferUtils.createByteBuffer(bytes.length);
 
-      log.info(bytes.length + " bytes or " + bytes.length / 1024 + "kb");
+      log.info("File size: " + bytes.length / 1024 + "KB");
 
       buffer.put(bytes);
       buffer.flip();

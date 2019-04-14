@@ -5,7 +5,7 @@ import com.shepherdjerred.capstone.engine.engine.scene.SceneCoordinate;
 /**
  * An object that takes up space in a scenes.
  */
-public interface Bounded {
+public interface Collidable {
 
   /**
    * Returns whether or not a coordinate is contained within an object.

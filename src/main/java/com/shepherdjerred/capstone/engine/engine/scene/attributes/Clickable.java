@@ -3,7 +3,7 @@ package com.shepherdjerred.capstone.engine.engine.scene.attributes;
 /**
  * Represents an object that can be interacted with.
  */
-public interface Clickable extends Bounded {
+public interface Clickable extends Collidable {
 
   void onClickBegin();
 

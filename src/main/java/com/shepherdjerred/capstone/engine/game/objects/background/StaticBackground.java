@@ -14,9 +14,9 @@ import lombok.ToString;
 @Getter
 @ToString
 @AllArgsConstructor
-public class Background implements GameObject {
+public class StaticBackground implements GameObject {
 
-  private final GameObjectRenderer<Background> renderer;
+  private final GameObjectRenderer<StaticBackground> renderer;
   @Setter
   private ScenePositioner position;
   private final Type type;

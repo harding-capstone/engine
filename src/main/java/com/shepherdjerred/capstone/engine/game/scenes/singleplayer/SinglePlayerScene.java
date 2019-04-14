@@ -10,6 +10,7 @@ import com.shepherdjerred.capstone.engine.engine.scene.position.WindowRelativeSc
 import com.shepherdjerred.capstone.engine.engine.scene.position.WindowRelativeScenePositioner.HorizontalPosition;
 import com.shepherdjerred.capstone.engine.engine.scene.position.WindowRelativeScenePositioner.VerticalPosition;
 import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
+import com.shepherdjerred.capstone.engine.game.objects.background.parallax.ParallaxBackground;
 import com.shepherdjerred.capstone.engine.game.objects.text.Text;
 import com.shepherdjerred.capstone.engine.game.objects.text.TextRenderer;
 import com.shepherdjerred.capstone.events.Event;
@@ -26,13 +27,15 @@ public class SinglePlayerScene implements Scene {
   @Getter
   private final List<GameObject> gameObjects;
 
-  public SinglePlayerScene(EventBus<Event> eventBus,
+  public SinglePlayerScene(ParallaxBackground background,
+      EventBus<Event> eventBus,
       ResourceManager resourceManager,
       SceneRenderer<SinglePlayerScene> sceneRenderer) {
     this.eventBus = eventBus;
     this.resourceManager = resourceManager;
     this.sceneRenderer = sceneRenderer;
     this.gameObjects = new ArrayList<>();
+    gameObjects.add(background);
   }
 
   @Override
@@ -60,6 +63,7 @@ public class SinglePlayerScene implements Scene {
 
   @Override
   public void updateState(float interval) {
+    gameObjects.forEach(gameObject -> gameObject.update(interval));
   }
 
   @Override

@@ -8,20 +8,20 @@ import com.shepherdjerred.capstone.engine.engine.object.GameObjectRenderer;
 import com.shepherdjerred.capstone.engine.engine.resource.ResourceManager;
 import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
 
-public class BackgroundRenderer implements
-    GameObjectRenderer<Background> {
+public class StaticBackgroundRenderer implements
+    GameObjectRenderer<StaticBackground> {
 
   private TexturedMesh texturedMesh;
   private final ResourceManager resourceManager;
   private WindowSize windowSize;
 
-  public BackgroundRenderer(ResourceManager resourceManager, WindowSize windowSize) {
+  public StaticBackgroundRenderer(ResourceManager resourceManager, WindowSize windowSize) {
     this.windowSize = windowSize;
     this.resourceManager = resourceManager;
   }
 
   @Override
-  public void init(Background gameObject) throws Exception {
+  public void init(StaticBackground gameObject) throws Exception {
     var width = windowSize.getWidth();
     var height = windowSize.getHeight();
 
@@ -60,7 +60,7 @@ public class BackgroundRenderer implements
   }
 
   @Override
-  public void render(WindowSize windowSize, Background sceneElement) {
+  public void render(WindowSize windowSize, StaticBackground sceneElement) {
     // TODO bind shader program, etc.
     texturedMesh.render();
   }

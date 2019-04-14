@@ -22,7 +22,6 @@ import com.shepherdjerred.capstone.engine.game.objects.background.parallax.Paral
 import com.shepherdjerred.capstone.engine.game.objects.background.parallax.ParallaxBackground.Type;
 import com.shepherdjerred.capstone.engine.game.objects.background.parallax.ParallaxBackgroundRenderer;
 import com.shepherdjerred.capstone.engine.game.objects.button.Button;
-import com.shepherdjerred.capstone.engine.game.objects.button.ButtonRenderer;
 import com.shepherdjerred.capstone.engine.game.objects.logo.Logo;
 import com.shepherdjerred.capstone.engine.game.objects.logo.LogoRenderer;
 import com.shepherdjerred.capstone.engine.game.objects.text.Text;
@@ -74,12 +73,18 @@ public class MainMenuScene implements Scene {
         300,
         Logo.Type.GAME);
 
-    var button = new Button(new ButtonRenderer(resourceManager),
+    var background = new ParallaxBackground(new ParallaxBackgroundRenderer(resourceManager,
+        windowSize),
+        randomType());
+
+    var button = new Button(resourceManager,
+        windowSize,
         new ObjectRelativeScenePositioner(logo, 400, 0, 0, 0, 0),
         100,
         100,
         () -> {
-          var scene = new SinglePlayerScene(eventBus,
+          var scene = new SinglePlayerScene(background,
+              eventBus,
               resourceManager,
               new SinglePlayerRenderer(resourceManager,
                   eventBus,
@@ -99,10 +104,6 @@ public class MainMenuScene implements Scene {
             0,
             0)
     );
-
-    var background = new ParallaxBackground(new ParallaxBackgroundRenderer(resourceManager,
-        windowSize),
-        randomType());
 
     gameObjects.add(button);
     gameObjects.add(logo);
