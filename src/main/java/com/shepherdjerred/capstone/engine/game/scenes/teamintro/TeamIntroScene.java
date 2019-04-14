@@ -67,7 +67,7 @@ public class TeamIntroScene implements Scene {
 
   @Override
   public void cleanup() {
-    gameObjects.forEach(gameObject -> gameObject.getRenderer().cleanup());
+    gameObjects.forEach(GameObject::cleanup);
     renderer.cleanup();
   }
 

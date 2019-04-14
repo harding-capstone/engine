@@ -41,7 +41,7 @@ public class TeamIntroRenderer implements SceneRenderer<TeamIntroScene> {
     defaultShaderProgram.bind();
     defaultShaderProgram.setUniform(ShaderUniform.PROJECTION_MATRIX, projectionMatrix.getMatrix());
 
-    scene.getGameObjects().forEach(element -> element.getRenderer().render(windowSize, element));
+    scene.getGameObjects().forEach(element -> element.render(windowSize));
   }
 
   @Override
@@ -52,7 +52,7 @@ public class TeamIntroRenderer implements SceneRenderer<TeamIntroScene> {
     OpenGlHelper.setClearColor(Color.white());
 
     for (GameObject gameObject : scene.getGameObjects()) {
-      gameObject.getRenderer().init(gameObject);
+      gameObject.initialize();
     }
   }
 

@@ -26,9 +26,9 @@ public class LogoRenderer implements
   }
 
   @Override
-  public void init(Logo gameObject) throws Exception {
-    var width = gameObject.getWidth();
-    var height = gameObject.getHeight();
+  public void initialize(Logo gameObject) throws Exception {
+    var width = gameObject.getDimensions().getWidth();
+    var height = gameObject.getDimensions().getHeight();
 
     defaultShaderProgram = resourceManager.get(ShaderProgramName.DEFAULT);
 
@@ -67,7 +67,7 @@ public class LogoRenderer implements
   @Override
   public void render(WindowSize windowSize, Logo sceneElement) {
     var pos = sceneElement.getPosition()
-        .getSceneCoordinate(windowSize, sceneElement.getWidth(), sceneElement.getHeight());
+        .getSceneCoordinate(windowSize, sceneElement.getDimensions().getWidth(), sceneElement.getDimensions().getHeight());
     var model = new ModelMatrix(new RendererCoordinate(pos.getX(), pos.getY(), pos.getZ()),
         0,
         1).getMatrix();

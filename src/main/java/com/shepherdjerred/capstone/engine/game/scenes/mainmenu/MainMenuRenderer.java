@@ -46,7 +46,7 @@ public class MainMenuRenderer implements SceneRenderer<MainMenuScene> {
     textShaderProgram.bind();
     textShaderProgram.setUniform(ShaderUniform.PROJECTION_MATRIX, projectionMatrix.getMatrix());
 
-    scene.getGameObjects().forEach(element -> element.getRenderer().render(windowSize, element));
+    scene.getGameObjects().forEach(element -> element.render(windowSize));
   }
 
   @Override
@@ -56,7 +56,7 @@ public class MainMenuRenderer implements SceneRenderer<MainMenuScene> {
     registerEventHandlers();
 
     for (GameObject gameObject : scene.getGameObjects()) {
-      gameObject.getRenderer().init(gameObject);
+      gameObject.initialize();
     }
   }
 

@@ -1,7 +1,7 @@
 package com.shepherdjerred.capstone.engine.game.objects.button;
 
-import com.shepherdjerred.capstone.engine.engine.collision.ButtonCollisionDetector;
 import com.shepherdjerred.capstone.engine.engine.collision.CollisionDetector;
+import com.shepherdjerred.capstone.engine.engine.object.Dimensions;
 import com.shepherdjerred.capstone.engine.engine.object.GameObject;
 import com.shepherdjerred.capstone.engine.engine.object.GameObjectRenderer;
 import com.shepherdjerred.capstone.engine.engine.resource.ResourceManager;
@@ -22,8 +22,7 @@ public class Button implements GameObject, Clickable, Hoverable {
   private final CollisionDetector collisionDetector;
   @Setter
   private ScenePositioner position;
-  private final int width;
-  private final int height;
+  private final Dimensions dimensions;
   private final Runnable onClick;
   private boolean isClicked;
   private boolean isHovered;
@@ -32,27 +31,31 @@ public class Button implements GameObject, Clickable, Hoverable {
   public Button(ResourceManager resourceManager,
       WindowSize windowSize,
       ScenePositioner position,
-      int width,
-      int height,
+      Dimensions dimensions,
       Runnable onClick) {
     this.renderer = new ButtonRenderer(resourceManager);
     this.collisionDetector = new ButtonCollisionDetector(this, windowSize);
     this.position = position;
-    this.width = width;
-    this.height = height;
+    this.dimensions = dimensions;
     this.onClick = onClick;
   }
 
   @Override
   public void onClickBegin() {
     this.isClicked = true;
-    onClick.run();
+    updateState();
+  }
+
+  @Override
+  public void onClickAbort() {
+    this.isClicked = false;
     updateState();
   }
 
   @Override
   public void onClickEnd() {
     this.isClicked = false;
+    onClick.run();
     updateState();
   }
 
@@ -81,6 +84,21 @@ public class Button implements GameObject, Clickable, Hoverable {
   @Override
   public boolean contains(SceneCoordinate coordinate) {
     return collisionDetector.hasCollision(coordinate);
+  }
+
+  @Override
+  public void initialize() throws Exception {
+    renderer.initialize(this);
+  }
+
+  @Override
+  public void cleanup() {
+    renderer.cleanup();
+  }
+
+  @Override
+  public void render(WindowSize windowSize) {
+    renderer.render(windowSize, this);
   }
 
   @Override

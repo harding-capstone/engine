@@ -7,6 +7,8 @@ public interface Clickable extends Collidable {
 
   void onClickBegin();
 
+  void onClickAbort();
+
   void onClickEnd();
 
   boolean isClicked();

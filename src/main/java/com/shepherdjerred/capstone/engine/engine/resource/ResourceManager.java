@@ -52,17 +52,20 @@ public class ResourceManager {
   }
 
   public void free(ResourceIdentifier identifier) {
-    var references = referenceCounter.get(identifier) - 1;
-    log.info("Freeing " + identifier + ". New usage: " + references);
-    if (references < 0) {
-      throw new IllegalStateException("Negative reference count");
-    } else if (references == 0) {
+    var newReferenceCount = referenceCounter.get(identifier) - 1;
+    log.info(String.format("Freeing %s %s. New reference count is %s.",
+        identifier.getClass().getSimpleName().replace("Name", ""),
+        identifier,
+        newReferenceCount));
+    if (newReferenceCount < 0) {
+      throw new IllegalStateException("Negative reference count.");
+    } else if (newReferenceCount == 0) {
       log.info("Resource " + identifier + " no longer in use. Cleaning up.");
       resourceCache.get(identifier).cleanup();
       resourceCache.remove(identifier);
       referenceCounter.remove(identifier);
     } else {
-      referenceCounter.put(identifier, references);
+      referenceCounter.put(identifier, newReferenceCount);
     }
   }
 

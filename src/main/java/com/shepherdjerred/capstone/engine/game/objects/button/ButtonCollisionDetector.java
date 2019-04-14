@@ -1,8 +1,8 @@
-package com.shepherdjerred.capstone.engine.engine.collision;
+package com.shepherdjerred.capstone.engine.game.objects.button;
 
+import com.shepherdjerred.capstone.engine.engine.collision.CollisionDetector;
 import com.shepherdjerred.capstone.engine.engine.scene.SceneCoordinate;
 import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
-import com.shepherdjerred.capstone.engine.game.objects.button.Button;
 
 public class ButtonCollisionDetector implements CollisionDetector {
 
@@ -17,10 +17,10 @@ public class ButtonCollisionDetector implements CollisionDetector {
   @Override
   public boolean hasCollision(SceneCoordinate coordinate) {
     var position = button.getPosition()
-        .getSceneCoordinate(windowSize, button.getWidth(), button.getHeight());
-    var maxX = position.getX() + button.getWidth();
+        .getSceneCoordinate(windowSize, button.getDimensions().getWidth(), button.getDimensions().getHeight());
+    var maxX = position.getX() + button.getDimensions().getWidth();
     var minX = position.getX();
-    var maxY = position.getY() + button.getHeight();
+    var maxY = position.getY() + button.getDimensions().getHeight();
     var minY = position.getY();
 
     return coordinate.getX() <= maxX

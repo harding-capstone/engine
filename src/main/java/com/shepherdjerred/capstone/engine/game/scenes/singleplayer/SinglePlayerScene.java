@@ -57,7 +57,7 @@ public class SinglePlayerScene implements Scene {
 
   @Override
   public void cleanup() {
-    gameObjects.forEach(gameObject -> gameObject.getRenderer().cleanup());
+    gameObjects.forEach(GameObject::cleanup);
     sceneRenderer.cleanup();
   }
 

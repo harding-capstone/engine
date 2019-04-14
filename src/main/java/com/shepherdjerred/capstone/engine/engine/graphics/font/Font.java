@@ -41,28 +41,28 @@ public class Font implements Resource {
     OpenGlHelper.unbind2dTexture();
   }
 
-  public FontCharacter getFontCharacter(char c, int x, int y) {
-    Preconditions.checkArgument(c >= 32 && c < 128);
+  public FontCharacter getFontCharacter(char character, int xPosition, int yPosition) {
+    Preconditions.checkArgument(character >= 32 && character < 128);
 
     try (var stack = MemoryStack.stackPush()) {
       var xBuffer = stack.mallocFloat(1);
       var yBuffer = stack.mallocFloat(1);
       STBTTAlignedQuad quad = STBTTAlignedQuad.mallocStack(stack);
 
-      xBuffer.put(x).flip();
-      yBuffer.put(y).flip();
+      xBuffer.put(xPosition).flip();
+      yBuffer.put(yPosition).flip();
 
       stbtt_GetBakedQuad(characterBuffer,
           textureWidth,
           textureHeight,
-          c - 32,
+          character - 32,
           xBuffer,
           yBuffer,
           quad,
           true);
 
       return new FontCharacter(
-          c,
+          character,
           quad.x1() - quad.x0(),
           quad.y1() - quad.y0(),
           new Quad(

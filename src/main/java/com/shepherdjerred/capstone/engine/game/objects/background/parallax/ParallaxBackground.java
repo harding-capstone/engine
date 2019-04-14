@@ -1,10 +1,12 @@
 package com.shepherdjerred.capstone.engine.game.objects.background.parallax;
 
+import com.shepherdjerred.capstone.engine.engine.object.Dimensions;
 import com.shepherdjerred.capstone.engine.engine.object.GameObject;
 import com.shepherdjerred.capstone.engine.engine.object.GameObjectRenderer;
 import com.shepherdjerred.capstone.engine.engine.scene.position.AbsoluteScenePositioner;
 import com.shepherdjerred.capstone.engine.engine.scene.position.ScenePositioner;
 import com.shepherdjerred.capstone.engine.engine.scene.SceneCoordinate;
+import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import lombok.Getter;
@@ -60,6 +62,26 @@ public class ParallaxBackground implements GameObject {
 
   public float getLayerPosition(int instance, int layer) {
     return instances.get(instance).get(layer);
+  }
+
+  @Override
+  public void initialize() throws Exception {
+    renderer.initialize(this);
+  }
+
+  @Override
+  public void cleanup() {
+    renderer.cleanup();
+  }
+
+  @Override
+  public Dimensions getDimensions() {
+    return new Dimensions(0, 0);
+  }
+
+  @Override
+  public void render(WindowSize windowSize) {
+    renderer.render(windowSize, this);
   }
 
   @Override

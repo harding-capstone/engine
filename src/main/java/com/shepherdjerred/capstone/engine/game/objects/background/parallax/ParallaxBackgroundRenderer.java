@@ -35,7 +35,7 @@ public class ParallaxBackgroundRenderer implements
   }
 
   @Override
-  public void init(ParallaxBackground gameObject) throws Exception {
+  public void initialize(ParallaxBackground gameObject) throws Exception {
     var width = windowSize.getWidth();
     var height = windowSize.getHeight();
 

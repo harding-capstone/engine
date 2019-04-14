@@ -21,7 +21,7 @@ public class StaticBackgroundRenderer implements
   }
 
   @Override
-  public void init(StaticBackground gameObject) throws Exception {
+  public void initialize(StaticBackground gameObject) throws Exception {
     var width = windowSize.getWidth();
     var height = windowSize.getHeight();
 

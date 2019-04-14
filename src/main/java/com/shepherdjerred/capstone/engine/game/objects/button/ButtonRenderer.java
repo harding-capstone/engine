@@ -30,9 +30,9 @@ public class ButtonRenderer implements GameObjectRenderer<Button> {
   }
 
   @Override
-  public void init(Button gameObject) throws Exception {
-    var width = gameObject.getWidth();
-    var height = gameObject.getHeight();
+  public void initialize(Button gameObject) throws Exception {
+    var width = gameObject.getDimensions().getWidth();
+    var height = gameObject.getDimensions().getHeight();
 
     var normalTexture = (Texture) resourceManager.get(MAIN_MENU_BUTTON);
     var hoveredTexture = (Texture) resourceManager.get(MAIN_MENU_BUTTON_HOVERED);
@@ -69,7 +69,9 @@ public class ButtonRenderer implements GameObjectRenderer<Button> {
   @Override
   public void render(WindowSize windowSize, Button gameObject) {
     var pos = gameObject.getPosition()
-        .getSceneCoordinate(windowSize, gameObject.getWidth(), gameObject.getHeight());
+        .getSceneCoordinate(windowSize,
+            gameObject.getDimensions().getWidth(),
+            gameObject.getDimensions().getHeight());
     var model = new ModelMatrix(new RendererCoordinate(pos.getX(), pos.getY(), pos.getZ()),
         0,
         1).getMatrix();

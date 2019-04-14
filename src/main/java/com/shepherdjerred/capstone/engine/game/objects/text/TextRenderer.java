@@ -12,6 +12,7 @@ import com.shepherdjerred.capstone.engine.engine.object.GameObjectRenderer;
 import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
 import java.util.HashMap;
 import java.util.Map;
+import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
@@ -21,6 +22,8 @@ public class TextRenderer implements GameObjectRenderer<Text> {
   private Font font;
   private ShaderProgram textShaderProgram;
   private Map<Integer, Mesh> characterMeshMap;
+  @Getter
+  private int width = 0;
 
   public TextRenderer(ResourceManager resourceManager) {
     this.resourceManager = resourceManager;
@@ -28,21 +31,19 @@ public class TextRenderer implements GameObjectRenderer<Text> {
   }
 
   @Override
-  public void init(Text gameObject) throws Exception {
+  public void initialize(Text gameObject) throws Exception {
     font = resourceManager.get(gameObject.getFontName());
     textShaderProgram = resourceManager.get(ShaderProgramName.TEXT);
     var chars = gameObject.getText().toCharArray();
 
-    var currX = 0;
-    var currY = 0;
+    var currentX = 0;
+    var currentY = 0;
     for (int i = 0; i < chars.length; i++) {
-      char c = chars[i];
+      char character = chars[i];
 
-      var fontChar = font.getFontCharacter(c, currX, currY);
-
-      var vertices = fontChar.getCoordinates().toFloatArray();
-
-      var textureCoordinates = fontChar.getTextureCoordinates().toFloatArray();
+      var fontCharacter = font.getFontCharacter(character, currentX, currentY);
+      var vertices = fontCharacter.getCoordinates().toFloatArray();
+      var textureCoordinates = fontCharacter.getTextureCoordinates().toFloatArray();
 
       var indices = new int[] {
           0, 1, 2,
@@ -52,12 +53,13 @@ public class TextRenderer implements GameObjectRenderer<Text> {
       var mesh = new Mesh(vertices, textureCoordinates, indices);
       characterMeshMap.put(i, mesh);
 
-      if (c == 32) {
-        currX += 12;
+      if (character == 32) {
+        currentX += 12;
       } else {
-        currX += fontChar.getWidth() + 2;
+        currentX += fontCharacter.getWidth() + 2;
       }
     }
+    width = currentX;
   }
 
   @Override
@@ -66,7 +68,9 @@ public class TextRenderer implements GameObjectRenderer<Text> {
     font.bind();
 
     var pos = sceneElement.getPosition()
-        .getSceneCoordinate(windowSize, sceneElement.getWidth(), sceneElement.getHeight());
+        .getSceneCoordinate(windowSize,
+            sceneElement.getDimensions().getWidth(),
+            sceneElement.getDimensions().getHeight());
     var model = new ModelMatrix(new RendererCoordinate(pos.getX(), pos.getY(), pos.getZ()),
         0,
         1).getMatrix();

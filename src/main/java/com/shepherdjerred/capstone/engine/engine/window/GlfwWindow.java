@@ -96,6 +96,7 @@ public class GlfwWindow implements Window {
       Configuration.DEBUG_LOADER.set(true);
       Configuration.DEBUG_MEMORY_ALLOCATOR.set(true);
       Configuration.DEBUG_STACK.set(true);
+      Configuration.DEBUG_STREAM.set(System.out);
     }
 
     if (!glfwInit()) {

@@ -41,7 +41,7 @@ public class SinglePlayerRenderer implements SceneRenderer<SinglePlayerScene> {
     defaultShaderProgram.bind();
     defaultShaderProgram.setUniform(ShaderUniform.PROJECTION_MATRIX, projectionMatrix.getMatrix());
 
-    scene.getGameObjects().forEach(element -> element.getRenderer().render(windowSize, element));
+    scene.getGameObjects().forEach(element -> element.render(windowSize));
   }
 
   @Override
@@ -52,7 +52,7 @@ public class SinglePlayerRenderer implements SceneRenderer<SinglePlayerScene> {
     OpenGlHelper.setClearColor(Color.black());
 
     for (GameObject gameObject : scene.getGameObjects()) {
-      gameObject.getRenderer().init(gameObject);
+      gameObject.initialize();
     }
   }
 

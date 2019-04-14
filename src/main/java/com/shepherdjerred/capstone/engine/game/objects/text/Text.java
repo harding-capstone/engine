@@ -2,9 +2,10 @@ package com.shepherdjerred.capstone.engine.game.objects.text;
 
 import com.shepherdjerred.capstone.engine.engine.graphics.Color;
 import com.shepherdjerred.capstone.engine.engine.graphics.font.FontName;
+import com.shepherdjerred.capstone.engine.engine.object.Dimensions;
 import com.shepherdjerred.capstone.engine.engine.object.GameObject;
-import com.shepherdjerred.capstone.engine.engine.object.GameObjectRenderer;
 import com.shepherdjerred.capstone.engine.engine.scene.position.ScenePositioner;
+import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,7 +16,7 @@ import lombok.ToString;
 @AllArgsConstructor
 public class Text implements GameObject {
 
-  private GameObjectRenderer<Text> renderer;
+  private TextRenderer renderer;
   private final String text;
   private final FontName fontName;
   private final Color color;
@@ -23,12 +24,23 @@ public class Text implements GameObject {
   @Setter
   private ScenePositioner position;
 
-  public int getHeight() {
-    return size;
+  public Dimensions getDimensions() {
+    return new Dimensions(renderer.getWidth(), size);
   }
 
-  public int getWidth() {
-    return size * text.length();
+  @Override
+  public void initialize() throws Exception {
+    renderer.initialize(this);
+  }
+
+  @Override
+  public void cleanup() {
+    renderer.cleanup();
+  }
+
+  @Override
+  public void render(WindowSize windowSize) {
+    renderer.render(windowSize, this);
   }
 
   @Override

@@ -26,11 +26,13 @@ public class ObjectRelativeScenePositioner implements ScenePositioner {
 
   private final float getXCoordinate(WindowSize windowSize, int width, int height) {
     var orig = anchor.getPosition().getSceneCoordinate(windowSize, width, height).getX();
-    return (orig + right) - left;
+    var anchorWidth = anchor.getDimensions().getWidth();
+    return orig + (anchorWidth / 2);
   }
 
   private final float getYCoordinate(WindowSize windowSize, int width, int height) {
     var orig = anchor.getPosition().getSceneCoordinate(windowSize, width, height).getY();
-    return (orig + top) - bottom;
+    var anchorHeight = anchor.getDimensions().getHeight();
+    return orig + (anchorHeight / 2);
   }
 }
