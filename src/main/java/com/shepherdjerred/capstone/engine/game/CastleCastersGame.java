@@ -18,7 +18,6 @@ import com.shepherdjerred.capstone.engine.engine.map.GameMapLoader;
 import com.shepherdjerred.capstone.engine.engine.map.GameMapName;
 import com.shepherdjerred.capstone.engine.engine.resource.ByteBufferLoader;
 import com.shepherdjerred.capstone.engine.engine.resource.PathResourceFileLocator;
-import com.shepherdjerred.capstone.engine.engine.resource.ResourceFileLocator;
 import com.shepherdjerred.capstone.engine.engine.resource.ResourceManager;
 import com.shepherdjerred.capstone.engine.engine.scene.Scene;
 import com.shepherdjerred.capstone.engine.engine.scene.SceneTransitioner;
@@ -49,7 +48,8 @@ public class CastleCastersGame implements GameLogic {
   }
 
   private void registerLoaders() {
-    ResourceFileLocator resourceFileLocator = new PathResourceFileLocator(
+    var loader = new ByteBufferLoader();
+    var resourceFileLocator = new PathResourceFileLocator(
         "/textures/",
         "/fonts/",
         "/audio/",
@@ -58,8 +58,8 @@ public class CastleCastersGame implements GameLogic {
     var textureLoader = new TextureLoader(resourceFileLocator);
     var shaderLoader = new ShaderProgramLoader(new ClasspathFileShaderCodeLoader("/shaders/"));
     var fontLoader = new FontLoader(resourceFileLocator);
-    var audioLoader = new AudioLoader(resourceFileLocator, new ByteBufferLoader());
-    var mapLoader = new GameMapLoader();
+    var audioLoader = new AudioLoader(resourceFileLocator, loader);
+    var mapLoader = new GameMapLoader(loader, resourceFileLocator);
 
     resourceManager.registerLoader(TextureName.class, textureLoader);
     resourceManager.registerLoader(ShaderProgramName.class, shaderLoader);
@@ -82,6 +82,8 @@ public class CastleCastersGame implements GameLogic {
         new SceneTransitionEventHandler(sceneTransitioner));
 
     audioPlayer.initialize();
+
+    resourceManager.get(GameMapName.GRASS);
   }
 
   private Scene getTeamScene(WindowSize windowSize) {

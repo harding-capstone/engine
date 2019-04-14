@@ -8,4 +8,5 @@ module com.shepherdjerred.capstone.engine {
   requires com.google.common;
   requires com.shepherdjerred.capstone.events;
   requires org.lwjgl.openal;
+  requires gson;
 }

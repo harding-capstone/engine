@@ -3,6 +3,7 @@ package com.shepherdjerred.capstone.engine.engine.resource;
 import com.shepherdjerred.capstone.engine.engine.audio.AudioName;
 import com.shepherdjerred.capstone.engine.engine.graphics.font.FontName;
 import com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName;
+import com.shepherdjerred.capstone.engine.engine.map.GameMapName;
 
 public interface ResourceFileLocator {
 
@@ -17,4 +18,6 @@ public interface ResourceFileLocator {
   String getFontPath(FontName fontName);
 
   String getAudioPath(AudioName audioName);
+
+  String getMapPath(GameMapName mapName);
 }

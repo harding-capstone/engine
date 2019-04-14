@@ -127,4 +127,9 @@ public class PathResourceFileLocator implements ResourceFileLocator {
   public String getAudioPath(AudioName audioName) {
     return audioBasePath + resourcePaths.get(audioName);
   }
+
+  @Override
+  public String getMapPath(GameMapName mapName) {
+    return mapBasePath + resourcePaths.get(mapName);
+  }
 }
