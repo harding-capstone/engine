@@ -5,7 +5,11 @@ import com.shepherdjerred.capstone.engine.engine.resource.ResourceIdentifier;
 public enum TextureName implements ResourceIdentifier {
   FROST_WALL,
   FIRE_WIZARD_FRONT,
-  TERRAIN,
+  TERRAIN_TILESHEET,
+  CASTLE_TILESHEET,
+  DARK_DIMENSION_TILESHEET,
+  DESERT_TILESHEET,
+  WATER_TILESHEET,
   MAIN_MENU_BUTTON,
   MAIN_MENU_BUTTON_HOVERED,
   MAIN_MENU_BUTTON_CLICKED,

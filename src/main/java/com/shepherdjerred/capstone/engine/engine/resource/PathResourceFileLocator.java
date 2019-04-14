@@ -21,7 +21,7 @@ import static com.shepherdjerred.capstone.engine.engine.graphics.texture.Texture
 import static com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName.PURPLE_MOUNTAINS_E;
 import static com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName.RED_PLAINS;
 import static com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName.TEAM_LOGO;
-import static com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName.TERRAIN;
+import static com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName.TERRAIN_TILESHEET;
 import static com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName.UNKNOWN;
 
 import com.shepherdjerred.capstone.engine.engine.audio.AudioName;
@@ -75,7 +75,7 @@ public class PathResourceFileLocator implements ResourceFileLocator {
   private void initializeTexturePaths() {
     resourcePaths.put(FROST_WALL, "wall_frost.png");
     resourcePaths.put(FIRE_WIZARD_FRONT, "front_fire.png");
-    resourcePaths.put(TERRAIN, "terrain.png");
+    resourcePaths.put(TERRAIN_TILESHEET, "terrain.png");
     resourcePaths.put(MAIN_MENU_BUTTON, "ui/buttons/main-menu-default.png");
     resourcePaths.put(MAIN_MENU_BUTTON_HOVERED,
         "ui/buttons/main-menu-hovered.png");
