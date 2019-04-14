@@ -17,10 +17,10 @@ public class ButtonCollisionDetector implements CollisionDetector {
   @Override
   public boolean hasCollision(SceneCoordinate coordinate) {
     var position = button.getPosition()
-        .getSceneCoordinate(windowSize, button.getDimensions().getWidth(), button.getDimensions().getHeight());
-    var maxX = position.getX() + button.getDimensions().getWidth();
+        .getSceneCoordinate(windowSize, button.getSceneObjectDimensions());
+    var maxX = position.getX() + button.getSceneObjectDimensions().getWidth();
     var minX = position.getX();
-    var maxY = position.getY() + button.getDimensions().getHeight();
+    var maxY = position.getY() + button.getSceneObjectDimensions().getHeight();
     var minY = position.getY();
 
     return coordinate.getX() <= maxX

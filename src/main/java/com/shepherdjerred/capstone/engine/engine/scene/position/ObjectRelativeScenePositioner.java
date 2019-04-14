@@ -1,6 +1,7 @@
 package com.shepherdjerred.capstone.engine.engine.scene.position;
 
 import com.shepherdjerred.capstone.engine.engine.object.GameObject;
+import com.shepherdjerred.capstone.engine.engine.object.SceneObjectDimensions;
 import com.shepherdjerred.capstone.engine.engine.scene.SceneCoordinate;
 import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
 import lombok.AllArgsConstructor;
@@ -18,21 +19,22 @@ public class ObjectRelativeScenePositioner implements ScenePositioner {
   private final int z;
 
   @Override
-  public SceneCoordinate getSceneCoordinate(WindowSize windowSize, int width, int height) {
-    var x = getXCoordinate(windowSize, width, height);
-    var y = getYCoordinate(windowSize, width, height);
+  public SceneCoordinate getSceneCoordinate(WindowSize windowSize,
+      SceneObjectDimensions dimensions) {
+    var x = getXCoordinate(windowSize, dimensions);
+    var y = getYCoordinate(windowSize, dimensions);
     return new SceneCoordinate(x, y, z);
   }
 
-  private final float getXCoordinate(WindowSize windowSize, int width, int height) {
-    var orig = anchor.getPosition().getSceneCoordinate(windowSize, width, height).getX();
-    var anchorWidth = anchor.getDimensions().getWidth();
-    return orig + (anchorWidth / 2);
+  private float getXCoordinate(WindowSize windowSize, SceneObjectDimensions dimensions) {
+    var orig = anchor.getPosition().getSceneCoordinate(windowSize, dimensions).getX();
+    var anchorWidth = anchor.getSceneObjectDimensions().getWidth();
+    return ((orig + (anchorWidth / 2)) - dimensions.getWidth() / 2) + right - left;
   }
 
-  private final float getYCoordinate(WindowSize windowSize, int width, int height) {
-    var orig = anchor.getPosition().getSceneCoordinate(windowSize, width, height).getY();
-    var anchorHeight = anchor.getDimensions().getHeight();
-    return orig + (anchorHeight / 2);
+  private float getYCoordinate(WindowSize windowSize, SceneObjectDimensions dimensions) {
+    var orig = anchor.getPosition().getSceneCoordinate(windowSize, dimensions).getY();
+    var anchorHeight = anchor.getSceneObjectDimensions().getHeight();
+    return ((orig + (anchorHeight / 2)) - dimensions.getHeight() / 2) + top - bottom;
   }
 }

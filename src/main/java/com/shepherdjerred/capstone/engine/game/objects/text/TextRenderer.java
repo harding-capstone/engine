@@ -68,9 +68,7 @@ public class TextRenderer implements GameObjectRenderer<Text> {
     font.bind();
 
     var pos = sceneElement.getPosition()
-        .getSceneCoordinate(windowSize,
-            sceneElement.getDimensions().getWidth(),
-            sceneElement.getDimensions().getHeight());
+        .getSceneCoordinate(windowSize, sceneElement.getSceneObjectDimensions());
     var model = new ModelMatrix(new RendererCoordinate(pos.getX(), pos.getY(), pos.getZ()),
         0,
         1).getMatrix();

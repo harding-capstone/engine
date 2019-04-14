@@ -1,6 +1,6 @@
 package com.shepherdjerred.capstone.engine.game.objects.background;
 
-import com.shepherdjerred.capstone.engine.engine.object.Dimensions;
+import com.shepherdjerred.capstone.engine.engine.object.SceneObjectDimensions;
 import com.shepherdjerred.capstone.engine.engine.object.GameObject;
 import com.shepherdjerred.capstone.engine.engine.object.GameObjectRenderer;
 import com.shepherdjerred.capstone.engine.engine.scene.position.ScenePositioner;
@@ -34,9 +34,9 @@ public class StaticBackground implements GameObject {
   }
 
   @Override
-  public Dimensions getDimensions() {
+  public SceneObjectDimensions getSceneObjectDimensions() {
     // TODO?
-    return new Dimensions(0, 0);
+    return new SceneObjectDimensions(0, 0);
   }
 
   @Override

@@ -1,5 +1,6 @@
-package com.shepherdjerred.capstone.engine.game.map;
+package com.shepherdjerred.capstone.engine.engine.map;
 
+import com.shepherdjerred.capstone.engine.engine.resource.Resource;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import lombok.Getter;
@@ -7,7 +8,7 @@ import lombok.ToString;
 
 @Getter
 @ToString
-public class GameMap {
+public class GameMap implements Resource {
 
   private final TileDimension dimension;
   private final SortedMap<Integer, Layer> layerMap;
@@ -23,5 +24,10 @@ public class GameMap {
 
   public Layer getLayer(Integer i) {
     return layerMap.get(i);
+  }
+
+  @Override
+  public void cleanup() {
+
   }
 }

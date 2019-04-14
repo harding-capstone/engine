@@ -1,4 +1,4 @@
-package com.shepherdjerred.capstone.engine.game.map;
+package com.shepherdjerred.capstone.engine.engine.map;
 
 import java.util.HashMap;
 import java.util.Map;

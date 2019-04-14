@@ -1,5 +1,6 @@
 package com.shepherdjerred.capstone.engine.engine.scene.position;
 
+import com.shepherdjerred.capstone.engine.engine.object.SceneObjectDimensions;
 import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
 import com.shepherdjerred.capstone.engine.engine.scene.SceneCoordinate;
 import lombok.AllArgsConstructor;
@@ -16,9 +17,10 @@ public class WindowRelativeScenePositioner implements ScenePositioner {
   private final float z;
 
   @Override
-  public SceneCoordinate getSceneCoordinate(WindowSize windowSize, int width, int height) {
-    var x = getXCoordinate(windowSize, width) + horizontalOffset;
-    var y = getYCoordinate(windowSize, height) + verticalOffset;
+  public SceneCoordinate getSceneCoordinate(WindowSize windowSize,
+      SceneObjectDimensions dimensions) {
+    var x = getXCoordinate(windowSize, dimensions.getWidth()) + horizontalOffset;
+    var y = getYCoordinate(windowSize, dimensions.getHeight()) + verticalOffset;
     return new SceneCoordinate(x, y, z);
   }
 

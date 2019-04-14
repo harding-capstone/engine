@@ -1,5 +1,6 @@
 package com.shepherdjerred.capstone.engine.engine.collision;
 
+import com.shepherdjerred.capstone.engine.engine.object.SceneObjectDimensions;
 import com.shepherdjerred.capstone.engine.engine.scene.SceneCoordinate;
 import com.shepherdjerred.capstone.engine.engine.scene.position.ScenePositioner;
 import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
@@ -15,15 +16,14 @@ public class ScenePositionCollisionDetector implements CollisionDetector {
 
   private ScenePositioner scenePositioner;
   private WindowSize windowSize;
-  private int width;
-  private int height;
+  private SceneObjectDimensions dimensions;
 
   @Override
   public boolean hasCollision(SceneCoordinate coordinate) {
-    var position = scenePositioner.getSceneCoordinate(windowSize, width, height);
-    var maxX = position.getX() + width;
+    var position = scenePositioner.getSceneCoordinate(windowSize, dimensions);
+    var maxX = position.getX() + dimensions.getWidth();
     var minX = position.getX();
-    var maxY = position.getY() + height;
+    var maxY = position.getY() + dimensions.getHeight();
     var minY = position.getY();
 
     return coordinate.getX() <= maxX

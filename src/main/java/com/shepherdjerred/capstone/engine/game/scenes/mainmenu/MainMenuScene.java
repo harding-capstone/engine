@@ -3,9 +3,10 @@ package com.shepherdjerred.capstone.engine.game.scenes.mainmenu;
 import com.shepherdjerred.capstone.engine.engine.events.input.MouseButtonDownEvent;
 import com.shepherdjerred.capstone.engine.engine.events.input.MouseButtonUpEvent;
 import com.shepherdjerred.capstone.engine.engine.events.input.MouseMoveEvent;
+import com.shepherdjerred.capstone.engine.engine.events.scene.SceneTransitionEvent;
 import com.shepherdjerred.capstone.engine.engine.graphics.Color;
 import com.shepherdjerred.capstone.engine.engine.graphics.font.FontName;
-import com.shepherdjerred.capstone.engine.engine.object.Dimensions;
+import com.shepherdjerred.capstone.engine.engine.object.SceneObjectDimensions;
 import com.shepherdjerred.capstone.engine.engine.object.GameObject;
 import com.shepherdjerred.capstone.engine.engine.resource.ResourceManager;
 import com.shepherdjerred.capstone.engine.engine.scene.Scene;
@@ -26,6 +27,8 @@ import com.shepherdjerred.capstone.engine.game.objects.logo.LogoRenderer;
 import com.shepherdjerred.capstone.engine.game.objects.text.Text;
 import com.shepherdjerred.capstone.engine.game.objects.text.TextRenderer;
 import com.shepherdjerred.capstone.engine.game.objects.textbutton.TextButton;
+import com.shepherdjerred.capstone.engine.game.scenes.singleplayer.SinglePlayerRenderer;
+import com.shepherdjerred.capstone.engine.game.scenes.singleplayer.SinglePlayerScene;
 import com.shepherdjerred.capstone.events.Event;
 import com.shepherdjerred.capstone.events.EventBus;
 import java.util.ArrayList;
@@ -68,7 +71,7 @@ public class MainMenuScene implements Scene {
             50,
             0),
         1.485517919,
-        300,
+        200,
         Logo.Type.GAME);
 
     var background = new ParallaxBackground(new ParallaxBackgroundRenderer(resourceManager,
@@ -88,58 +91,67 @@ public class MainMenuScene implements Scene {
             0)
     );
 
+    var buttonSize = new SceneObjectDimensions(300, 50);
+
     var singlePlayerButton = new TextButton(resourceManager,
         windowSize,
-        new ObjectRelativeScenePositioner(logo, 400, 0, 0, 0, 0),
+        new ObjectRelativeScenePositioner(logo, 0, 0, 0, 0, 0),
         "Single Player",
         FontName.M5X7,
         Color.white(),
         12,
-        new Dimensions(300, 100),
+        buttonSize,
         () -> {
+          var scene = new SinglePlayerScene(background,
+              eventBus,
+              resourceManager,
+              new SinglePlayerRenderer(resourceManager,
+                  eventBus,
+                  windowSize));
+          eventBus.dispatch(new SceneTransitionEvent(scene));
         });
 
     var multiPlayerButton = new TextButton(resourceManager,
         windowSize,
-        new ObjectRelativeScenePositioner(logo, 400, 0, 0, 0, 0),
+        new ObjectRelativeScenePositioner(singlePlayerButton, 100, 0, 0, 0, 0),
         "Multiplayer",
         FontName.M5X7,
         Color.white(),
         12,
-        new Dimensions(300, 100),
+        buttonSize,
         () -> {
         });
 
     var optionsButton = new TextButton(resourceManager,
         windowSize,
-        new ObjectRelativeScenePositioner(logo, 400, 0, 0, 0, 0),
+        new ObjectRelativeScenePositioner(multiPlayerButton, 100, 0, 0, 0, 0),
         "Options",
         FontName.M5X7,
         Color.white(),
         12,
-        new Dimensions(300, 100),
+        buttonSize,
         () -> {
         });
 
     var aboutButton = new TextButton(resourceManager,
         windowSize,
-        new ObjectRelativeScenePositioner(logo, 400, 0, 0, 0, 0),
+        new ObjectRelativeScenePositioner(optionsButton, 100, 0, 0, 0, 0),
         "About",
         FontName.M5X7,
         Color.white(),
         12,
-        new Dimensions(300, 100),
+        buttonSize,
         () -> {
         });
 
     var helpButton = new TextButton(resourceManager,
         windowSize,
-        new ObjectRelativeScenePositioner(logo, 400, 0, 0, 0, 0),
+        new ObjectRelativeScenePositioner(aboutButton, 100, 0, 0, 0, 0),
         "Help",
         FontName.M5X7,
         Color.white(),
         12,
-        new Dimensions(300, 100),
+        buttonSize,
         () -> {
         });
 

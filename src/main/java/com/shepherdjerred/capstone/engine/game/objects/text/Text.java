@@ -2,7 +2,7 @@ package com.shepherdjerred.capstone.engine.game.objects.text;
 
 import com.shepherdjerred.capstone.engine.engine.graphics.Color;
 import com.shepherdjerred.capstone.engine.engine.graphics.font.FontName;
-import com.shepherdjerred.capstone.engine.engine.object.Dimensions;
+import com.shepherdjerred.capstone.engine.engine.object.SceneObjectDimensions;
 import com.shepherdjerred.capstone.engine.engine.object.GameObject;
 import com.shepherdjerred.capstone.engine.engine.scene.position.ScenePositioner;
 import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
@@ -24,8 +24,8 @@ public class Text implements GameObject {
   @Setter
   private ScenePositioner position;
 
-  public Dimensions getDimensions() {
-    return new Dimensions(renderer.getWidth(), size);
+  public SceneObjectDimensions getSceneObjectDimensions() {
+    return new SceneObjectDimensions(renderer.getWidth(), size);
   }
 
   @Override

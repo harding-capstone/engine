@@ -1,4 +1,4 @@
-package com.shepherdjerred.capstone.engine.game.map;
+package com.shepherdjerred.capstone.engine.engine.map;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -9,8 +9,8 @@ import lombok.ToString;
 @ToString
 @EqualsAndHashCode
 @AllArgsConstructor
-public class MapCoordinate {
+public class TileDimension {
 
-  private final int x;
-  private final int y;
+  private final int width;
+  private final int height;
 }

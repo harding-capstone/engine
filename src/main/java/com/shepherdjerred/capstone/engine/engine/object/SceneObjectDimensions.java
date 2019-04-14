@@ -1,15 +1,13 @@
-package com.shepherdjerred.capstone.engine.game.map;
+package com.shepherdjerred.capstone.engine.engine.object;
 
 import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
 @Getter
 @ToString
-@EqualsAndHashCode
 @AllArgsConstructor
-public class TileDimension {
+public class SceneObjectDimensions {
 
   private final int width;
   private final int height;

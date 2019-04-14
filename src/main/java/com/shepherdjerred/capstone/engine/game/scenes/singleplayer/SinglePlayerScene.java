@@ -41,7 +41,7 @@ public class SinglePlayerScene implements Scene {
   @Override
   public void initialize() throws Exception {
     var text = new Text(new TextRenderer(resourceManager),
-        "Single Player",
+        "Here's where my singleplayer setup screen would go... IF I HAD ONE",
         FontName.M5X7,
         Color.white(),
         12,

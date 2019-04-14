@@ -1,6 +1,6 @@
 package com.shepherdjerred.capstone.engine.game.objects.background.parallax;
 
-import com.shepherdjerred.capstone.engine.engine.object.Dimensions;
+import com.shepherdjerred.capstone.engine.engine.object.SceneObjectDimensions;
 import com.shepherdjerred.capstone.engine.engine.object.GameObject;
 import com.shepherdjerred.capstone.engine.engine.object.GameObjectRenderer;
 import com.shepherdjerred.capstone.engine.engine.scene.position.AbsoluteScenePositioner;
@@ -75,8 +75,8 @@ public class ParallaxBackground implements GameObject {
   }
 
   @Override
-  public Dimensions getDimensions() {
-    return new Dimensions(0, 0);
+  public SceneObjectDimensions getSceneObjectDimensions() {
+    return new SceneObjectDimensions(0, 0);
   }
 
   @Override

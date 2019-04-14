@@ -1,6 +1,6 @@
 package com.shepherdjerred.capstone.engine.game.objects.logo;
 
-import com.shepherdjerred.capstone.engine.engine.object.Dimensions;
+import com.shepherdjerred.capstone.engine.engine.object.SceneObjectDimensions;
 import com.shepherdjerred.capstone.engine.engine.object.GameObject;
 import com.shepherdjerred.capstone.engine.engine.object.GameObjectRenderer;
 import com.shepherdjerred.capstone.engine.engine.scene.position.ScenePositioner;
@@ -34,8 +34,8 @@ public class Logo implements GameObject {
   }
 
   @Override
-  public Dimensions getDimensions() {
-    return new Dimensions((int) (height * aspectRatio), height);
+  public SceneObjectDimensions getSceneObjectDimensions() {
+    return new SceneObjectDimensions((int) (height * aspectRatio), height);
   }
 
   @Override

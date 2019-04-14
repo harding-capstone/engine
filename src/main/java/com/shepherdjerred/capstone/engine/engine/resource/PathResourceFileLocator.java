@@ -2,11 +2,32 @@ package com.shepherdjerred.capstone.engine.engine.resource;
 
 import static com.shepherdjerred.capstone.engine.engine.graphics.font.FontName.FIRA_CODE;
 import static com.shepherdjerred.capstone.engine.engine.graphics.font.FontName.M5X7;
-import static com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName.*;
+import static com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName.FIRE_WIZARD_FRONT;
+import static com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName.FROST_WALL;
+import static com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName.GAME_LOGO;
+import static com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName.MAIN_MENU_BUTTON;
+import static com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName.MAIN_MENU_BUTTON_CLICKED;
+import static com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName.MAIN_MENU_BUTTON_HOVERED;
+import static com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName.PLAINS_A;
+import static com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName.PLAINS_B;
+import static com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName.PLAINS_C;
+import static com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName.PLAINS_D;
+import static com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName.PLAINS_E;
+import static com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName.PURPLE_MOUNTAINS;
+import static com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName.PURPLE_MOUNTAINS_A;
+import static com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName.PURPLE_MOUNTAINS_B;
+import static com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName.PURPLE_MOUNTAINS_C;
+import static com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName.PURPLE_MOUNTAINS_D;
+import static com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName.PURPLE_MOUNTAINS_E;
+import static com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName.RED_PLAINS;
+import static com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName.TEAM_LOGO;
+import static com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName.TERRAIN;
+import static com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName.UNKNOWN;
 
 import com.shepherdjerred.capstone.engine.engine.audio.AudioName;
 import com.shepherdjerred.capstone.engine.engine.graphics.font.FontName;
 import com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName;
+import com.shepherdjerred.capstone.engine.engine.map.GameMapName;
 import java.util.HashMap;
 import lombok.ToString;
 
@@ -19,85 +40,91 @@ public class PathResourceFileLocator implements ResourceFileLocator {
   private final String texturesBasePath;
   private final String fontsBasePath;
   private final String audioBasePath;
-  private final HashMap<TextureName, String> textureFileNameHashMap;
-  private final HashMap<FontName, String> fontFileNameHashMap;
-  private final HashMap<AudioName, String> audioFileHashMap;
+  private final String mapBasePath;
+  private final HashMap<ResourceIdentifier, String> resourcePaths;
 
   public PathResourceFileLocator(String texturesBasePath,
       String fontsBasePath,
-      String audioBasePath) {
+      String audioBasePath,
+      String mapBasePath) {
     this.texturesBasePath = texturesBasePath;
     this.fontsBasePath = fontsBasePath;
     this.audioBasePath = audioBasePath;
+    this.mapBasePath = mapBasePath;
 
-    textureFileNameHashMap = new HashMap<>();
-    fontFileNameHashMap = new HashMap<>();
-    audioFileHashMap = new HashMap<>();
+    resourcePaths = new HashMap<>();
 
-    initializeTextureMap();
-    initializeFontMap();
-    initializeAudioMap();
+    initializeTexturePaths();
+    initializeFontPaths();
+    initializeAudioPaths();
+    initializeMapPaths();
   }
 
-  private void initializeAudioMap() {
-    audioFileHashMap.put(AudioName.THEME_MUSIC, "music/theme.ogg");
-    audioFileHashMap.put(AudioName.VICTORY_MUSIC, "music/victory.ogg");
-    audioFileHashMap.put(AudioName.DEFEAT_MUSIC, "music/defeat.ogg");
+  private void initializeMapPaths() {
+    resourcePaths.put(GameMapName.GRASS, "grass.json");
+    resourcePaths.put(GameMapName.DESERT, "desert.json");
+    resourcePaths.put(GameMapName.ICE, "winter.json");
   }
 
-  private void initializeTextureMap() {
-    textureFileNameHashMap.put(FROST_WALL, "wall_frost.png");
-    textureFileNameHashMap.put(FIRE_WIZARD_FRONT, "front_fire.png");
-    textureFileNameHashMap.put(TERRAIN, "terrain.png");
-    textureFileNameHashMap.put(MAIN_MENU_BUTTON, "ui/buttons/main-menu-default.png");
-    textureFileNameHashMap.put(MAIN_MENU_BUTTON_HOVERED,
+  private void initializeAudioPaths() {
+    resourcePaths.put(AudioName.THEME_MUSIC, "music/theme.ogg");
+    resourcePaths.put(AudioName.VICTORY_MUSIC, "music/victory.ogg");
+    resourcePaths.put(AudioName.DEFEAT_MUSIC, "music/defeat.ogg");
+  }
+
+  private void initializeTexturePaths() {
+    resourcePaths.put(FROST_WALL, "wall_frost.png");
+    resourcePaths.put(FIRE_WIZARD_FRONT, "front_fire.png");
+    resourcePaths.put(TERRAIN, "terrain.png");
+    resourcePaths.put(MAIN_MENU_BUTTON, "ui/buttons/main-menu-default.png");
+    resourcePaths.put(MAIN_MENU_BUTTON_HOVERED,
         "ui/buttons/main-menu-hovered.png");
-    textureFileNameHashMap.put(MAIN_MENU_BUTTON_CLICKED,
+    resourcePaths.put(MAIN_MENU_BUTTON_CLICKED,
         "ui/buttons/main-menu-active.png");
-    textureFileNameHashMap.put(PURPLE_MOUNTAINS, "ui/backgrounds/purple mountains.png");
-    textureFileNameHashMap.put(PURPLE_MOUNTAINS_A,
+    resourcePaths.put(PURPLE_MOUNTAINS, "ui/backgrounds/purple mountains.png");
+    resourcePaths.put(PURPLE_MOUNTAINS_A,
         "ui/backgrounds/parallax/purple-mountains/purple-mountains-a.png");
-    textureFileNameHashMap.put(PURPLE_MOUNTAINS_B,
+    resourcePaths.put(PURPLE_MOUNTAINS_B,
         "ui/backgrounds/parallax/purple-mountains/purple-mountains-b.png");
-    textureFileNameHashMap.put(PURPLE_MOUNTAINS_C,
+    resourcePaths.put(PURPLE_MOUNTAINS_C,
         "ui/backgrounds/parallax/purple-mountains/purple-mountains-c.png");
-    textureFileNameHashMap.put(PURPLE_MOUNTAINS_D,
+    resourcePaths.put(PURPLE_MOUNTAINS_D,
         "ui/backgrounds/parallax/purple-mountains/purple-mountains-d.png");
-    textureFileNameHashMap.put(PURPLE_MOUNTAINS_E,
+    resourcePaths.put(PURPLE_MOUNTAINS_E,
         "ui/backgrounds/parallax/purple-mountains/purple-mountains-e.png");
-    textureFileNameHashMap.put(PLAINS_A,
+    resourcePaths.put(PLAINS_A,
         "ui/backgrounds/parallax/plains/plains-a.png");
-    textureFileNameHashMap.put(PLAINS_B,
+    resourcePaths.put(PLAINS_B,
         "ui/backgrounds/parallax/plains/plains-b.png");
-    textureFileNameHashMap.put(PLAINS_C,
+    resourcePaths.put(PLAINS_C,
         "ui/backgrounds/parallax/plains/plains-c.png");
-    textureFileNameHashMap.put(PLAINS_D,
+    resourcePaths.put(PLAINS_D,
         "ui/backgrounds/parallax/plains/plains-d.png");
-    textureFileNameHashMap.put(PLAINS_E,
+    resourcePaths.put(PLAINS_E,
         "ui/backgrounds/parallax/plains/plains-e.png");
-    textureFileNameHashMap.put(RED_PLAINS, "ui/backgrounds/red plains.png");
-    textureFileNameHashMap.put(GAME_LOGO, "logos/game logo.png");
-    textureFileNameHashMap.put(TEAM_LOGO, "logos/team logo.png");
-    textureFileNameHashMap.put(UNKNOWN, "unknown.png");
+    resourcePaths.put(RED_PLAINS, "ui/backgrounds/red plains.png");
+    resourcePaths.put(GAME_LOGO, "logos/game logo.png");
+    resourcePaths.put(TEAM_LOGO, "logos/team logo.png");
+    resourcePaths.put(UNKNOWN, "unknown.png");
   }
 
-  private void initializeFontMap() {
-    fontFileNameHashMap.put(M5X7, "m5x7.ttf");
-    fontFileNameHashMap.put(FIRA_CODE, "FiraCode-Regular.ttf");
+  private void initializeFontPaths() {
+    resourcePaths.put(M5X7, "m5x7.ttf");
+    resourcePaths.put(FIRA_CODE, "FiraCode-Regular.ttf");
   }
 
   @Override
   public String getTexturePath(TextureName textureName) {
-    return texturesBasePath + textureFileNameHashMap.getOrDefault(textureName, "unknown.png");
+    return texturesBasePath + resourcePaths.getOrDefault(textureName, "unknown.png");
   }
 
   @Override
   public String getFontPath(FontName fontName) {
-    return fontsBasePath + fontFileNameHashMap.get(fontName);
+    return fontsBasePath + resourcePaths.get(fontName);
   }
 
   @Override
   public String getAudioPath(AudioName audioName) {
-    return audioBasePath + audioFileHashMap.get(audioName);
+    return audioBasePath + resourcePaths.get(audioName);
   }
 }

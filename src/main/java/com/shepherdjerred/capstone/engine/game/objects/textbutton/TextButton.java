@@ -2,7 +2,7 @@ package com.shepherdjerred.capstone.engine.game.objects.textbutton;
 
 import com.shepherdjerred.capstone.engine.engine.graphics.Color;
 import com.shepherdjerred.capstone.engine.engine.graphics.font.FontName;
-import com.shepherdjerred.capstone.engine.engine.object.Dimensions;
+import com.shepherdjerred.capstone.engine.engine.object.SceneObjectDimensions;
 import com.shepherdjerred.capstone.engine.engine.object.GameObject;
 import com.shepherdjerred.capstone.engine.engine.resource.ResourceManager;
 import com.shepherdjerred.capstone.engine.engine.scene.SceneCoordinate;
@@ -27,26 +27,24 @@ public class TextButton implements GameObject, Clickable, Hoverable {
       FontName fontName,
       Color color,
       int fontSize,
-      Dimensions buttonDimensions,
+      SceneObjectDimensions dimensions,
       Runnable onClick) {
     this.button = new Button(resourceManager,
         windowSize,
         positioner,
-        buttonDimensions,
+        dimensions,
         onClick);
     this.text = new Text(new TextRenderer(resourceManager),
         text,
         fontName,
         color,
         fontSize,
-        new ObjectRelativeScenePositioner(button,
+        new ObjectRelativeScenePositioner(this,
             0,
             0,
             0,
             0,
-            (int) positioner.getSceneCoordinate(windowSize,
-                buttonDimensions.getWidth(),
-                buttonDimensions.getHeight()).getZ()));
+            (int) positioner.getSceneCoordinate(windowSize, dimensions).getZ() + 1));
   }
 
   @Override
@@ -62,8 +60,8 @@ public class TextButton implements GameObject, Clickable, Hoverable {
   }
 
   @Override
-  public Dimensions getDimensions() {
-    return button.getDimensions();
+  public SceneObjectDimensions getSceneObjectDimensions() {
+    return button.getSceneObjectDimensions();
   }
 
   @Override

@@ -1,7 +1,7 @@
 package com.shepherdjerred.capstone.engine.game.objects.button;
 
 import com.shepherdjerred.capstone.engine.engine.collision.CollisionDetector;
-import com.shepherdjerred.capstone.engine.engine.object.Dimensions;
+import com.shepherdjerred.capstone.engine.engine.object.SceneObjectDimensions;
 import com.shepherdjerred.capstone.engine.engine.object.GameObject;
 import com.shepherdjerred.capstone.engine.engine.object.GameObjectRenderer;
 import com.shepherdjerred.capstone.engine.engine.resource.ResourceManager;
@@ -22,7 +22,7 @@ public class Button implements GameObject, Clickable, Hoverable {
   private final CollisionDetector collisionDetector;
   @Setter
   private ScenePositioner position;
-  private final Dimensions dimensions;
+  private final SceneObjectDimensions sceneObjectDimensions;
   private final Runnable onClick;
   private boolean isClicked;
   private boolean isHovered;
@@ -31,12 +31,12 @@ public class Button implements GameObject, Clickable, Hoverable {
   public Button(ResourceManager resourceManager,
       WindowSize windowSize,
       ScenePositioner position,
-      Dimensions dimensions,
+      SceneObjectDimensions sceneObjectDimensions,
       Runnable onClick) {
     this.renderer = new ButtonRenderer(resourceManager);
     this.collisionDetector = new ButtonCollisionDetector(this, windowSize);
     this.position = position;
-    this.dimensions = dimensions;
+    this.sceneObjectDimensions = sceneObjectDimensions;
     this.onClick = onClick;
   }
 

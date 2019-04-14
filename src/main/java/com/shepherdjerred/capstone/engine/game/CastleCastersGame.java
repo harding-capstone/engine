@@ -14,6 +14,8 @@ import com.shepherdjerred.capstone.engine.engine.graphics.shader.ShaderProgramNa
 import com.shepherdjerred.capstone.engine.engine.graphics.shader.code.ClasspathFileShaderCodeLoader;
 import com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureLoader;
 import com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName;
+import com.shepherdjerred.capstone.engine.engine.map.GameMapLoader;
+import com.shepherdjerred.capstone.engine.engine.map.GameMapName;
 import com.shepherdjerred.capstone.engine.engine.resource.ByteBufferLoader;
 import com.shepherdjerred.capstone.engine.engine.resource.PathResourceFileLocator;
 import com.shepherdjerred.capstone.engine.engine.resource.ResourceFileLocator;
@@ -50,17 +52,20 @@ public class CastleCastersGame implements GameLogic {
     ResourceFileLocator resourceFileLocator = new PathResourceFileLocator(
         "/textures/",
         "/fonts/",
-        "/audio/"
+        "/audio/",
+        "/maps/"
     );
     var textureLoader = new TextureLoader(resourceFileLocator);
     var shaderLoader = new ShaderProgramLoader(new ClasspathFileShaderCodeLoader("/shaders/"));
     var fontLoader = new FontLoader(resourceFileLocator);
     var audioLoader = new AudioLoader(resourceFileLocator, new ByteBufferLoader());
+    var mapLoader = new GameMapLoader();
 
     resourceManager.registerLoader(TextureName.class, textureLoader);
     resourceManager.registerLoader(ShaderProgramName.class, shaderLoader);
     resourceManager.registerLoader(FontName.class, fontLoader);
     resourceManager.registerLoader(AudioName.class, audioLoader);
+    resourceManager.registerLoader(GameMapName.class, mapLoader);
   }
 
   @Override

@@ -9,7 +9,7 @@ public interface GameObject {
 
   void cleanup();
 
-  Dimensions getDimensions();
+  SceneObjectDimensions getSceneObjectDimensions();
 
   ScenePositioner getPosition();
 
