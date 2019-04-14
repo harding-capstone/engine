@@ -19,7 +19,7 @@ import com.shepherdjerred.capstone.engine.engine.resource.PathResourceFileLocato
 import com.shepherdjerred.capstone.engine.engine.resource.ResourceFileLocator;
 import com.shepherdjerred.capstone.engine.engine.resource.ResourceManager;
 import com.shepherdjerred.capstone.engine.engine.scene.Scene;
-import com.shepherdjerred.capstone.engine.engine.scene.SceneManager;
+import com.shepherdjerred.capstone.engine.engine.scene.SceneTransitioner;
 import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
 import com.shepherdjerred.capstone.engine.game.scenes.mainmenu.MainMenuAudio;
 import com.shepherdjerred.capstone.engine.game.scenes.mainmenu.MainMenuRenderer;
@@ -35,13 +35,14 @@ public class CastleCastersGame implements GameLogic {
 
   private final EventBus<Event> eventBus;
   private final ResourceManager resourceManager;
-  private SceneManager sceneManager;
-  private AudioPlayer audioPlayer;
+  private final SceneTransitioner sceneTransitioner;
+  private final AudioPlayer audioPlayer;
 
   public CastleCastersGame(EventBus<Event> eventBus) {
     this.eventBus = eventBus;
     this.resourceManager = new ResourceManager();
     this.audioPlayer = new AudioPlayer(eventBus);
+    this.sceneTransitioner = new SceneTransitioner(eventBus);
     registerLoaders();
   }
 
@@ -69,54 +70,54 @@ public class CastleCastersGame implements GameLogic {
     OpenGlHelper.setClearColor();
 
     var scene = getTeamScene(windowSize);
-    this.sceneManager = new SceneManager(eventBus, scene);
-    sceneManager.initialize();
+
+    sceneTransitioner.initialize(scene);
 
     eventBus.registerHandler(SceneTransitionEvent.class,
-        new SceneTransitionEventHandler(sceneManager));
+        new SceneTransitionEventHandler(sceneTransitioner));
 
     audioPlayer.initialize();
   }
 
   private Scene getTeamScene(WindowSize windowSize) {
     var sceneRenderer = new TeamIntroRenderer(resourceManager, eventBus, windowSize);
-    var scene = new TeamIntroScene(sceneRenderer,
-        null,
+    return new TeamIntroScene(sceneRenderer,
         resourceManager,
         eventBus,
         windowSize);
-    return scene;
   }
 
   private Scene getMainMenuScene(WindowSize windowSize) {
     var sceneRenderer = new MainMenuRenderer(resourceManager, eventBus, windowSize);
-    var scene = new MainMenuScene(sceneRenderer,
+    return new MainMenuScene(sceneRenderer,
         resourceManager,
         eventBus,
         windowSize,
         new MainMenuAudio(eventBus, resourceManager));
-    return scene;
   }
 
   @Override
   public void updateGameState(float interval) {
-    sceneManager.update(interval);
+    sceneTransitioner.getScene().updateState(interval);
   }
 
   @Override
   public void render() {
-    sceneManager.render();
+    // TODO window size?
+    sceneTransitioner.getScene().render(null);
   }
 
   @Override
   public void cleanup() {
-    sceneManager.cleanup();
-    var references = resourceManager.getReferenceCounter();
-    if (references.size() > 0) {
+    sceneTransitioner.cleanup();
+
+    if (resourceManager.hasAllocatedResources()) {
+      var references = resourceManager.getReferenceCounter();
       log.warn("Resource leak(s) detected. " + references);
     } else {
       log.info("No resource leaks detected :)");
     }
+
     audioPlayer.cleanup();
     resourceManager.freeAll();
   }

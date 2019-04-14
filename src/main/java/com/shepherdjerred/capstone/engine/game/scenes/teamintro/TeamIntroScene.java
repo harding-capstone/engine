@@ -4,7 +4,6 @@ import com.shepherdjerred.capstone.engine.engine.events.scene.SceneTransitionEve
 import com.shepherdjerred.capstone.engine.engine.object.GameObject;
 import com.shepherdjerred.capstone.engine.engine.resource.ResourceManager;
 import com.shepherdjerred.capstone.engine.engine.scene.Scene;
-import com.shepherdjerred.capstone.engine.engine.scene.SceneAudio;
 import com.shepherdjerred.capstone.engine.engine.scene.SceneRenderer;
 import com.shepherdjerred.capstone.engine.engine.scene.position.WindowRelativeScenePositioner;
 import com.shepherdjerred.capstone.engine.engine.scene.position.WindowRelativeScenePositioner.HorizontalPosition;
@@ -33,16 +32,12 @@ public class TeamIntroScene implements Scene {
   private final SceneRenderer<TeamIntroScene> renderer;
   private float time = 0;
   private boolean hasTransitioned = false;
-  @Getter
-  private final SceneAudio sceneAudio;
 
   public TeamIntroScene(SceneRenderer<TeamIntroScene> renderer,
-      SceneAudio sceneAudio,
       ResourceManager resourceManager,
       EventBus<Event> eventBus,
       WindowSize windowSize) {
     this.renderer = renderer;
-    this.sceneAudio = sceneAudio;
     this.resourceManager = resourceManager;
     this.eventBus = eventBus;
     this.windowSize = windowSize;
@@ -66,12 +61,14 @@ public class TeamIntroScene implements Scene {
   }
 
   @Override
-  public void initialize() {
+  public void initialize() throws Exception {
+    renderer.initialize(this);
   }
 
   @Override
   public void cleanup() {
     gameObjects.forEach(gameObject -> gameObject.getRenderer().cleanup());
+    renderer.cleanup();
   }
 
   @Override
@@ -91,7 +88,7 @@ public class TeamIntroScene implements Scene {
   }
 
   @Override
-  public SceneRenderer getSceneRenderer() {
-    return renderer;
+  public void render(WindowSize windowSize) {
+    renderer.render(this);
   }
 }

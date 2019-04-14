@@ -9,7 +9,6 @@ import com.shepherdjerred.capstone.engine.engine.graphics.font.FontName;
 import com.shepherdjerred.capstone.engine.engine.object.GameObject;
 import com.shepherdjerred.capstone.engine.engine.resource.ResourceManager;
 import com.shepherdjerred.capstone.engine.engine.scene.Scene;
-import com.shepherdjerred.capstone.engine.engine.scene.SceneAudio;
 import com.shepherdjerred.capstone.engine.engine.scene.SceneCoordinate;
 import com.shepherdjerred.capstone.engine.engine.scene.SceneRenderer;
 import com.shepherdjerred.capstone.engine.engine.scene.attributes.Clickable;
@@ -47,14 +46,13 @@ public class MainMenuScene implements Scene {
   private final List<GameObject> gameObjects;
   private final WindowSize windowSize;
   private final SceneRenderer<MainMenuScene> renderer;
-  @Getter
-  private final SceneAudio sceneAudio;
+  private final MainMenuAudio sceneAudio;
 
   public MainMenuScene(SceneRenderer<MainMenuScene> renderer,
       ResourceManager resourceManager,
       EventBus<Event> eventBus,
       WindowSize windowSize,
-      SceneAudio sceneAudio) {
+      MainMenuAudio sceneAudio) {
     this.renderer = renderer;
     this.resourceManager = resourceManager;
     this.eventBus = eventBus;
@@ -85,7 +83,7 @@ public class MainMenuScene implements Scene {
               resourceManager,
               new SinglePlayerRenderer(resourceManager,
                   eventBus,
-                  windowSize), null);
+                  windowSize));
           eventBus.dispatch(new SceneTransitionEvent(scene));
         });
 
@@ -113,7 +111,7 @@ public class MainMenuScene implements Scene {
   }
 
   @Override
-  public void initialize() {
+  public void initialize() throws Exception {
     eventBus.registerHandler(MouseButtonDownEvent.class,
         mouseButtonDownEvent -> gameObjects.forEach(element -> {
           if (element instanceof Clickable) {
@@ -150,11 +148,16 @@ public class MainMenuScene implements Scene {
             }
           }
         }));
+
+    renderer.initialize(this);
+    sceneAudio.initialize();
   }
 
   @Override
   public void cleanup() {
     gameObjects.forEach(gameObject -> gameObject.getRenderer().cleanup());
+    renderer.cleanup();
+    sceneAudio.cleanup();
   }
 
   @Override
@@ -163,8 +166,8 @@ public class MainMenuScene implements Scene {
   }
 
   @Override
-  public SceneRenderer getSceneRenderer() {
-    return renderer;
+  public void render(WindowSize windowSize) {
+    renderer.render(this);
   }
 
   private Type randomType() {

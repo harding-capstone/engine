@@ -70,4 +70,8 @@ public class ResourceManager {
     log.info("Freeing all resources");
     resourceCache.values().forEach(Resource::cleanup);
   }
+
+  public boolean hasAllocatedResources() {
+    return referenceCounter.size() > 0;
+  }
 }
