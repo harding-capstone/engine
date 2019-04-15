@@ -22,6 +22,8 @@ import com.shepherdjerred.capstone.engine.engine.resource.ResourceManager;
 import com.shepherdjerred.capstone.engine.engine.scene.Scene;
 import com.shepherdjerred.capstone.engine.engine.scene.SceneTransitioner;
 import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
+import com.shepherdjerred.capstone.engine.game.scenes.game.GameRenderer;
+import com.shepherdjerred.capstone.engine.game.scenes.game.GameScene;
 import com.shepherdjerred.capstone.engine.game.scenes.mainmenu.MainMenuAudio;
 import com.shepherdjerred.capstone.engine.game.scenes.mainmenu.MainMenuRenderer;
 import com.shepherdjerred.capstone.engine.game.scenes.mainmenu.MainMenuScene;
@@ -74,7 +76,7 @@ public class CastleCastersGame implements GameLogic {
     OpenGlHelper.enableTransparency();
     OpenGlHelper.setClearColor();
 
-    var scene = getTeamScene(windowSize);
+    var scene = getGameScene(windowSize);
 
     sceneTransitioner.initialize(scene);
 
@@ -82,8 +84,11 @@ public class CastleCastersGame implements GameLogic {
         new SceneTransitionEventHandler(sceneTransitioner));
 
     audioPlayer.initialize();
+  }
 
-    resourceManager.get(GameMapName.GRASS);
+  private Scene getGameScene(WindowSize windowSize) {
+    var sceneRenderer = new GameRenderer();
+    return new GameScene(resourceManager, eventBus, sceneRenderer, GameMapName.GRASS, windowSize);
   }
 
   private Scene getTeamScene(WindowSize windowSize) {

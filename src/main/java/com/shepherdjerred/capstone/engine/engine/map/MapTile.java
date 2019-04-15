@@ -9,7 +9,7 @@ import lombok.ToString;
 @Getter
 @ToString
 @AllArgsConstructor
-public class Tile {
+public class MapTile {
 
   private final MapCoordinate coordinate;
   private final TextureName textureName;

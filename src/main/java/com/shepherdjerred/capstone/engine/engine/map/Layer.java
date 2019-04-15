@@ -8,18 +8,18 @@ import lombok.ToString;
 public class Layer {
 
   private final TileDimension dimension;
-  private final Map<MapCoordinate, Tile> tiles;
+  private final Map<MapCoordinate, MapTile> tiles;
 
   public Layer(TileDimension tileDimension) {
     this.dimension = tileDimension;
     this.tiles = new HashMap<>();
   }
 
-  public void setTile(MapCoordinate coordinate, Tile tile) {
-    tiles.put(coordinate, tile);
+  public void setTile(MapCoordinate coordinate, MapTile mapTile) {
+    tiles.put(coordinate, mapTile);
   }
 
-  public Tile getTile(MapCoordinate coordinate) {
+  public MapTile getTile(MapCoordinate coordinate) {
     return tiles.get(coordinate);
   }
 }

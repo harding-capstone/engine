@@ -72,13 +72,11 @@ public class GameMapLoader implements ResourceLoader<GameMapName, GameMap> {
         var tileset = tilesetTileIdMapper.getTilesetForTileId(tileId);
 
         layer.setTile(new MapCoordinate(x, y),
-            new Tile(coord, tileset.getTextureName(), tileset.getTextureCoordinate(tileId)));
+            new MapTile(coord, tileset.getTextureName(), tileset.getTextureCoordinate(tileId)));
       }
 
       gameMap.setLayer(layerId, layer);
     }
-
-    log.info(gameMap);
 
     return gameMap;
   }
