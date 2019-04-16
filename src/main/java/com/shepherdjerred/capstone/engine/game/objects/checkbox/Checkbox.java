@@ -1,11 +1,12 @@
 package com.shepherdjerred.capstone.engine.game.objects.checkbox;
 
+import com.shepherdjerred.capstone.engine.engine.collision.GameObjectCollisionDetector;
+import com.shepherdjerred.capstone.engine.engine.object.ClickableGameObject;
 import com.shepherdjerred.capstone.engine.engine.object.GameObjectRenderer;
 import com.shepherdjerred.capstone.engine.engine.object.SceneObjectDimensions;
 import com.shepherdjerred.capstone.engine.engine.resource.ResourceManager;
 import com.shepherdjerred.capstone.engine.engine.scene.position.ScenePositioner;
 import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
-import com.shepherdjerred.capstone.engine.game.objects.hover.ClickableGameObject;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -25,10 +26,11 @@ public class Checkbox extends ClickableGameObject {
       ScenePositioner position,
       SceneObjectDimensions sceneObjectDimensions,
       Runnable onClick) {
-    super(windowSize, onClick);
+    super(null, onClick);
     this.renderer = new CheckboxRenderer(resourceManager);
     this.position = position;
     this.sceneObjectDimensions = sceneObjectDimensions;
+    setCollisionDetector(new GameObjectCollisionDetector(this, windowSize));
   }
 
   @Override

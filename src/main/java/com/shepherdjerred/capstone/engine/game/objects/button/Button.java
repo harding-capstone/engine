@@ -1,11 +1,12 @@
 package com.shepherdjerred.capstone.engine.game.objects.button;
 
+import com.shepherdjerred.capstone.engine.engine.collision.GameObjectCollisionDetector;
+import com.shepherdjerred.capstone.engine.engine.object.ClickableGameObject;
 import com.shepherdjerred.capstone.engine.engine.object.GameObjectRenderer;
 import com.shepherdjerred.capstone.engine.engine.object.SceneObjectDimensions;
 import com.shepherdjerred.capstone.engine.engine.resource.ResourceManager;
 import com.shepherdjerred.capstone.engine.engine.scene.position.ScenePositioner;
 import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
-import com.shepherdjerred.capstone.engine.game.objects.hover.ClickableGameObject;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -27,11 +28,12 @@ public class Button extends ClickableGameObject {
       SceneObjectDimensions sceneObjectDimensions,
       Type type,
       Runnable onClick) {
-    super(windowSize, onClick);
+    super(null, onClick);
     this.renderer = new ButtonRenderer(resourceManager);
     this.position = position;
     this.type = type;
     this.sceneObjectDimensions = sceneObjectDimensions;
+    setCollisionDetector(new GameObjectCollisionDetector(this, windowSize));
   }
 
   @Override
