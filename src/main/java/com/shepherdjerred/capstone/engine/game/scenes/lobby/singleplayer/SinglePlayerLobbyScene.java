@@ -71,7 +71,7 @@ public class SinglePlayerLobbyScene implements Scene {
     gameServerThread.start();
 
     var text = new Text(new TextRenderer(resourceManager),
-        "Here's where my lobby setup screen would go... IF I HAD ONE",
+        "Lobby Setup",
         FontName.M5X7,
         Color.white(),
         12,

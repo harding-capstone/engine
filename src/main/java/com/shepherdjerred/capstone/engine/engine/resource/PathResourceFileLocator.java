@@ -113,15 +113,15 @@ public class PathResourceFileLocator implements ResourceFileLocator {
     resourcePaths.put(DESERT_E,
         "ui/backgrounds/parallax/desert/desert-e.png");
     resourcePaths.put(DESERT_RED_A,
-        "ui/backgrounds/parallax/desert/desert-red-a.png");
+        "ui/backgrounds/parallax/desert-red/desert-red-a.png");
     resourcePaths.put(DESERT_RED_B,
-        "ui/backgrounds/parallax/desert/desert-red-b.png");
+        "ui/backgrounds/parallax/desert-red/desert-red-b.png");
     resourcePaths.put(DESERT_RED_C,
-        "ui/backgrounds/parallax/desert/desert-red-c.png");
+        "ui/backgrounds/parallax/desert-red/desert-red-c.png");
     resourcePaths.put(DESERT_RED_D,
-        "ui/backgrounds/parallax/desert/desert-red-d.png");
+        "ui/backgrounds/parallax/desert-red/desert-red-d.png");
     resourcePaths.put(DESERT_RED_E,
-        "ui/backgrounds/parallax/desert/desert-red-e.png");
+        "ui/backgrounds/parallax/desert-red/desert-red-e.png");
     resourcePaths.put(GREEN_FOREST_A,
         "ui/backgrounds/parallax/green-forest/green-forest-a.png");
     resourcePaths.put(GREEN_FOREST_B,

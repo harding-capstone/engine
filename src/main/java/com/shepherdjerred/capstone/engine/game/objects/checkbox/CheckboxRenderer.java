@@ -1,4 +1,4 @@
-package com.shepherdjerred.capstone.engine.game.objects.button;
+package com.shepherdjerred.capstone.engine.game.objects.checkbox;
 
 import static com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName.MAIN_MENU_BUTTON;
 import static com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName.MAIN_MENU_BUTTON_CLICKED;
@@ -17,7 +17,7 @@ import com.shepherdjerred.capstone.engine.engine.resource.ResourceManager;
 import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
 import com.shepherdjerred.capstone.engine.game.objects.hover.ClickableGameObject.State;
 
-public class ButtonRenderer implements GameObjectRenderer<Button> {
+public class CheckboxRenderer implements GameObjectRenderer<Checkbox> {
 
   private final ResourceManager resourceManager;
   private TexturedMesh normalMesh;
@@ -25,12 +25,12 @@ public class ButtonRenderer implements GameObjectRenderer<Button> {
   private TexturedMesh clickedMesh;
   private ShaderProgram shaderProgram;
 
-  public ButtonRenderer(ResourceManager resourceManager) {
+  public CheckboxRenderer(ResourceManager resourceManager) {
     this.resourceManager = resourceManager;
   }
 
   @Override
-  public void initialize(Button gameObject) throws Exception {
+  public void initialize(Checkbox gameObject) throws Exception {
     var width = gameObject.getSceneObjectDimensions().getWidth();
     var height = gameObject.getSceneObjectDimensions().getHeight();
 
@@ -67,7 +67,7 @@ public class ButtonRenderer implements GameObjectRenderer<Button> {
   }
 
   @Override
-  public void render(WindowSize windowSize, Button gameObject) {
+  public void render(WindowSize windowSize, Checkbox gameObject) {
     var pos = gameObject.getPosition()
         .getSceneCoordinate(windowSize, gameObject.getSceneObjectDimensions());
     var model = new ModelMatrix(new RendererCoordinate(pos.getX(), pos.getY(), pos.getZ()),

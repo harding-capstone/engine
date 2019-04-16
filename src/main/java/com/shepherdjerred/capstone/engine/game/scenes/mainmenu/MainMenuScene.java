@@ -93,11 +93,11 @@ public class MainMenuScene implements Scene {
             0)
     );
 
-    var buttonSize = new SceneObjectDimensions(300, 50);
+    var buttonSize = new SceneObjectDimensions(250, 50);
 
     var singlePlayerButton = new TextButton(resourceManager,
         windowSize,
-        new ObjectRelativeScenePositioner(logo, 0, 0, 0, 0, 0),
+        new ObjectRelativeScenePositioner(logo, 200, 0, 0, 0, 0),
         "Single Player",
         FontName.M5X7,
         Color.white(),
@@ -158,10 +158,10 @@ public class MainMenuScene implements Scene {
         });
 
     gameObjects.add(singlePlayerButton);
-    gameObjects.add(multiPlayerButton);
-    gameObjects.add(optionsButton);
-    gameObjects.add(helpButton);
-    gameObjects.add(aboutButton);
+//    gameObjects.add(multiPlayerButton);
+//    gameObjects.add(optionsButton);
+//    gameObjects.add(helpButton);
+//    gameObjects.add(aboutButton);
     gameObjects.add(logo);
     gameObjects.add(text);
     gameObjects.add(background);

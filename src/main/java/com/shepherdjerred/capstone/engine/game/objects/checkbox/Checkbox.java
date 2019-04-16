@@ -1,4 +1,4 @@
-package com.shepherdjerred.capstone.engine.game.objects.button;
+package com.shepherdjerred.capstone.engine.game.objects.checkbox;
 
 import com.shepherdjerred.capstone.engine.engine.object.GameObjectRenderer;
 import com.shepherdjerred.capstone.engine.engine.object.SceneObjectDimensions;
@@ -12,20 +12,21 @@ import lombok.ToString;
 
 @Getter
 @ToString
-public class Button extends ClickableGameObject {
+public class Checkbox extends ClickableGameObject {
 
-  private final GameObjectRenderer<Button> renderer;
+  private final GameObjectRenderer<Checkbox> renderer;
+
   @Setter
   private ScenePositioner position;
   private final SceneObjectDimensions sceneObjectDimensions;
 
-  public Button(ResourceManager resourceManager,
+  public Checkbox(ResourceManager resourceManager,
       WindowSize windowSize,
       ScenePositioner position,
       SceneObjectDimensions sceneObjectDimensions,
       Runnable onClick) {
     super(windowSize, onClick);
-    this.renderer = new ButtonRenderer(resourceManager);
+    this.renderer = new CheckboxRenderer(resourceManager);
     this.position = position;
     this.sceneObjectDimensions = sceneObjectDimensions;
   }
