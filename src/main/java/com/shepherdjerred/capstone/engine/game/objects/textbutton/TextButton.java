@@ -12,6 +12,7 @@ import com.shepherdjerred.capstone.engine.engine.scene.position.ObjectRelativeSc
 import com.shepherdjerred.capstone.engine.engine.scene.position.ScenePositioner;
 import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
 import com.shepherdjerred.capstone.engine.game.objects.button.Button;
+import com.shepherdjerred.capstone.engine.game.objects.button.Button.Type;
 import com.shepherdjerred.capstone.engine.game.objects.text.Text;
 import com.shepherdjerred.capstone.engine.game.objects.text.TextRenderer;
 
@@ -28,11 +29,14 @@ public class TextButton implements GameObject, Clickable, Hoverable {
       Color color,
       int fontSize,
       SceneObjectDimensions dimensions,
-      Runnable onClick) {
+      Type type,
+      Runnable onClick
+  ) {
     this.button = new Button(resourceManager,
         windowSize,
         positioner,
         dimensions,
+        type,
         onClick);
     this.text = new Text(new TextRenderer(resourceManager),
         text,

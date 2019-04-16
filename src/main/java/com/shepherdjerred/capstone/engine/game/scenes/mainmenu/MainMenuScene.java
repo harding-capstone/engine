@@ -22,6 +22,7 @@ import com.shepherdjerred.capstone.engine.game.handlers.MouseUpClickableHandler;
 import com.shepherdjerred.capstone.engine.game.objects.background.parallax.ParallaxBackground;
 import com.shepherdjerred.capstone.engine.game.objects.background.parallax.ParallaxBackground.Type;
 import com.shepherdjerred.capstone.engine.game.objects.background.parallax.ParallaxBackgroundRenderer;
+import com.shepherdjerred.capstone.engine.game.objects.button.Button;
 import com.shepherdjerred.capstone.engine.game.objects.logo.Logo;
 import com.shepherdjerred.capstone.engine.game.objects.logo.LogoRenderer;
 import com.shepherdjerred.capstone.engine.game.objects.text.Text;
@@ -103,6 +104,7 @@ public class MainMenuScene implements Scene {
         Color.white(),
         12,
         buttonSize,
+        Button.Type.GENERIC,
         () -> {
           var scene = new SinglePlayerLobbyScene(background,
               eventBus,
@@ -121,6 +123,7 @@ public class MainMenuScene implements Scene {
         Color.white(),
         12,
         buttonSize,
+        Button.Type.GENERIC,
         () -> {
         });
 
@@ -132,6 +135,7 @@ public class MainMenuScene implements Scene {
         Color.white(),
         12,
         buttonSize,
+        Button.Type.GENERIC,
         () -> {
         });
 
@@ -143,6 +147,7 @@ public class MainMenuScene implements Scene {
         Color.white(),
         12,
         buttonSize,
+        Button.Type.GENERIC,
         () -> {
         });
 
@@ -154,6 +159,7 @@ public class MainMenuScene implements Scene {
         Color.white(),
         12,
         buttonSize,
+        Button.Type.GENERIC,
         () -> {
         });
 

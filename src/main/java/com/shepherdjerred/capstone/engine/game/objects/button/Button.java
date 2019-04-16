@@ -18,15 +18,19 @@ public class Button extends ClickableGameObject {
   @Setter
   private ScenePositioner position;
   private final SceneObjectDimensions sceneObjectDimensions;
+  @Getter
+  private final Type type;
 
   public Button(ResourceManager resourceManager,
       WindowSize windowSize,
       ScenePositioner position,
       SceneObjectDimensions sceneObjectDimensions,
+      Type type,
       Runnable onClick) {
     super(windowSize, onClick);
     this.renderer = new ButtonRenderer(resourceManager);
     this.position = position;
+    this.type = type;
     this.sceneObjectDimensions = sceneObjectDimensions;
   }
 
@@ -47,5 +51,9 @@ public class Button extends ClickableGameObject {
 
   @Override
   public void update(float interval) {
+  }
+
+  public enum Type {
+    GENERIC
   }
 }

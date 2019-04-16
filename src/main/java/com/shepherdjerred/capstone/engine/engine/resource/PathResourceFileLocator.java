@@ -157,6 +157,7 @@ public class PathResourceFileLocator implements ResourceFileLocator {
     resourcePaths.put(GAME_LOGO, "logos/game logo.png");
     resourcePaths.put(TEAM_LOGO, "logos/team logo.png");
     resourcePaths.put(UNKNOWN, "unknown.png");
+    resourcePaths.put(GENERIC_BUTTON, "ui/buttons/buttons_15.png");
   }
 
   private void initializeFontPaths() {
