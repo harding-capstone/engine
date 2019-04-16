@@ -27,8 +27,8 @@ import com.shepherdjerred.capstone.engine.game.objects.logo.LogoRenderer;
 import com.shepherdjerred.capstone.engine.game.objects.text.Text;
 import com.shepherdjerred.capstone.engine.game.objects.text.TextRenderer;
 import com.shepherdjerred.capstone.engine.game.objects.textbutton.TextButton;
-import com.shepherdjerred.capstone.engine.game.scenes.singleplayer.SinglePlayerRenderer;
-import com.shepherdjerred.capstone.engine.game.scenes.singleplayer.SinglePlayerScene;
+import com.shepherdjerred.capstone.engine.game.scenes.lobby.singleplayer.SinglePlayerLobbyRenderer;
+import com.shepherdjerred.capstone.engine.game.scenes.lobby.singleplayer.SinglePlayerLobbyScene;
 import com.shepherdjerred.capstone.events.Event;
 import com.shepherdjerred.capstone.events.EventBus;
 import com.shepherdjerred.capstone.events.handlers.EventHandlerFrame;
@@ -105,10 +105,10 @@ public class MainMenuScene implements Scene {
         12,
         buttonSize,
         () -> {
-          var scene = new SinglePlayerScene(background,
+          var scene = new SinglePlayerLobbyScene(background,
               eventBus,
               resourceManager,
-              new SinglePlayerRenderer(resourceManager,
+              new SinglePlayerLobbyRenderer(resourceManager,
                   eventBus,
                   windowSize));
           eventBus.dispatch(new SceneTransitionEvent(scene));

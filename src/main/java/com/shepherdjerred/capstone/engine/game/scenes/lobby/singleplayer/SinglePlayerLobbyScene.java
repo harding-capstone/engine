@@ -1,5 +1,7 @@
-package com.shepherdjerred.capstone.engine.game.scenes.singleplayer;
+package com.shepherdjerred.capstone.engine.game.scenes.lobby.singleplayer;
 
+import com.shepherdjerred.capstone.common.lobby.LobbySettings;
+import com.shepherdjerred.capstone.common.lobby.LobbySettings.LobbyType;
 import com.shepherdjerred.capstone.engine.engine.graphics.Color;
 import com.shepherdjerred.capstone.engine.engine.graphics.font.FontName;
 import com.shepherdjerred.capstone.engine.engine.object.GameObject;
@@ -15,22 +17,33 @@ import com.shepherdjerred.capstone.engine.game.objects.text.Text;
 import com.shepherdjerred.capstone.engine.game.objects.text.TextRenderer;
 import com.shepherdjerred.capstone.events.Event;
 import com.shepherdjerred.capstone.events.EventBus;
+import com.shepherdjerred.capstone.logic.board.BoardSettings;
+import com.shepherdjerred.capstone.logic.match.MatchSettings;
+import com.shepherdjerred.capstone.logic.player.PlayerCount;
+import com.shepherdjerred.capstone.logic.player.QuoridorPlayer;
+import com.shepherdjerred.capstone.server.GameServer;
+import com.shepherdjerred.capstone.server.network.netty.NettyServerConnector;
+import com.shepherdjerred.capstone.server.network.netty.NettyServerSettings;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
+import lombok.extern.log4j.Log4j2;
 
-public class SinglePlayerScene implements Scene {
+@Log4j2
+public class SinglePlayerLobbyScene implements Scene {
 
   private final EventBus<Event> eventBus;
   private final ResourceManager resourceManager;
-  private final SceneRenderer<SinglePlayerScene> sceneRenderer;
+  private final SceneRenderer<SinglePlayerLobbyScene> sceneRenderer;
   @Getter
   private final List<GameObject> gameObjects;
 
-  public SinglePlayerScene(ParallaxBackground background,
+  private Thread gameServerThread;
+
+  public SinglePlayerLobbyScene(ParallaxBackground background,
       EventBus<Event> eventBus,
       ResourceManager resourceManager,
-      SceneRenderer<SinglePlayerScene> sceneRenderer) {
+      SceneRenderer<SinglePlayerLobbyScene> sceneRenderer) {
     this.eventBus = eventBus;
     this.resourceManager = resourceManager;
     this.sceneRenderer = sceneRenderer;
@@ -40,8 +53,25 @@ public class SinglePlayerScene implements Scene {
 
   @Override
   public void initialize() throws Exception {
+    gameServerThread = new Thread(() -> {
+      var gameServer = new GameServer(new LobbySettings("My Lobby",
+          new MatchSettings(10, QuoridorPlayer.ONE, PlayerCount.TWO),
+          new BoardSettings(9, PlayerCount.TWO),
+          LobbyType.LOCAL,
+          false));
+      var connector = new NettyServerConnector(new NettyServerSettings("127.0.0.1",
+          35567));
+      gameServer.registerConnector(connector);
+      try {
+        gameServer.run();
+      } catch (InterruptedException e) {
+        log.error("Error while running server.", e);
+      }
+    });
+    gameServerThread.start();
+
     var text = new Text(new TextRenderer(resourceManager),
-        "Here's where my singleplayer setup screen would go... IF I HAD ONE",
+        "Here's where my lobby setup screen would go... IF I HAD ONE",
         FontName.M5X7,
         Color.white(),
         12,
@@ -59,6 +89,8 @@ public class SinglePlayerScene implements Scene {
   public void cleanup() {
     gameObjects.forEach(GameObject::cleanup);
     sceneRenderer.cleanup();
+    // TODO better way to stop thread?
+    gameServerThread.stop();
   }
 
   @Override

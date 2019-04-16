@@ -79,7 +79,7 @@ public class CastleCastersGame implements GameLogic {
 
     this.windowSize = windowSize;
 
-    var scene = getGameScene(windowSize);
+    var scene = getTeamScene(windowSize);
 
     sceneTransitioner.initialize(scene);
 
