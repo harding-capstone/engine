@@ -2,27 +2,7 @@ package com.shepherdjerred.capstone.engine.engine.resource;
 
 import static com.shepherdjerred.capstone.engine.engine.graphics.font.FontName.FIRA_CODE;
 import static com.shepherdjerred.capstone.engine.engine.graphics.font.FontName.M5X7;
-import static com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName.FIRE_WIZARD_FRONT;
-import static com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName.FROST_WALL;
-import static com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName.GAME_LOGO;
-import static com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName.MAIN_MENU_BUTTON;
-import static com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName.MAIN_MENU_BUTTON_CLICKED;
-import static com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName.MAIN_MENU_BUTTON_HOVERED;
-import static com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName.PLAINS_A;
-import static com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName.PLAINS_B;
-import static com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName.PLAINS_C;
-import static com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName.PLAINS_D;
-import static com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName.PLAINS_E;
-import static com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName.PURPLE_MOUNTAINS;
-import static com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName.PURPLE_MOUNTAINS_A;
-import static com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName.PURPLE_MOUNTAINS_B;
-import static com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName.PURPLE_MOUNTAINS_C;
-import static com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName.PURPLE_MOUNTAINS_D;
-import static com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName.PURPLE_MOUNTAINS_E;
-import static com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName.RED_PLAINS;
-import static com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName.TEAM_LOGO;
-import static com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName.TERRAIN_TILESHEET;
-import static com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName.UNKNOWN;
+import static com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName.*;
 
 import com.shepherdjerred.capstone.engine.engine.audio.AudioName;
 import com.shepherdjerred.capstone.engine.engine.graphics.font.FontName;

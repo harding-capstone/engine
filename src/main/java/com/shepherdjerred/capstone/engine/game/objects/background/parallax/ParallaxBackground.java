@@ -108,7 +108,7 @@ public class ParallaxBackground implements GameObject {
     PURPLE_MOUNTAINS,
     RED_PLAINS;
 
-    public Type random() {
+    public static Type random() {
       var random = new Random();
       var values = Type.values();
       return values[random.nextInt(values.length)];

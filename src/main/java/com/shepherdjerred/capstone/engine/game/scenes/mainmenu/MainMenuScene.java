@@ -6,8 +6,8 @@ import com.shepherdjerred.capstone.engine.engine.events.input.MouseMoveEvent;
 import com.shepherdjerred.capstone.engine.engine.events.scene.SceneTransitionEvent;
 import com.shepherdjerred.capstone.engine.engine.graphics.Color;
 import com.shepherdjerred.capstone.engine.engine.graphics.font.FontName;
-import com.shepherdjerred.capstone.engine.engine.object.SceneObjectDimensions;
 import com.shepherdjerred.capstone.engine.engine.object.GameObject;
+import com.shepherdjerred.capstone.engine.engine.object.SceneObjectDimensions;
 import com.shepherdjerred.capstone.engine.engine.resource.ResourceManager;
 import com.shepherdjerred.capstone.engine.engine.scene.Scene;
 import com.shepherdjerred.capstone.engine.engine.scene.SceneRenderer;
@@ -34,7 +34,6 @@ import com.shepherdjerred.capstone.events.EventBus;
 import com.shepherdjerred.capstone.events.handlers.EventHandlerFrame;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 
@@ -79,7 +78,7 @@ public class MainMenuScene implements Scene {
 
     var background = new ParallaxBackground(new ParallaxBackgroundRenderer(resourceManager,
         windowSize),
-        randomType());
+        Type.random());
 
     var text = new Text(
         new TextRenderer(resourceManager),
@@ -116,7 +115,7 @@ public class MainMenuScene implements Scene {
 
     var multiPlayerButton = new TextButton(resourceManager,
         windowSize,
-        new ObjectRelativeScenePositioner(singlePlayerButton, 100, 0, 0, 0, 0),
+        new ObjectRelativeScenePositioner(singlePlayerButton, 0, 0, 0, 0, 0),
         "Multiplayer",
         FontName.M5X7,
         Color.white(),
@@ -200,13 +199,5 @@ public class MainMenuScene implements Scene {
   @Override
   public void render(WindowSize windowSize) {
     renderer.render(this);
-  }
-
-  private Type randomType() {
-    var random = new Random();
-    List<Type> types = new ArrayList<>();
-    types.add(Type.PLAINS);
-    types.add(Type.PURPLE_MOUNTAINS);
-    return types.get(random.nextInt(types.size()));
   }
 }

@@ -127,7 +127,7 @@ public class GlfwWindow implements Window {
   private void setWindowHints() {
     glfwDefaultWindowHints();
     glfwWindowHint(GLFW_VISIBLE, GL_FALSE);
-    glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
+    glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
