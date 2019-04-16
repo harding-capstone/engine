@@ -52,9 +52,7 @@ public class GameEngine {
     gameLoop.start();
   }
 
-  private void initialize() throws Exception {
-    window.initialize();
-    gameLogic.initialize(window.getWindowSettings().getWindowSize());
+  private void initialize() {
     registerEventHandlers();
   }
 

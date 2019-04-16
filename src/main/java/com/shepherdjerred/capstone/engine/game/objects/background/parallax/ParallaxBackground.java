@@ -7,6 +7,7 @@ import com.shepherdjerred.capstone.engine.engine.scene.position.AbsoluteScenePos
 import com.shepherdjerred.capstone.engine.engine.scene.position.ScenePositioner;
 import com.shepherdjerred.capstone.engine.engine.scene.SceneCoordinate;
 import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
+import java.util.Random;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import lombok.Getter;
@@ -105,6 +106,12 @@ public class ParallaxBackground implements GameObject {
     NIGHT_FOREST,
     PLAINS,
     PURPLE_MOUNTAINS,
-    RED_PLAINS
+    RED_PLAINS;
+
+    public Type random() {
+      var random = new Random();
+      var values = Type.values();
+      return values[random.nextInt(values.length)];
+    }
   }
 }

@@ -1,4 +1,4 @@
-package com.shepherdjerred.capstone.engine.engine.map;
+package com.shepherdjerred.capstone.engine.engine.map.tileset;
 
 import com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName;
 import com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureSheetCoordinates;

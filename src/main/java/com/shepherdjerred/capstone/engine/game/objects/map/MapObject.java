@@ -1,6 +1,6 @@
 package com.shepherdjerred.capstone.engine.game.objects.map;
 
-import com.shepherdjerred.capstone.engine.engine.map.GameMap;
+import com.shepherdjerred.capstone.engine.engine.map.MapLayers;
 import com.shepherdjerred.capstone.engine.engine.map.GameMapName;
 import com.shepherdjerred.capstone.engine.engine.object.GameObject;
 import com.shepherdjerred.capstone.engine.engine.object.SceneObjectDimensions;
@@ -17,7 +17,7 @@ public class MapObject implements GameObject {
   private final MapRenderer mapRenderer;
   private final GameMapName gameMapName;
   @Getter
-  private GameMap gameMap;
+  private MapLayers mapLayers;
 
   public MapObject(ResourceManager resourceManager, GameMapName gameMapName) {
     this.resourceManager = resourceManager;
@@ -27,7 +27,7 @@ public class MapObject implements GameObject {
 
   @Override
   public void initialize() throws Exception {
-    gameMap = resourceManager.get(gameMapName);
+    mapLayers = resourceManager.get(gameMapName);
     mapRenderer.initialize(this);
   }
 

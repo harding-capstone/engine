@@ -47,7 +47,7 @@
         {
          "columns":18,
          "firstgid":1,
-         "image":"..\/..\/..\/..\/..\/assets\/maps\/TILESETS\/desert.png",
+         "image":"..\/..\/..\/..\/..\/assets\/maps\/tilesets\/main\/desert.png",
          "imageheight":368,
          "imagewidth":288,
          "margin":0,
@@ -60,7 +60,7 @@
         {
          "columns":29,
          "firstgid":415,
-         "image":"..\/..\/..\/..\/..\/assets\/maps\/tf_darkdimension\/tf_darkdimension_sheet.png",
+         "image":"..\/..\/..\/..\/..\/assets\/maps\/tilesets\/darkdimension\/tf_darkdimension_sheet.png",
          "imageheight":336,
          "imagewidth":464,
          "margin":0,
@@ -73,7 +73,7 @@
         {
          "columns":34,
          "firstgid":1024,
-         "image":"..\/..\/..\/..\/..\/assets\/maps\/TILESETS\/castle.png",
+         "image":"..\/..\/..\/..\/..\/assets\/maps\/tilesets\/main\/castle.png",
          "imageheight":272,
          "imagewidth":544,
          "margin":0,
@@ -87,7 +87,7 @@
         {
          "columns":39,
          "firstgid":1602,
-         "image":"..\/..\/..\/..\/..\/assets\/maps\/TILESETS\/terrain.png",
+         "image":"..\/..\/..\/..\/..\/assets\/maps\/tilesets\/main\/terrain.png",
          "imageheight":608,
          "imagewidth":624,
          "margin":0,
@@ -101,7 +101,7 @@
         {
          "columns":51,
          "firstgid":3084,
-         "image":"..\/..\/..\/..\/..\/assets\/maps\/TILESETS\/water.png",
+         "image":"..\/..\/..\/..\/..\/assets\/maps\/tilesets\/main\/water.png",
          "imageheight":880,
          "imagewidth":816,
          "margin":0,

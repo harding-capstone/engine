@@ -31,6 +31,7 @@ import com.shepherdjerred.capstone.engine.game.scenes.singleplayer.SinglePlayerR
 import com.shepherdjerred.capstone.engine.game.scenes.singleplayer.SinglePlayerScene;
 import com.shepherdjerred.capstone.events.Event;
 import com.shepherdjerred.capstone.events.EventBus;
+import com.shepherdjerred.capstone.events.handlers.EventHandlerFrame;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -47,6 +48,7 @@ public class MainMenuScene implements Scene {
   private final WindowSize windowSize;
   private final SceneRenderer<MainMenuScene> renderer;
   private final MainMenuAudio sceneAudio;
+  private final EventHandlerFrame<Event> handlerFrame;
 
   public MainMenuScene(SceneRenderer<MainMenuScene> renderer,
       ResourceManager resourceManager,
@@ -58,6 +60,7 @@ public class MainMenuScene implements Scene {
     this.eventBus = eventBus;
     this.windowSize = windowSize;
     this.sceneAudio = sceneAudio;
+    this.handlerFrame = new EventHandlerFrame<>();
     gameObjects = new ArrayList<>();
     createGameObjects();
   }
@@ -171,9 +174,10 @@ public class MainMenuScene implements Scene {
     var mouseUpClickable = new MouseUpClickableHandler(this);
     var mouseMoveHoverable = new MouseMoveHoverableEventHandler(this);
 
-    eventBus.registerHandler(MouseButtonDownEvent.class, mouseDownClickable);
-    eventBus.registerHandler(MouseButtonUpEvent.class, mouseUpClickable);
-    eventBus.registerHandler(MouseMoveEvent.class, mouseMoveHoverable);
+    handlerFrame.registerHandler(MouseButtonDownEvent.class, mouseDownClickable);
+    handlerFrame.registerHandler(MouseButtonUpEvent.class, mouseUpClickable);
+    handlerFrame.registerHandler(MouseMoveEvent.class, mouseMoveHoverable);
+    eventBus.registerHandlerFrame(handlerFrame);
 
     renderer.initialize(this);
     sceneAudio.initialize();
@@ -185,6 +189,7 @@ public class MainMenuScene implements Scene {
     gameObjects.forEach(GameObject::cleanup);
     renderer.cleanup();
     sceneAudio.cleanup();
+    eventBus.removeHandlerFrame(handlerFrame);
   }
 
   @Override

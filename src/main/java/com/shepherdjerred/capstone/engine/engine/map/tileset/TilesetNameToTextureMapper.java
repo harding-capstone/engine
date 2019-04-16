@@ -1,4 +1,4 @@
-package com.shepherdjerred.capstone.engine.engine.map;
+package com.shepherdjerred.capstone.engine.engine.map.tileset;
 
 import static com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName.*;
 import static com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName.TERRAIN_TILESHEET;
@@ -7,11 +7,14 @@ import com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName;
 import java.util.HashMap;
 import java.util.Map;
 
-public class TilesetNameMapper {
+/**
+ * Maps the names of tilesets to textures.
+ */
+public class TilesetNameToTextureMapper {
 
   private final Map<String, TextureName> textureMap;
 
-  public TilesetNameMapper() {
+  public TilesetNameToTextureMapper() {
     textureMap = new HashMap<>();
     initializeMap();
   }

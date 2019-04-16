@@ -8,13 +8,13 @@ import lombok.ToString;
 
 @Getter
 @ToString
-public class GameMap implements Resource {
+public class MapLayers implements Resource {
 
-  private final TileDimension dimension;
+  private final MapDimensions dimension;
   private final SortedMap<Integer, Layer> layerMap;
 
-  public GameMap(TileDimension tileDimension) {
-    this.dimension = tileDimension;
+  public MapLayers(MapDimensions mapDimensions) {
+    this.dimension = mapDimensions;
     layerMap = new TreeMap<>();
   }
 

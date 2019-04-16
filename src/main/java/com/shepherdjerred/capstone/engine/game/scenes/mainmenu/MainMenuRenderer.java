@@ -36,8 +36,6 @@ public class MainMenuRenderer implements SceneRenderer<MainMenuScene> {
 
   @Override
   public void render(MainMenuScene scene) {
-    OpenGlHelper.setClearColor(Color.black());
-    OpenGlHelper.enableDepthBuffer();
     OpenGlHelper.clearScreen();
     updateProjectionMatrix();
 
@@ -54,6 +52,8 @@ public class MainMenuRenderer implements SceneRenderer<MainMenuScene> {
     updateProjectionMatrix();
     createShaderProgram();
     registerEventHandlers();
+    OpenGlHelper.setClearColor(Color.black());
+    OpenGlHelper.enableDepthBuffer();
 
     for (GameObject gameObject : scene.getGameObjects()) {
       gameObject.initialize();
@@ -85,11 +85,5 @@ public class MainMenuRenderer implements SceneRenderer<MainMenuScene> {
   public void cleanup() {
     resourceManager.free(ShaderProgramName.TEXT);
     resourceManager.free(ShaderProgramName.DEFAULT);
-    removeEventHandlers();
-  }
-
-  // TODO
-  private void removeEventHandlers() {
-
   }
 }

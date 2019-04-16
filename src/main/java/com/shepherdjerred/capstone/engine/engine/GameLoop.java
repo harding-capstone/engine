@@ -39,6 +39,11 @@ public class GameLoop implements Runnable {
     this.targetUpdatesPerSecond = targetUpdatesPerSecond;
   }
 
+  public void initialize() throws Exception {
+    window.initialize();
+    gameLogic.initialize(window.getWindowSettings().getWindowSize());
+  }
+
   private void sync() {
     float loopSlot = 1f / targetFramesPerSecond;
     double endTime = timer.getLastLoopTime() + loopSlot;
@@ -68,6 +73,7 @@ public class GameLoop implements Runnable {
   @Override
   public void run() {
     try {
+      initialize();
       runGameLoop();
     } catch (Exception e) {
       log.catching(e);
@@ -101,7 +107,7 @@ public class GameLoop implements Runnable {
     }
   }
 
-  public void start() {
+  public void start() throws Exception {
     if (isOperatingSystemMacOs()) {
       gameLoopThread.run();
     } else {

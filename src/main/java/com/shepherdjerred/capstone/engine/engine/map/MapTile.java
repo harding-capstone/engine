@@ -6,6 +6,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
 
+/**
+ * A single tile a on a map.
+ */
 @Getter
 @ToString
 @AllArgsConstructor

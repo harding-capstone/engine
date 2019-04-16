@@ -40,6 +40,7 @@ public class CastleCastersGame implements GameLogic {
   private final ResourceManager resourceManager;
   private final SceneTransitioner sceneTransitioner;
   private final AudioPlayer audioPlayer;
+  private WindowSize windowSize;
 
   public CastleCastersGame(EventBus<Event> eventBus) {
     this.eventBus = eventBus;
@@ -76,6 +77,8 @@ public class CastleCastersGame implements GameLogic {
     OpenGlHelper.enableTransparency();
     OpenGlHelper.setClearColor();
 
+    this.windowSize = windowSize;
+
     var scene = getGameScene(windowSize);
 
     sceneTransitioner.initialize(scene);
@@ -87,7 +90,7 @@ public class CastleCastersGame implements GameLogic {
   }
 
   private Scene getGameScene(WindowSize windowSize) {
-    var sceneRenderer = new GameRenderer();
+    var sceneRenderer = new GameRenderer(resourceManager, eventBus, windowSize);
     return new GameScene(resourceManager, eventBus, sceneRenderer, GameMapName.GRASS, windowSize);
   }
 
@@ -115,8 +118,8 @@ public class CastleCastersGame implements GameLogic {
 
   @Override
   public void render() {
-    // TODO window size?
-    sceneTransitioner.getScene().render(null);
+    // TODO handle resizes
+    sceneTransitioner.getScene().render(windowSize);
   }
 
   @Override

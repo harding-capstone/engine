@@ -3,6 +3,9 @@ package com.shepherdjerred.capstone.engine.engine.map;
 import com.google.common.base.Charsets;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.shepherdjerred.capstone.engine.engine.map.tileset.TileIdTilesetMapper;
+import com.shepherdjerred.capstone.engine.engine.map.tileset.Tileset;
+import com.shepherdjerred.capstone.engine.engine.map.tileset.TilesetNameToTextureMapper;
 import com.shepherdjerred.capstone.engine.engine.resource.ByteBufferLoader;
 import com.shepherdjerred.capstone.engine.engine.resource.ResourceFileLocator;
 import com.shepherdjerred.capstone.engine.engine.resource.ResourceLoader;
@@ -14,14 +17,14 @@ import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 @AllArgsConstructor
-public class GameMapLoader implements ResourceLoader<GameMapName, GameMap> {
+public class GameMapLoader implements ResourceLoader<GameMapName, MapLayers> {
 
   private final ByteBufferLoader loader;
   private final ResourceFileLocator locator;
 
   @Override
-  public GameMap get(GameMapName identifier) throws Exception {
-    var tilesetNameMapper = new TilesetNameMapper();
+  public MapLayers get(GameMapName identifier) throws Exception {
+    var tilesetNameMapper = new TilesetNameToTextureMapper();
     var filePath = locator.getMapPath(identifier);
     var mapByteBuffer = loader.load(filePath);
     var json = byteBufferToJson(mapByteBuffer);
@@ -48,18 +51,18 @@ public class GameMapLoader implements ResourceLoader<GameMapName, GameMap> {
       tilesets.add(tileset);
     });
 
-    var tilesetTileIdMapper = new TilesetTileIdMapper(tilesets);
+    var tilesetTileIdMapper = new TileIdTilesetMapper(tilesets);
 
     var layers = json.getAsJsonArray("layers");
 
     var mapWidth = json.getAsJsonPrimitive("width").getAsInt();
     var mapHeight = json.getAsJsonPrimitive("height").getAsInt();
 
-    var dimensions = new TileDimension(mapWidth, mapHeight);
-    var gameMap = new GameMap(dimensions);
+    var dimensions = new MapDimensions(mapWidth, mapHeight);
+    var gameMap = new MapLayers(dimensions);
 
     for (int layerId = 0; layerId < layers.size(); layerId++) {
-      var layer = new Layer(dimensions);
+      var layer = new Layer(dimensions, layers.size() - layerId);
       var layerTiles = layers.get(layerId)
           .getAsJsonObject()
           .getAsJsonArray("data");
@@ -69,10 +72,18 @@ public class GameMapLoader implements ResourceLoader<GameMapName, GameMap> {
         var y = tileId / dimensions.getWidth();
         var coord = new MapCoordinate(x, y);
 
-        var tileset = tilesetTileIdMapper.getTilesetForTileId(tileId);
+        var tileTexture = layerTiles.get(tileId).getAsInt();
+
+        if (tileTexture == 0) {
+          continue;
+        }
+
+        var tileset = tilesetTileIdMapper.getTilesetForTileId(tileTexture);
 
         layer.setTile(new MapCoordinate(x, y),
-            new MapTile(coord, tileset.getTextureName(), tileset.getTextureCoordinate(tileId)));
+            new MapTile(coord,
+                tileset.getTextureName(),
+                tileset.getTextureCoordinate(tileTexture)));
       }
 
       gameMap.setLayer(layerId, layer);
