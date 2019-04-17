@@ -105,8 +105,8 @@ public class TextButton implements GameObject, Clickable, Hoverable {
   }
 
   @Override
-  public boolean isClicked() {
-    return button.isClicked();
+  public boolean isChecked() {
+    return button.isChecked();
   }
 
   @Override

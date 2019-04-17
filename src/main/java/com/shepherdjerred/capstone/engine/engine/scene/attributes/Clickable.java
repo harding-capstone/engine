@@ -11,6 +11,6 @@ public interface Clickable extends Hoverable {
 
   void onClickEnd();
 
-  boolean isClicked();
+  boolean isChecked();
 
 }

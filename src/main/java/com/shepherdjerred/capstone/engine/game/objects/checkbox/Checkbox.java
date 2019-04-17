@@ -19,6 +19,7 @@ public class Checkbox extends ClickableGameObject {
 
   @Setter
   private ScenePositioner position;
+  private boolean isChecked;
   private final SceneObjectDimensions sceneObjectDimensions;
 
   public Checkbox(ResourceManager resourceManager,
@@ -50,5 +51,11 @@ public class Checkbox extends ClickableGameObject {
 
   @Override
   public void update(float interval) {
+  }
+
+  @Override
+  public void onClickBegin() {
+    super.onClickBegin();
+    this.isChecked = !this.isChecked;
   }
 }
