@@ -41,6 +41,10 @@ public class MapRenderer implements GameObjectRenderer<MapObject> {
 
     for (Layer layer : map.getMapLayers()) {
       for (MapTile tile : layer) {
+        if (tile.getTextureName() == null) {
+          log.info(tile);
+        }
+
         var vertices = new float[] {
             0, 0, 0,
             0, RENDER_TILE_RESOLUTION, 0,

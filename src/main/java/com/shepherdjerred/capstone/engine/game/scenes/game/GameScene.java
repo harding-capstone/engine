@@ -85,17 +85,29 @@ public class GameScene implements Scene {
         matchingTiles.forEach(tile -> {
           var textureCoordinates = tile.getTextureSheetCoordinates();
 
-          var texture = (Texture) resourceManager.getUnchecked(tile.getTextureName());
-          var resX = textureCoordinates.getMinX() * texture.getWidth();
-          var resY = textureCoordinates.getMinY() * texture.getHeight();
-          var sheetX = resX / 16;
-          var sheetY = resY / 16;
+          log.info(textureCoordinates);
 
-          log.info(String.format("img x: %s, img y: %s. sheet x: %s, sheet y: %s",
-              resX,
-              resY,
-              sheetX,
-              sheetY));
+          var texture = (Texture) resourceManager.getUnchecked(tile.getTextureName());
+          var resolutionMinX = textureCoordinates.getMinX() * texture.getWidth();
+          var resolutionMinY = textureCoordinates.getMinY() * texture.getHeight();
+          var resolutionMaxX = textureCoordinates.getMaxX() * texture.getWidth();
+          var resolutionMaxY = textureCoordinates.getMaxY() * texture.getHeight();
+
+          var sheetMinX = resolutionMinX / 16;
+          var sheetMinY = resolutionMinY / 16;
+          var sheetMaxX = resolutionMaxX / 16;
+          var sheetMaxY = resolutionMaxY / 16;
+
+          log.info(String.format(
+              "img min x: %s, img min y: %s \nimg max x: %s img max y %s \nsheet min x: %s, sheet min y: %s \nsheet max x: %s, sheet max y %s",
+              resolutionMinX,
+              resolutionMinY,
+              resolutionMaxX,
+              resolutionMaxY,
+              sheetMinX,
+              sheetMinY,
+              sheetMaxX,
+              sheetMaxY));
         });
       }
     };

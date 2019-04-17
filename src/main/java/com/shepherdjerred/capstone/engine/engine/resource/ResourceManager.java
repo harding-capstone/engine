@@ -34,7 +34,7 @@ public class ResourceManager {
     var currentReferences = referenceCounter.getOrDefault(identifier, 0) + 1;
     referenceCounter.put(identifier, currentReferences);
 
-    log.info("Allocating " + identifier + ". New usage: " + currentReferences);
+    log.trace("Allocating " + identifier + ". New usage: " + currentReferences);
 
     if (resourceCache.containsKey(identifier)) {
       return (R) resourceCache.get(identifier);
@@ -58,14 +58,14 @@ public class ResourceManager {
 
   public void free(ResourceIdentifier identifier) {
     var newReferenceCount = referenceCounter.get(identifier) - 1;
-    log.info(String.format("Freeing %s %s. New reference count is %s.",
+    log.trace(String.format("Freeing %s %s. New reference count is %s.",
         identifier.getClass().getSimpleName().replace("Name", ""),
         identifier,
         newReferenceCount));
     if (newReferenceCount < 0) {
       throw new IllegalStateException("Negative reference count.");
     } else if (newReferenceCount == 0) {
-      log.info("Resource " + identifier + " no longer in use. Cleaning up.");
+      log.trace("Resource " + identifier + " no longer in use. Cleaning up.");
       resourceCache.get(identifier).cleanup();
       resourceCache.remove(identifier);
       referenceCounter.remove(identifier);

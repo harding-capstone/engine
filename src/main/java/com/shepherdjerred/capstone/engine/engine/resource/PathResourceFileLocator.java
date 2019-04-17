@@ -10,10 +10,12 @@ import com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName;
 import com.shepherdjerred.capstone.engine.engine.map.GameMapName;
 import java.util.HashMap;
 import lombok.ToString;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Returns the path to a texture file.
  */
+@Log4j2
 @ToString
 public class PathResourceFileLocator implements ResourceFileLocator {
 
@@ -44,6 +46,7 @@ public class PathResourceFileLocator implements ResourceFileLocator {
     resourcePaths.put(GameMapName.GRASS, "grass.json");
     resourcePaths.put(GameMapName.DESERT, "desert.json");
     resourcePaths.put(GameMapName.ICE, "winter.json");
+    resourcePaths.put(GameMapName.TEST, "test.json");
   }
 
   private void initializeAudioPaths() {
@@ -59,6 +62,7 @@ public class PathResourceFileLocator implements ResourceFileLocator {
     resourcePaths.put(CASTLE_TILESHEET, "tilesheets/castle.png");
     resourcePaths.put(DESERT_TILESHEET, "tilesheets/desert.png");
     resourcePaths.put(WATER_TILESHEET, "tilesheets/water.png");
+
     resourcePaths.put(DARK_DIMENSION_TILESHEET, "tilesheets/dark-dimension.png");
     resourcePaths.put(MAIN_MENU_BUTTON, "ui/buttons/main-menu-default.png");
     resourcePaths.put(MAIN_MENU_BUTTON_HOVERED,
@@ -171,21 +175,29 @@ public class PathResourceFileLocator implements ResourceFileLocator {
 
   @Override
   public String getTexturePath(TextureName textureName) {
-    return texturesBasePath + resourcePaths.getOrDefault(textureName, "unknown.png");
+    return getResourcePath(texturesBasePath, textureName);
   }
 
   @Override
   public String getFontPath(FontName fontName) {
-    return fontsBasePath + resourcePaths.get(fontName);
+    return getResourcePath(fontsBasePath, fontName);
   }
 
   @Override
   public String getAudioPath(AudioName audioName) {
-    return audioBasePath + resourcePaths.get(audioName);
+    return getResourcePath(audioBasePath, audioName);
   }
 
   @Override
   public String getMapPath(GameMapName mapName) {
-    return mapBasePath + resourcePaths.get(mapName);
+    return getResourcePath(mapBasePath, mapName);
+  }
+
+  private String getResourcePath(String basePath, ResourceIdentifier name) {
+    if (resourcePaths.containsKey(name)) {
+      return basePath + resourcePaths.get(name);
+    } else {
+      throw new IllegalStateException("Could not find resource: " + name);
+    }
   }
 }

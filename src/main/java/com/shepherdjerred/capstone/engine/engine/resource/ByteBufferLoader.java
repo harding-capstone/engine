@@ -9,13 +9,13 @@ import org.lwjgl.BufferUtils;
 public class ByteBufferLoader {
 
   public ByteBuffer load(String filePath) throws IOException {
-    log.info("Loading file from jar: " + filePath);
+    log.trace("Loading file from jar: " + filePath);
 
     try (var stream = getClass().getResourceAsStream(filePath)) {
       var bytes = stream.readAllBytes();
       var buffer = BufferUtils.createByteBuffer(bytes.length);
 
-      log.info("File size: " + bytes.length / 1024 + "KB");
+      log.trace("File size: " + bytes.length / 1024 + "KB");
 
       buffer.put(bytes);
       buffer.flip();
