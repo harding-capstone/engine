@@ -70,7 +70,7 @@ public class GameScene implements Scene {
   }
 
   private void createEventHandlerFrame() {
-    var clickEventHandler = new EventHandler<MouseButtonDownEvent>() {
+    var inspectTileEventHandler = new EventHandler<MouseButtonDownEvent>() {
       @Override
       public void handle(MouseButtonDownEvent mouseButtonDownEvent) {
         var tileSize = RENDER_TILE_RESOLUTION;
@@ -126,7 +126,7 @@ public class GameScene implements Scene {
       }
     };
 
-    eventHandlerFrame.registerHandler(MouseButtonDownEvent.class, clickEventHandler);
+    eventHandlerFrame.registerHandler(MouseButtonDownEvent.class, inspectTileEventHandler);
     eventHandlerFrame.registerHandler(KeyPressedEvent.class, keyDownHandler);
     eventHandlerFrame.registerHandler(KeyReleasedEvent.class, keyUpHandler);
   }

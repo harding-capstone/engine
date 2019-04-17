@@ -45,7 +45,7 @@ public class PathResourceFileLocator implements ResourceFileLocator {
   private void initializeMapPaths() {
     resourcePaths.put(GameMapName.GRASS, "grass.json");
     resourcePaths.put(GameMapName.DESERT, "desert.json");
-    resourcePaths.put(GameMapName.ICE, "winter.json");
+    resourcePaths.put(GameMapName.WINTER, "winter.json");
     resourcePaths.put(GameMapName.TEST, "test.json");
   }
 
@@ -58,12 +58,18 @@ public class PathResourceFileLocator implements ResourceFileLocator {
   private void initializeTexturePaths() {
     resourcePaths.put(FROST_WALL, "wall_frost.png");
     resourcePaths.put(FIRE_WIZARD_FRONT, "front_fire.png");
-    resourcePaths.put(TERRAIN_TILESHEET, "tilesheets/terrain.png");
-    resourcePaths.put(CASTLE_TILESHEET, "tilesheets/castle.png");
-    resourcePaths.put(DESERT_TILESHEET, "tilesheets/desert.png");
-    resourcePaths.put(WATER_TILESHEET, "tilesheets/water.png");
-
-    resourcePaths.put(DARK_DIMENSION_TILESHEET, "tilesheets/dark-dimension.png");
+    resourcePaths.put(TERRAIN_TILESHEET, "tilesheets/main/terrain.png");
+    resourcePaths.put(CASTLE_TILESHEET, "tilesheets/main/castle.png");
+    resourcePaths.put(DESERT_TILESHEET, "tilesheets/main/desert.png");
+    resourcePaths.put(WATER_TILESHEET, "tilesheets/main/water.png");
+    resourcePaths.put(WINTER_TILE_B_TILESHEET, "tilesheets/winter/tf_winter_tileB.png");
+    resourcePaths.put(WINTER_TILE_C_TILESHEET, "tilesheets/winter/tf_winter_tileC.png");
+    resourcePaths.put(DARK_DIMENSION_TILESHEET, "tilesheets/darkdimension/tf_darkdimension_sheet.png");
+    resourcePaths.put(WINTER_TERRAIN_TILESHEET, "tilesheets/winter/tf_winter_terrain.png");
+    resourcePaths.put(TORCH_TILESHEET, "tilesheets/main/animated/torch.png");
+    resourcePaths.put(ICE_TILESHEET, "tilesheets/animations/ice.png");
+    resourcePaths.put(CHESTS_TILESHEET, "tilesheets/characters/chests.png");
+    resourcePaths.put(B_RUINS_1_TILESHEET, "tilesheets/ruins/tf_B_ruins1.png");
     resourcePaths.put(MAIN_MENU_BUTTON, "ui/buttons/main-menu-default.png");
     resourcePaths.put(MAIN_MENU_BUTTON_HOVERED,
         "ui/buttons/main-menu-hovered.png");

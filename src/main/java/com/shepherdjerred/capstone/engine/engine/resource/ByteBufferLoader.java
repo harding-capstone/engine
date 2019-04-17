@@ -12,6 +12,9 @@ public class ByteBufferLoader {
     log.trace("Loading file from jar: " + filePath);
 
     try (var stream = getClass().getResourceAsStream(filePath)) {
+      if (stream == null) {
+        throw new IllegalStateException("File doesn't exist: " + filePath);
+      }
       var bytes = stream.readAllBytes();
       var buffer = BufferUtils.createByteBuffer(bytes.length);
 

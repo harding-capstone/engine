@@ -32,21 +32,10 @@ public class Tileset implements Comparable<Tileset> {
     var width = columns * tileSize;
     var height = rows * tileSize;
 
-    log.info(row);
-
-    log.info(String.format("tileset: %s, tile value: %s || %s, row: %s, col: %s",
-        name,
-        value,
-        tile,
-        row,
-        column));
-
     double minX = column * tileSize;
     double maxX = column * tileSize + tileSize;
     double minY = row * tileSize;
     double maxY = row * tileSize + tileSize;
-
-//    log.info(String.format("width: %s, height %s", width, height));
 
     double scaledMinX = new BigDecimal(minX)
         .divide(BigDecimal.valueOf(width), MathContext.DECIMAL128)
@@ -60,13 +49,6 @@ public class Tileset implements Comparable<Tileset> {
     double scaledMaxY = new BigDecimal(maxY)
         .divide(BigDecimal.valueOf(height), MathContext.DECIMAL128)
         .floatValue();
-
-//    log.info(String.format("minX %s maxX %s minY %s maxY %s", minX, maxX, minY, maxY));
-//    log.info(String.format("SCALED minX %s maxX %s minY %s maxY %s",
-//        scaledMinX,
-//        scaledMaxX,
-//        scaledMinY,
-//        scaledMaxY));
 
     return new TextureSheetCoordinates(scaledMinX, scaledMaxX, scaledMinY, scaledMaxY);
   }

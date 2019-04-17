@@ -64,8 +64,6 @@ public class GameMapLoader implements ResourceLoader<GameMapName, MapLayers> {
     var mapDimensions = new MapDimensions(mapWidth, mapHeight);
     var gameMap = new MapLayers(mapDimensions);
 
-    log.info("Map has " + layers.size() + " layers");
-
     for (int layerId = 0; layerId < layers.size(); layerId++) {
 
       var layer = new Layer(mapDimensions, layers.size() - layerId);
@@ -73,7 +71,6 @@ public class GameMapLoader implements ResourceLoader<GameMapName, MapLayers> {
           .getAsJsonObject()
           .getAsJsonArray("data");
 
-      log.info(String.format("Layer %s has %s tiles", layerId, layerTiles.size()));
       for (int tileNumber = 0; tileNumber < layerTiles.size(); tileNumber++) {
         var x = tileNumber % mapDimensions.getWidth();
         var y = tileNumber / mapDimensions.getWidth();
@@ -92,10 +89,6 @@ public class GameMapLoader implements ResourceLoader<GameMapName, MapLayers> {
                 tileset.getTextureName(),
                 tileset.getTextureCoordinate(tileTexture)));
       }
-
-      log.info(String.format("After processing, layer %s has %s tiles",
-          layerId,
-          layer.getTiles().size()));
 
       gameMap.setLayer(layerId, layer);
     }
