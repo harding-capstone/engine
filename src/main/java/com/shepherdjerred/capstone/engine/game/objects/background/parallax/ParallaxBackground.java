@@ -1,11 +1,12 @@
 package com.shepherdjerred.capstone.engine.game.objects.background.parallax;
 
-import com.shepherdjerred.capstone.engine.engine.object.SceneObjectDimensions;
 import com.shepherdjerred.capstone.engine.engine.object.GameObject;
 import com.shepherdjerred.capstone.engine.engine.object.GameObjectRenderer;
-import com.shepherdjerred.capstone.engine.engine.scene.position.AbsoluteScenePositioner;
-import com.shepherdjerred.capstone.engine.engine.scene.position.ScenePositioner;
+import com.shepherdjerred.capstone.engine.engine.object.SceneObjectDimensions;
 import com.shepherdjerred.capstone.engine.engine.scene.SceneCoordinate;
+import com.shepherdjerred.capstone.engine.engine.scene.position.AbsoluteScenePositioner;
+import com.shepherdjerred.capstone.engine.engine.scene.position.SceneCoordinateOffset;
+import com.shepherdjerred.capstone.engine.engine.scene.position.ScenePositioner;
 import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
 import java.util.Random;
 import java.util.SortedMap;
@@ -31,7 +32,8 @@ public class ParallaxBackground implements GameObject {
 
   public ParallaxBackground(GameObjectRenderer<ParallaxBackground> renderer, Type type) {
     this.renderer = renderer;
-    this.position = new AbsoluteScenePositioner(new SceneCoordinate(0, 0, 0));
+    this.position = new AbsoluteScenePositioner(new SceneCoordinate(0, 0, 0),
+        new SceneCoordinateOffset(0, 0));
     this.type = type;
     this.instances = new TreeMap<>();
     this.texturesMapper = new ParallaxTexturesMapper();

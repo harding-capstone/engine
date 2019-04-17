@@ -187,15 +187,6 @@
         <version>1.6.0</version>
         <executions>
           <execution>
-            <id>run-java</id>
-            <goals>
-              <goal>java</goal>
-            </goals>
-            <configuration>
-              <mainClass>com.shepherdjerred.capstone.engine.Main</mainClass>
-            </configuration>
-          </execution>
-          <execution>
             <id>run-exec</id>
             <goals>
               <goal>exec</goal>

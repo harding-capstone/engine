@@ -80,13 +80,14 @@ public class CastleCastersGame implements GameLogic {
     this.windowSize = windowSize;
 
     var scene = getGameScene(windowSize);
-
     sceneTransitioner.initialize(scene);
+    audioPlayer.initialize();
+    registerEventHandlers();
+  }
 
+  private void registerEventHandlers() {
     eventBus.registerHandler(SceneTransitionEvent.class,
         new SceneTransitionEventHandler(sceneTransitioner));
-
-    audioPlayer.initialize();
   }
 
   private Scene getGameScene(WindowSize windowSize) {

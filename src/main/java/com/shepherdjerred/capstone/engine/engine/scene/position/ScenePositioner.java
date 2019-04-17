@@ -6,6 +6,10 @@ import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
 
 public interface ScenePositioner {
 
-  SceneCoordinate getSceneCoordinate(WindowSize windowSize, SceneObjectDimensions sceneObjectDimensions);
+  SceneCoordinate getSceneCoordinate(WindowSize windowSize,
+      SceneObjectDimensions sceneObjectDimensions);
 
+  void setOffset(SceneCoordinateOffset offset);
+
+  SceneCoordinateOffset getOffset();
 }

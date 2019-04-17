@@ -3,8 +3,10 @@ package com.shepherdjerred.capstone.engine.engine.graphics.mesh;
 import com.shepherdjerred.capstone.engine.engine.graphics.texture.Texture;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.ToString;
 
 @Getter
+@ToString
 @AllArgsConstructor
 public class TexturedMesh {
 

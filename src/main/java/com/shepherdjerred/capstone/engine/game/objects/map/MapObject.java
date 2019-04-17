@@ -7,6 +7,7 @@ import com.shepherdjerred.capstone.engine.engine.object.SceneObjectDimensions;
 import com.shepherdjerred.capstone.engine.engine.resource.ResourceManager;
 import com.shepherdjerred.capstone.engine.engine.scene.SceneCoordinate;
 import com.shepherdjerred.capstone.engine.engine.scene.position.AbsoluteScenePositioner;
+import com.shepherdjerred.capstone.engine.engine.scene.position.SceneCoordinateOffset;
 import com.shepherdjerred.capstone.engine.engine.scene.position.ScenePositioner;
 import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
 import lombok.Getter;
@@ -52,7 +53,7 @@ public class MapObject implements GameObject {
 
   @Override
   public ScenePositioner getPosition() {
-    return new AbsoluteScenePositioner(new SceneCoordinate(0, 0, 0));
+    return new AbsoluteScenePositioner(new SceneCoordinate(0, 0, 0), new SceneCoordinateOffset(0, 0));
   }
 
   @Override

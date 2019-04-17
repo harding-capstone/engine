@@ -5,6 +5,7 @@ import com.shepherdjerred.capstone.engine.engine.object.GameObject;
 import com.shepherdjerred.capstone.engine.engine.resource.ResourceManager;
 import com.shepherdjerred.capstone.engine.engine.scene.Scene;
 import com.shepherdjerred.capstone.engine.engine.scene.SceneRenderer;
+import com.shepherdjerred.capstone.engine.engine.scene.position.SceneCoordinateOffset;
 import com.shepherdjerred.capstone.engine.engine.scene.position.WindowRelativeScenePositioner;
 import com.shepherdjerred.capstone.engine.engine.scene.position.WindowRelativeScenePositioner.HorizontalPosition;
 import com.shepherdjerred.capstone.engine.engine.scene.position.WindowRelativeScenePositioner.VerticalPosition;
@@ -50,8 +51,7 @@ public class TeamIntroScene implements Scene {
         new LogoRenderer(resourceManager),
         new WindowRelativeScenePositioner(HorizontalPosition.CENTER,
             VerticalPosition.CENTER,
-            0,
-            0,
+            new SceneCoordinateOffset(0, 0),
             100),
         1.102292769,
         300,

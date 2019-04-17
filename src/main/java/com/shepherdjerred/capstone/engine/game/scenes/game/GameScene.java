@@ -2,6 +2,7 @@ package com.shepherdjerred.capstone.engine.game.scenes.game;
 
 import static com.shepherdjerred.capstone.engine.game.Constants.RENDER_TILE_RESOLUTION;
 
+import com.shepherdjerred.capstone.common.player.Element;
 import com.shepherdjerred.capstone.engine.engine.events.input.KeyPressedEvent;
 import com.shepherdjerred.capstone.engine.engine.events.input.KeyReleasedEvent;
 import com.shepherdjerred.capstone.engine.engine.events.input.MouseButtonDownEvent;
@@ -11,10 +12,16 @@ import com.shepherdjerred.capstone.engine.engine.map.GameMapName;
 import com.shepherdjerred.capstone.engine.engine.map.MapCoordinate;
 import com.shepherdjerred.capstone.engine.engine.map.MapTile;
 import com.shepherdjerred.capstone.engine.engine.object.GameObject;
+import com.shepherdjerred.capstone.engine.engine.object.SceneObjectDimensions;
 import com.shepherdjerred.capstone.engine.engine.resource.ResourceManager;
 import com.shepherdjerred.capstone.engine.engine.scene.Scene;
+import com.shepherdjerred.capstone.engine.engine.scene.SceneCoordinate;
+import com.shepherdjerred.capstone.engine.engine.scene.position.AbsoluteScenePositioner;
+import com.shepherdjerred.capstone.engine.engine.scene.position.SceneCoordinateOffset;
 import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
 import com.shepherdjerred.capstone.engine.game.objects.map.MapObject;
+import com.shepherdjerred.capstone.engine.game.objects.wizard.Wizard;
+import com.shepherdjerred.capstone.engine.game.objects.wizard.Wizard.State;
 import com.shepherdjerred.capstone.events.Event;
 import com.shepherdjerred.capstone.events.EventBus;
 import com.shepherdjerred.capstone.events.handlers.EventHandler;
@@ -39,6 +46,7 @@ public class GameScene implements Scene {
   private final WindowSize windowSize;
   private final GameMapName gameMapName;
   private MapObject mapObject;
+  private Wizard wizard;
   private final EventHandlerFrame<Event> eventHandlerFrame;
   private final Map<Key, Boolean> pressedKeys;
 
@@ -133,7 +141,13 @@ public class GameScene implements Scene {
 
   private void createGameObjects() {
     mapObject = new MapObject(resourceManager, gameMapName);
+    wizard = new Wizard(resourceManager,
+        new AbsoluteScenePositioner(new SceneCoordinate(0, 0, 100),
+            new SceneCoordinateOffset(0, 0)),
+        Element.FIRE,
+        new SceneObjectDimensions(RENDER_TILE_RESOLUTION * 2, RENDER_TILE_RESOLUTION * 2));
     gameObjects.add(mapObject);
+    gameObjects.add(wizard);
   }
 
   @Override
@@ -145,21 +159,48 @@ public class GameScene implements Scene {
 
   @Override
   public void updateState(float interval) {
-    var currY = mapObject.getYOffset();
-    var currX = mapObject.getXOffset();
+    var currMapX = mapObject.getXOffset();
+    var currMapY = mapObject.getYOffset();
+
+    var currWizX = wizard.getPosition().getOffset().getXOffset();
+    var currWizY = wizard.getPosition().getOffset().getYOffset();
+
+    if (pressedKeys.getOrDefault(Key.W, false)) {
+      currWizY -= 10;
+      wizard.setState(State.WALKING_UP);
+    }
+    if (pressedKeys.getOrDefault(Key.A, false)) {
+      currWizX -= 10;
+      wizard.setState(State.WALKING_LEFT);
+    }
+    if (pressedKeys.getOrDefault(Key.S, false)) {
+      currWizY += 10;
+      wizard.setState(State.WALKING_DOWN);
+    }
+    if (pressedKeys.getOrDefault(Key.D, false)) {
+      currWizX += 10;
+      wizard.setState(State.WALKING_RIGHT);
+    }
+
+    wizard.getPosition().setOffset(new SceneCoordinateOffset(currWizX, currWizY));
 
     if (pressedKeys.getOrDefault(Key.UP, false)) {
-      mapObject.setYOffset(currY + 100);
+      currMapY += 100;
     }
     if (pressedKeys.getOrDefault(Key.DOWN, false)) {
-      mapObject.setYOffset(currY - 100);
+      currMapY -= 100;
     }
     if (pressedKeys.getOrDefault(Key.LEFT, false)) {
-      mapObject.setXOffset(currX + 100);
+      currMapX += 100;
     }
     if (pressedKeys.getOrDefault(Key.RIGHT, false)) {
-      mapObject.setXOffset(currX - 100);
+      currMapX -= 100;
     }
+
+    mapObject.setXOffset(currMapX);
+    mapObject.setYOffset(currMapY);
+
+    gameObjects.forEach(object -> object.update(interval));
   }
 
   @Override

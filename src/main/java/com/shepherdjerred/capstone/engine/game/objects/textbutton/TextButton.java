@@ -9,6 +9,7 @@ import com.shepherdjerred.capstone.engine.engine.scene.SceneCoordinate;
 import com.shepherdjerred.capstone.engine.engine.scene.attributes.Clickable;
 import com.shepherdjerred.capstone.engine.engine.scene.attributes.Hoverable;
 import com.shepherdjerred.capstone.engine.engine.scene.position.ObjectRelativeScenePositioner;
+import com.shepherdjerred.capstone.engine.engine.scene.position.SceneCoordinateOffset;
 import com.shepherdjerred.capstone.engine.engine.scene.position.ScenePositioner;
 import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
 import com.shepherdjerred.capstone.engine.game.objects.button.Button;
@@ -43,10 +44,7 @@ public class TextButton implements GameObject, Clickable, Hoverable {
         color,
         fontSize,
         new ObjectRelativeScenePositioner(button,
-            0,
-            0,
-            0,
-            0,
+            new SceneCoordinateOffset(0, 0),
             (int) positioner.getSceneCoordinate(windowSize, dimensions).getZ() + 1));
   }
 
@@ -105,8 +103,8 @@ public class TextButton implements GameObject, Clickable, Hoverable {
   }
 
   @Override
-  public boolean isChecked() {
-    return button.isChecked();
+  public boolean isClicked() {
+    return button.isClicked();
   }
 
   @Override

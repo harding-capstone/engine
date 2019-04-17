@@ -14,6 +14,7 @@ import com.shepherdjerred.capstone.engine.engine.resource.ResourceManager;
 import com.shepherdjerred.capstone.engine.engine.scene.Scene;
 import com.shepherdjerred.capstone.engine.engine.scene.SceneRenderer;
 import com.shepherdjerred.capstone.engine.engine.scene.position.ObjectRelativeScenePositioner;
+import com.shepherdjerred.capstone.engine.engine.scene.position.SceneCoordinateOffset;
 import com.shepherdjerred.capstone.engine.engine.scene.position.WindowRelativeScenePositioner;
 import com.shepherdjerred.capstone.engine.engine.scene.position.WindowRelativeScenePositioner.HorizontalPosition;
 import com.shepherdjerred.capstone.engine.engine.scene.position.WindowRelativeScenePositioner.VerticalPosition;
@@ -24,7 +25,6 @@ import com.shepherdjerred.capstone.engine.game.handlers.MouseUpClickableHandler;
 import com.shepherdjerred.capstone.engine.game.objects.background.parallax.ParallaxBackground;
 import com.shepherdjerred.capstone.engine.game.objects.background.parallax.ParallaxBackground.Type;
 import com.shepherdjerred.capstone.engine.game.objects.background.parallax.ParallaxBackgroundRenderer;
-import com.shepherdjerred.capstone.engine.game.objects.button.Button;
 import com.shepherdjerred.capstone.engine.game.objects.logo.Logo;
 import com.shepherdjerred.capstone.engine.game.objects.logo.LogoRenderer;
 import com.shepherdjerred.capstone.engine.game.objects.text.Text;
@@ -72,8 +72,7 @@ public class MainMenuScene implements Scene {
         new LogoRenderer(resourceManager),
         new WindowRelativeScenePositioner(HorizontalPosition.CENTER,
             VerticalPosition.TOP,
-            0,
-            50,
+            new SceneCoordinateOffset(0, 50),
             0),
         1.485517919,
         200,
@@ -91,8 +90,7 @@ public class MainMenuScene implements Scene {
         12,
         new WindowRelativeScenePositioner(HorizontalPosition.RIGHT,
             VerticalPosition.BOTTOM,
-            -10,
-            -10,
+            new SceneCoordinateOffset(-10, -10),
             0)
     );
 
@@ -100,7 +98,7 @@ public class MainMenuScene implements Scene {
 
     var singlePlayerButton = new TextButton(resourceManager,
         windowSize,
-        new ObjectRelativeScenePositioner(logo, 0, 0, 0, 0, 1),
+        new ObjectRelativeScenePositioner(logo, new SceneCoordinateOffset(0, 0), 1),
         "Single Player",
         FontName.M5X7,
         Color.white(),
@@ -123,61 +121,9 @@ public class MainMenuScene implements Scene {
         FontName.M5X7,
         Color.white(),
         12,
-        new ObjectRelativeScenePositioner(singlePlayerButton, 0, 0, 0, 0, 2));
-
-    var multiPlayerButton = new TextButton(resourceManager,
-        windowSize,
-        new ObjectRelativeScenePositioner(singlePlayerButton, 100, 0, 0, 0, 0),
-        "Multiplayer",
-        FontName.M5X7,
-        Color.white(),
-        12,
-        buttonSize,
-        Button.Type.GENERIC,
-        () -> {
-        });
-
-    var optionsButton = new TextButton(resourceManager,
-        windowSize,
-        new ObjectRelativeScenePositioner(multiPlayerButton, 100, 0, 0, 0, 0),
-        "Options",
-        FontName.M5X7,
-        Color.white(),
-        12,
-        buttonSize,
-        Button.Type.GENERIC,
-        () -> {
-        });
-
-    var aboutButton = new TextButton(resourceManager,
-        windowSize,
-        new ObjectRelativeScenePositioner(optionsButton, 100, 0, 0, 0, 0),
-        "About",
-        FontName.M5X7,
-        Color.white(),
-        12,
-        buttonSize,
-        Button.Type.GENERIC,
-        () -> {
-        });
-
-    var helpButton = new TextButton(resourceManager,
-        windowSize,
-        new ObjectRelativeScenePositioner(aboutButton, 100, 0, 0, 0, 0),
-        "Help",
-        FontName.M5X7,
-        Color.white(),
-        12,
-        buttonSize,
-        Button.Type.GENERIC,
-        () -> {
-        });
+        new ObjectRelativeScenePositioner(singlePlayerButton, new SceneCoordinateOffset(0, 0), 2));
 
     gameObjects.add(singlePlayerButton);
-    gameObjects.add(multiPlayerButton);
-//    gameObjects.add(optionsButton);
-//    gameObjects.add(helpButton);
-//    gameObjects.add(aboutButton);
     gameObjects.add(logo);
     gameObjects.add(spt);
     gameObjects.add(text);

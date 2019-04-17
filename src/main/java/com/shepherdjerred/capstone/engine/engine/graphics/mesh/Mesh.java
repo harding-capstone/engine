@@ -22,11 +22,13 @@ import static org.lwjgl.opengl.GL30.glDeleteVertexArrays;
 import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 
 import com.google.common.base.Preconditions;
+import lombok.ToString;
 import org.lwjgl.system.MemoryStack;
 
 /**
  * A 3D object that is drawable and has a texture.
  */
+@ToString
 public class Mesh {
 
   private static final int VERTICES_BUFFER_INDEX = 0;

@@ -1,13 +1,13 @@
 package com.shepherdjerred.capstone.engine.engine.events.handlers.input;
 
-import static com.shepherdjerred.capstone.engine.engine.input.keyboard.Key.B;
-import static com.shepherdjerred.capstone.engine.engine.input.keyboard.Key.D;
-import static com.shepherdjerred.capstone.engine.engine.input.keyboard.Key.W;
+import static com.shepherdjerred.capstone.engine.engine.input.keyboard.Key.EIGHT;
+import static com.shepherdjerred.capstone.engine.engine.input.keyboard.Key.NINE;
+import static com.shepherdjerred.capstone.engine.engine.input.keyboard.Key.ZERO;
 
-import com.shepherdjerred.capstone.engine.engine.events.input.KeyReleasedEvent;
 import com.shepherdjerred.capstone.engine.engine.events.ToggleBlendingEvent;
 import com.shepherdjerred.capstone.engine.engine.events.ToggleDepthEvent;
 import com.shepherdjerred.capstone.engine.engine.events.ToggleWireframeEvent;
+import com.shepherdjerred.capstone.engine.engine.events.input.KeyReleasedEvent;
 import com.shepherdjerred.capstone.events.Event;
 import com.shepherdjerred.capstone.events.EventBus;
 import com.shepherdjerred.capstone.events.handlers.EventHandler;
@@ -21,13 +21,13 @@ public class KeyReleasedEventHandler implements EventHandler<KeyReleasedEvent> {
   @Override
   public void handle(KeyReleasedEvent keyReleasedEvent) {
     var key = keyReleasedEvent.getKey();
-    if (key == W) {
+    if (key == ZERO) {
       eventBus.dispatch(new ToggleWireframeEvent());
     }
-    if (key == B) {
+    if (key == NINE) {
       eventBus.dispatch(new ToggleBlendingEvent());
     }
-    if (key == D) {
+    if (key == EIGHT) {
       eventBus.dispatch(new ToggleDepthEvent());
     }
   }

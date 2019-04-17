@@ -56,8 +56,14 @@ public class PathResourceFileLocator implements ResourceFileLocator {
   }
 
   private void initializeTexturePaths() {
-    resourcePaths.put(FROST_WALL, "wall_frost.png");
-    resourcePaths.put(FIRE_WIZARD_FRONT, "front_fire.png");
+    resourcePaths.put(ICE_WALL, "walls/wall_frost.png");
+    resourcePaths.put(EARTH_WALL, "walls/wall_earth_elem.png");
+    resourcePaths.put(FIRE_WALL, "walls/wall_fire_elem.png");
+    resourcePaths.put(AIR_WALL, "walls/wall_air_elem.png");
+    resourcePaths.put(FIRE_WIZARD_FRONT, "wizards/front_fire.png");
+    resourcePaths.put(FIRE_WIZARD_BACK, "wizards/back_fire.png");
+    resourcePaths.put(FIRE_WIZARD_SIDE, "wizards/side_fire.png");
+    resourcePaths.put(FIRE_WIZARD_CAST, "wizards/cast_fire.png");
     resourcePaths.put(TERRAIN_TILESHEET, "tilesheets/main/terrain.png");
     resourcePaths.put(CASTLE_TILESHEET, "tilesheets/main/castle.png");
     resourcePaths.put(DESERT_TILESHEET, "tilesheets/main/desert.png");

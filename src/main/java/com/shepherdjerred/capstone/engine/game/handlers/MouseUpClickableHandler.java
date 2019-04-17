@@ -15,7 +15,7 @@ public class MouseUpClickableHandler implements EventHandler<MouseButtonUpEvent>
   public void handle(MouseButtonUpEvent mouseButtonUpEvent) {
     scene.getGameObjects().forEach(element -> {
       if (element instanceof Clickable) {
-        if (((Clickable) element).isChecked()) {
+        if (((Clickable) element).isClicked()) {
           ((Clickable) element).onClickEnd();
         }
       }
