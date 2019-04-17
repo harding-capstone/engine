@@ -1,4 +1,4 @@
-package com.shepherdjerred.capstone.engine.game.scenes.lobby.singleplayer;
+package com.shepherdjerred.capstone.engine.game.scenes.lobby;
 
 import com.shepherdjerred.capstone.engine.engine.events.WindowResizeEvent;
 import com.shepherdjerred.capstone.engine.engine.graphics.Color;
@@ -17,7 +17,7 @@ import com.shepherdjerred.capstone.events.handlers.EventHandler;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-public class SinglePlayerLobbyRenderer implements SceneRenderer<SinglePlayerLobbyScene> {
+public class LobbyRenderer implements SceneRenderer<LobbyScene> {
 
   private final ResourceManager resourceManager;
   private final EventBus<Event> eventBus;
@@ -25,7 +25,7 @@ public class SinglePlayerLobbyRenderer implements SceneRenderer<SinglePlayerLobb
   private ProjectionMatrix projectionMatrix;
   private ShaderProgram defaultShaderProgram;
 
-  public SinglePlayerLobbyRenderer(ResourceManager resourceManager,
+  public LobbyRenderer(ResourceManager resourceManager,
       EventBus<Event> eventBus,
       WindowSize windowSize) {
     this.resourceManager = resourceManager;
@@ -34,7 +34,7 @@ public class SinglePlayerLobbyRenderer implements SceneRenderer<SinglePlayerLobb
   }
 
   @Override
-  public void render(SinglePlayerLobbyScene scene) {
+  public void render(LobbyScene scene) {
     OpenGlHelper.clearScreen();
     updateProjectionMatrix();
 
@@ -45,7 +45,7 @@ public class SinglePlayerLobbyRenderer implements SceneRenderer<SinglePlayerLobb
   }
 
   @Override
-  public void initialize(SinglePlayerLobbyScene scene) throws Exception {
+  public void initialize(LobbyScene scene) throws Exception {
     updateProjectionMatrix();
     createShaderProgram();
     registerEventHandlers();

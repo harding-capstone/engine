@@ -1,5 +1,7 @@
 package com.shepherdjerred.capstone.engine.game.scenes.mainmenu;
 
+import static com.shepherdjerred.capstone.engine.game.objects.button.Button.Type.HOME;
+
 import com.shepherdjerred.capstone.engine.engine.events.input.MouseButtonDownEvent;
 import com.shepherdjerred.capstone.engine.engine.events.input.MouseButtonUpEvent;
 import com.shepherdjerred.capstone.engine.engine.events.input.MouseMoveEvent;
@@ -28,8 +30,8 @@ import com.shepherdjerred.capstone.engine.game.objects.logo.LogoRenderer;
 import com.shepherdjerred.capstone.engine.game.objects.text.Text;
 import com.shepherdjerred.capstone.engine.game.objects.text.TextRenderer;
 import com.shepherdjerred.capstone.engine.game.objects.textbutton.TextButton;
-import com.shepherdjerred.capstone.engine.game.scenes.lobby.singleplayer.SinglePlayerLobbyRenderer;
-import com.shepherdjerred.capstone.engine.game.scenes.lobby.singleplayer.SinglePlayerLobbyScene;
+import com.shepherdjerred.capstone.engine.game.scenes.lobby.LobbyRenderer;
+import com.shepherdjerred.capstone.engine.game.scenes.lobby.LobbyScene;
 import com.shepherdjerred.capstone.events.Event;
 import com.shepherdjerred.capstone.events.EventBus;
 import com.shepherdjerred.capstone.events.handlers.EventHandlerFrame;
@@ -89,35 +91,43 @@ public class MainMenuScene implements Scene {
         12,
         new WindowRelativeScenePositioner(HorizontalPosition.RIGHT,
             VerticalPosition.BOTTOM,
-            0,
-            0,
+            -10,
+            -10,
             0)
     );
 
-    var buttonSize = new SceneObjectDimensions(250, 50);
+    var buttonSize = new SceneObjectDimensions(100, 50);
 
     var singlePlayerButton = new TextButton(resourceManager,
         windowSize,
-        new ObjectRelativeScenePositioner(logo, 200, 0, 0, 0, 0),
+        new ObjectRelativeScenePositioner(logo, 0, 0, 0, 0, 1),
         "Single Player",
         FontName.M5X7,
         Color.white(),
         12,
         buttonSize,
-        Button.Type.GENERIC,
+        HOME,
         () -> {
-          var scene = new SinglePlayerLobbyScene(background,
+          var scene = new LobbyScene(background,
               eventBus,
               resourceManager,
-              new SinglePlayerLobbyRenderer(resourceManager,
+              new LobbyRenderer(resourceManager,
                   eventBus,
                   windowSize));
           eventBus.dispatch(new SceneTransitionEvent(scene));
         });
 
+    var spt = new Text(
+        new TextRenderer(resourceManager),
+        "Single Player",
+        FontName.M5X7,
+        Color.white(),
+        12,
+        new ObjectRelativeScenePositioner(singlePlayerButton, 0, 0, 0, 0, 2));
+
     var multiPlayerButton = new TextButton(resourceManager,
         windowSize,
-        new ObjectRelativeScenePositioner(singlePlayerButton, 0, 0, 0, 0, 0),
+        new ObjectRelativeScenePositioner(singlePlayerButton, 100, 0, 0, 0, 0),
         "Multiplayer",
         FontName.M5X7,
         Color.white(),
@@ -164,11 +174,12 @@ public class MainMenuScene implements Scene {
         });
 
     gameObjects.add(singlePlayerButton);
-//    gameObjects.add(multiPlayerButton);
+    gameObjects.add(multiPlayerButton);
 //    gameObjects.add(optionsButton);
 //    gameObjects.add(helpButton);
 //    gameObjects.add(aboutButton);
     gameObjects.add(logo);
+    gameObjects.add(spt);
     gameObjects.add(text);
     gameObjects.add(background);
   }

@@ -37,7 +37,7 @@ public class TextRenderer implements GameObjectRenderer<Text> {
     var chars = gameObject.getText().toCharArray();
 
     var currentX = 0;
-    var currentY = 0;
+    var currentY = 24;
     for (int i = 0; i < chars.length; i++) {
       char character = chars[i];
 

@@ -55,7 +55,11 @@ public class PathResourceFileLocator implements ResourceFileLocator {
   private void initializeTexturePaths() {
     resourcePaths.put(FROST_WALL, "wall_frost.png");
     resourcePaths.put(FIRE_WIZARD_FRONT, "front_fire.png");
-    resourcePaths.put(TERRAIN_TILESHEET, "terrain.png");
+    resourcePaths.put(TERRAIN_TILESHEET, "tilesheets/terrain.png");
+    resourcePaths.put(CASTLE_TILESHEET, "tilesheets/castle.png");
+    resourcePaths.put(DESERT_TILESHEET, "tilesheets/desert.png");
+    resourcePaths.put(WATER_TILESHEET, "tilesheets/water.png");
+    resourcePaths.put(DARK_DIMENSION_TILESHEET, "tilesheets/dark-dimension.png");
     resourcePaths.put(MAIN_MENU_BUTTON, "ui/buttons/main-menu-default.png");
     resourcePaths.put(MAIN_MENU_BUTTON_HOVERED,
         "ui/buttons/main-menu-hovered.png");
@@ -99,7 +103,7 @@ public class PathResourceFileLocator implements ResourceFileLocator {
     resourcePaths.put(CEMETERY_NIGHT_C,
         "ui/backgrounds/parallax/cemetery-night/cemetery-night-c.png");
     resourcePaths.put(CEMETERY_NIGHT_D,
-        "ui/backgrounds/parallax/cemetery-night/cemetery-night-D.png");
+        "ui/backgrounds/parallax/cemetery-night/cemetery-night-d.png");
     resourcePaths.put(CEMETERY_NIGHT_E,
         "ui/backgrounds/parallax/cemetery-night/cemetery-night-e.png");
     resourcePaths.put(DESERT_A,

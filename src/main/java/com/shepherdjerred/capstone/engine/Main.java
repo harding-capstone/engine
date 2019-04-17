@@ -18,6 +18,7 @@ public class Main {
       run();
     } catch (Exception e) {
       log.catching(e);
+      log.error(e);
       System.exit(1);
     }
   }

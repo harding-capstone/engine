@@ -56,4 +56,13 @@ public class TextureSheetCoordinates {
         topRight.getX(), topRight.getY()
     };
   }
+
+  public float[] asIndexedFloatArray() {
+    return new float[] {
+        bottomLeft.getX(), bottomLeft.getY(),
+        topLeft.getX(), topLeft.getY(),
+        bottomRight.getX(), bottomRight.getY(),
+        topRight.getX(), topRight.getY()
+    };
+  }
 }

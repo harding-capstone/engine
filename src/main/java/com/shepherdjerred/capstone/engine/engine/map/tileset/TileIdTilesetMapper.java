@@ -2,10 +2,12 @@ package com.shepherdjerred.capstone.engine.engine.map.tileset;
 
 import java.util.SortedSet;
 import lombok.AllArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Finds what tileset a tile ID belongs to based on a set of tilesets.
  */
+@Log4j2
 @AllArgsConstructor
 public class TileIdTilesetMapper {
 
@@ -21,6 +23,8 @@ public class TileIdTilesetMapper {
         lastMatch = tileset;
       }
     }
+
+//    log.info(String.format("%s matches %s", tileId, lastMatch));
 
     return lastMatch;
   }

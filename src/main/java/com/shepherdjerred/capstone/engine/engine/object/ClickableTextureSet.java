@@ -5,11 +5,11 @@ import com.shepherdjerred.capstone.engine.engine.object.ClickableGameObject.Stat
 import java.util.HashMap;
 import java.util.Map;
 
-public class HoveredTextureSet {
+public class ClickableTextureSet {
 
   private final Map<State, TextureName> stateTextureMap;
 
-  public HoveredTextureSet(TextureName defaultTexture, TextureName hovered, TextureName clicked) {
+  public ClickableTextureSet(TextureName defaultTexture, TextureName hovered, TextureName clicked) {
     stateTextureMap = new HashMap<>();
     stateTextureMap.put(State.INACTIVE, defaultTexture);
     stateTextureMap.put(State.HOVERED, hovered);

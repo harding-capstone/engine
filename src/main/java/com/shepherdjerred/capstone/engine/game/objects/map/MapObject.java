@@ -22,7 +22,7 @@ public class MapObject implements GameObject {
   public MapObject(ResourceManager resourceManager, GameMapName gameMapName) {
     this.resourceManager = resourceManager;
     this.gameMapName = gameMapName;
-    this.mapRenderer = new MapRenderer();
+    this.mapRenderer = new MapRenderer(resourceManager);
   }
 
   @Override

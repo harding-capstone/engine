@@ -56,6 +56,7 @@ public class Button extends ClickableGameObject {
   }
 
   public enum Type {
+    HOME,
     GENERIC
   }
 }

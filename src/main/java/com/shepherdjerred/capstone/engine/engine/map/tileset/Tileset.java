@@ -5,7 +5,9 @@ import com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureSheetCo
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
+import lombok.extern.log4j.Log4j2;
 
+@Log4j2
 @Getter
 @ToString
 @AllArgsConstructor
@@ -14,6 +16,7 @@ public class Tileset implements Comparable<Tileset> {
   private final String name;
   private final int firstTile;
   private final int columns;
+  private final int rows;
   private final int tileSize;
   private final TextureName textureName;
 
@@ -21,9 +24,11 @@ public class Tileset implements Comparable<Tileset> {
    * This is brittle, but it'll work.
    */
   public TextureSheetCoordinates getTextureCoordinate(int tile) {
-    var value = firstTile - tile;
-    var column = value / columns;
-    var row = value % columns;
+    var value = tile - firstTile;
+    var column = value / rows;
+    var row = value % rows;
+
+    log.info(String.format("v: %s, r: %s, c: %s", value, row, column));
 
     var minX = row * tileSize;
     var maxX = row * tileSize + tileSize;

@@ -75,8 +75,8 @@ public class GameRenderer implements SceneRenderer<GameScene> {
 
     defaultShaderProgram.bind();
     defaultShaderProgram.setUniform(ShaderUniform.PROJECTION_MATRIX, projectionMatrix.getMatrix());
-    textShaderProgram.bind();
-    textShaderProgram.setUniform(ShaderUniform.PROJECTION_MATRIX, projectionMatrix.getMatrix());
+//    textShaderProgram.bind();
+//    textShaderProgram.setUniform(ShaderUniform.PROJECTION_MATRIX, projectionMatrix.getMatrix());
 
     scene.getGameObjects().forEach(element -> element.render(windowSize));
   }

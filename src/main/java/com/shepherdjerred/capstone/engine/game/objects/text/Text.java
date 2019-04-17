@@ -25,7 +25,7 @@ public class Text implements GameObject {
   private ScenePositioner position;
 
   public SceneObjectDimensions getSceneObjectDimensions() {
-    return new SceneObjectDimensions(renderer.getWidth(), 10);
+    return new SceneObjectDimensions(renderer.getWidth(), 24);
   }
 
   @Override

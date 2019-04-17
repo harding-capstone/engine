@@ -30,8 +30,7 @@ public class TextButton implements GameObject, Clickable, Hoverable {
       int fontSize,
       SceneObjectDimensions dimensions,
       Type type,
-      Runnable onClick
-  ) {
+      Runnable onClick) {
     this.button = new Button(resourceManager,
         windowSize,
         positioner,
@@ -43,7 +42,7 @@ public class TextButton implements GameObject, Clickable, Hoverable {
         fontName,
         color,
         fontSize,
-        new ObjectRelativeScenePositioner(this,
+        new ObjectRelativeScenePositioner(button,
             0,
             0,
             0,

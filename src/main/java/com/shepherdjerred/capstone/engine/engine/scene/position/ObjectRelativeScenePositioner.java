@@ -6,7 +6,9 @@ import com.shepherdjerred.capstone.engine.engine.scene.SceneCoordinate;
 import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
 import lombok.AllArgsConstructor;
 import lombok.ToString;
+import lombok.extern.log4j.Log4j2;
 
+@Log4j2
 @ToString
 @AllArgsConstructor
 public class ObjectRelativeScenePositioner implements ScenePositioner {
@@ -23,18 +25,28 @@ public class ObjectRelativeScenePositioner implements ScenePositioner {
       SceneObjectDimensions dimensions) {
     var x = getXCoordinate(windowSize, dimensions);
     var y = getYCoordinate(windowSize, dimensions);
-    return new SceneCoordinate(x, y, z);
+    var coord = new SceneCoordinate(x, y, z);
+
+    return coord;
   }
 
   private float getXCoordinate(WindowSize windowSize, SceneObjectDimensions dimensions) {
-    var orig = anchor.getPosition().getSceneCoordinate(windowSize, dimensions).getX();
+    var anchorPosition = anchor.getPosition().getSceneCoordinate(windowSize, dimensions).getX();
     var anchorWidth = anchor.getSceneObjectDimensions().getWidth();
-    return ((orig + (anchorWidth / 2)) - dimensions.getWidth() / 2) + right - left;
+    var objectWidth = dimensions.getWidth();
+
+    var diff = Math.abs(anchorWidth - objectWidth);
+
+    return (anchorPosition + diff / 2) - objectWidth + (right - left);
   }
 
   private float getYCoordinate(WindowSize windowSize, SceneObjectDimensions dimensions) {
-    var orig = anchor.getPosition().getSceneCoordinate(windowSize, dimensions).getY();
+    var anchorPosition = anchor.getPosition().getSceneCoordinate(windowSize, dimensions).getY();
     var anchorHeight = anchor.getSceneObjectDimensions().getHeight();
-    return ((orig + (anchorHeight / 2)) - dimensions.getHeight() / 2) + top - bottom;
+    var objectHeight = dimensions.getHeight();
+
+    var diff = Math.abs(anchorHeight - objectHeight);
+
+    return (anchorPosition + diff / 2) + (top - bottom);
   }
 }

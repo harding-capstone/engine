@@ -1,4 +1,4 @@
-package com.shepherdjerred.capstone.engine.game.scenes.lobby.singleplayer;
+package com.shepherdjerred.capstone.engine.game.scenes.lobby;
 
 import com.shepherdjerred.capstone.common.lobby.LobbySettings;
 import com.shepherdjerred.capstone.common.lobby.LobbySettings.LobbyType;
@@ -30,20 +30,20 @@ import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-public class SinglePlayerLobbyScene implements Scene {
+public class LobbyScene implements Scene {
 
   private final EventBus<Event> eventBus;
   private final ResourceManager resourceManager;
-  private final SceneRenderer<SinglePlayerLobbyScene> sceneRenderer;
+  private final SceneRenderer<LobbyScene> sceneRenderer;
   @Getter
   private final List<GameObject> gameObjects;
-
+  private LobbySettings lobbySettings;
   private Thread gameServerThread;
 
-  public SinglePlayerLobbyScene(ParallaxBackground background,
+  public LobbyScene(ParallaxBackground background,
       EventBus<Event> eventBus,
       ResourceManager resourceManager,
-      SceneRenderer<SinglePlayerLobbyScene> sceneRenderer) {
+      SceneRenderer<LobbyScene> sceneRenderer) {
     this.eventBus = eventBus;
     this.resourceManager = resourceManager;
     this.sceneRenderer = sceneRenderer;
