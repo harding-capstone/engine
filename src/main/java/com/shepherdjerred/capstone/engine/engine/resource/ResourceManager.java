@@ -9,6 +9,7 @@ import lombok.extern.log4j.Log4j2;
  * Handles the loading and reference counting of resources. Useful to ensure that resources are
  * shared safely and cleaned up when possible.
  */
+@SuppressWarnings("unchecked")
 @Log4j2
 public class ResourceManager {
 
@@ -23,13 +24,12 @@ public class ResourceManager {
     loaders = new HashMap<>();
   }
 
-  @SuppressWarnings("unchecked")
   public <R extends Resource, I extends ResourceIdentifier> void registerLoader(Class<I> resourceType,
       ResourceLoader<I, R> provider) {
     loaders.put((Class<ResourceIdentifier>) resourceType, provider);
   }
 
-  @SuppressWarnings("unchecked")
+
   public <R extends Resource, I extends ResourceIdentifier> R get(I identifier) throws Exception {
     var currentReferences = referenceCounter.getOrDefault(identifier, 0) + 1;
     referenceCounter.put(identifier, currentReferences);
@@ -49,6 +49,11 @@ public class ResourceManager {
       resourceCache.put(identifier, resource);
       return (R) resource;
     }
+  }
+
+  public <R extends Resource, I extends ResourceIdentifier> R getUnchecked(I identifier) {
+    log.warn("Getting resource " + identifier + " unsafely.");
+    return (R) resourceCache.get(identifier);
   }
 
   public void free(ResourceIdentifier identifier) {

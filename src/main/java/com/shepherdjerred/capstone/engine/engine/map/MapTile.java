@@ -14,7 +14,7 @@ import lombok.ToString;
 @AllArgsConstructor
 public class MapTile {
 
-  private final MapCoordinate coordinate;
+  private final MapCoordinate position;
   private final TextureName textureName;
-  private final TextureSheetCoordinates coordinates;
+  private final TextureSheetCoordinates textureSheetCoordinates;
 }

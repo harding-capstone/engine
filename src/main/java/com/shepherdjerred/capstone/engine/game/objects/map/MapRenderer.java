@@ -1,5 +1,7 @@
 package com.shepherdjerred.capstone.engine.game.objects.map;
 
+import static com.shepherdjerred.capstone.engine.game.Constants.RENDER_TILE_RESOLUTION;
+
 import com.shepherdjerred.capstone.engine.engine.graphics.RendererCoordinate;
 import com.shepherdjerred.capstone.engine.engine.graphics.matrices.ModelMatrix;
 import com.shepherdjerred.capstone.engine.engine.graphics.mesh.Mesh;
@@ -21,12 +23,11 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class MapRenderer implements GameObjectRenderer<MapObject> {
 
-  private static final int TILE_DIMENSION = 2048;
-
   private final ResourceManager resourceManager;
   private ShaderProgram shaderProgram;
   private MapObject map;
   private final Map<MapTile, TexturedMesh> meshes;
+
 
   public MapRenderer(ResourceManager resourceManager) {
     this.resourceManager = resourceManager;
@@ -42,9 +43,9 @@ public class MapRenderer implements GameObjectRenderer<MapObject> {
       for (MapTile tile : layer) {
         var vertices = new float[] {
             0, 0, 0,
-            0, TILE_DIMENSION, 0,
-            TILE_DIMENSION, 0, 0,
-            TILE_DIMENSION, TILE_DIMENSION, 0
+            0, RENDER_TILE_RESOLUTION, 0,
+            RENDER_TILE_RESOLUTION, 0, 0,
+            RENDER_TILE_RESOLUTION, RENDER_TILE_RESOLUTION, 0
         };
 
         var indices = new int[] {
@@ -52,11 +53,11 @@ public class MapRenderer implements GameObjectRenderer<MapObject> {
             3, 1, 2
         };
 
-        var mesh = new Mesh(vertices, tile.getCoordinates().asIndexedFloatArray(), indices);
+        var mesh = new Mesh(vertices, tile.getTextureSheetCoordinates().asFloatArray(), indices);
         var texture = (Texture) resourceManager.get(tile.getTextureName());
         var texturedMesh = new TexturedMesh(mesh, texture);
 
-        log.info(String.format("T: %s, C: %s", texture.getTextureName(), tile.getCoordinates()));
+//        log.info(String.format("T: %s, C: %s", texture.getTextureName(), tile.getTextureSheetCoordinates()));
 
         meshes.put(tile, texturedMesh);
       }
@@ -69,18 +70,18 @@ public class MapRenderer implements GameObjectRenderer<MapObject> {
     shaderProgram.bind();
 
     map.getMapLayers().forEach(layer -> {
-      log.info("STARTING LAYER " + layer.getZ());
+//      log.info("STARTING LAYER " + layer.getZ());
 
       layer.forEach(tile -> {
-        var x = tile.getCoordinate().getX();
-        var y = tile.getCoordinate().getY();
+        var x = tile.getPosition().getX();
+        var y = tile.getPosition().getY();
 
 //        log.info(String.format("Map Location: x: %s, y: %s", x, y));
-//        log.info(String.format("Texture coords: %s", tile.getCoordinates()));
+//        log.info(String.format("Texture coords: %s", tile.getTextureSheetCoordinates()));
 
-        var model = new ModelMatrix(new RendererCoordinate(x * TILE_DIMENSION,
-            y * TILE_DIMENSION,
-            layer.getZ()),
+        var model = new ModelMatrix(new RendererCoordinate(x * RENDER_TILE_RESOLUTION + map.getXOffset(),
+            y * RENDER_TILE_RESOLUTION + map.getYOffset(),
+            layer.getZ() * -1),
             0,
             1).getMatrix();
 

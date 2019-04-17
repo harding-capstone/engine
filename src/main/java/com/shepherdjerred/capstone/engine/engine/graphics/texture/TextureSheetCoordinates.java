@@ -8,24 +8,24 @@ import lombok.ToString;
 @ToString
 public class TextureSheetCoordinates {
 
-  private final float minX;
-  private final float maxX;
-  private final float minY;
-  private final float maxY;
+  private final double minX;
+  private final double maxX;
+  private final double minY;
+  private final double maxY;
   private final RendererCoordinate topLeft;
   private final RendererCoordinate topRight;
   private final RendererCoordinate bottomLeft;
   private final RendererCoordinate bottomRight;
 
-  public TextureSheetCoordinates(float minX, float maxX, float minY, float maxY) {
+  public TextureSheetCoordinates(double minX, double maxX, double minY, double maxY) {
     this.minX = minX;
     this.maxX = maxX;
     this.minY = minY;
     this.maxY = maxY;
-    this.topLeft = new RendererCoordinate(minX, minY);
-    this.topRight = new RendererCoordinate(maxX, minY);
-    this.bottomLeft = new RendererCoordinate(minX, maxY);
-    this.bottomRight = new RendererCoordinate(maxX, maxY);
+    this.topLeft = new RendererCoordinate((float) minX, (float) minY);
+    this.topRight = new RendererCoordinate((float) maxX, (float) minY);
+    this.bottomLeft = new RendererCoordinate((float) minX, (float) maxY);
+    this.bottomRight = new RendererCoordinate((float) maxX, (float) maxY);
   }
 
   // TODO better name

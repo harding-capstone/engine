@@ -1,17 +1,17 @@
 package com.shepherdjerred.capstone.engine.engine;
 
-import com.shepherdjerred.capstone.engine.engine.events.input.KeyReleasedEvent;
-import com.shepherdjerred.capstone.engine.engine.events.input.MouseMoveEvent;
 import com.shepherdjerred.capstone.engine.engine.events.ToggleBlendingEvent;
 import com.shepherdjerred.capstone.engine.engine.events.ToggleDepthEvent;
 import com.shepherdjerred.capstone.engine.engine.events.ToggleWireframeEvent;
 import com.shepherdjerred.capstone.engine.engine.events.WindowResizeEvent;
-import com.shepherdjerred.capstone.engine.engine.events.handlers.input.KeyReleasedEventHandler;
-import com.shepherdjerred.capstone.engine.engine.events.handlers.input.MouseMoveEventHandler;
 import com.shepherdjerred.capstone.engine.engine.events.handlers.ToggleBlendingEventHandler;
 import com.shepherdjerred.capstone.engine.engine.events.handlers.ToggleDepthEventHandler;
 import com.shepherdjerred.capstone.engine.engine.events.handlers.ToggleWireframeEventHandler;
 import com.shepherdjerred.capstone.engine.engine.events.handlers.WindowResizedEventHandler;
+import com.shepherdjerred.capstone.engine.engine.events.handlers.input.KeyReleasedEventHandler;
+import com.shepherdjerred.capstone.engine.engine.events.handlers.input.MouseMoveEventHandler;
+import com.shepherdjerred.capstone.engine.engine.events.input.KeyReleasedEvent;
+import com.shepherdjerred.capstone.engine.engine.events.input.MouseMoveEvent;
 import com.shepherdjerred.capstone.engine.engine.input.mouse.MouseCoordinate;
 import com.shepherdjerred.capstone.engine.engine.input.mouse.MouseTracker;
 import com.shepherdjerred.capstone.engine.engine.window.GlfwWindow;
@@ -19,7 +19,6 @@ import com.shepherdjerred.capstone.engine.engine.window.Window;
 import com.shepherdjerred.capstone.engine.engine.window.WindowSettings;
 import com.shepherdjerred.capstone.events.Event;
 import com.shepherdjerred.capstone.events.EventBus;
-import com.shepherdjerred.capstone.events.handlers.EventLoggerHandler;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
@@ -57,7 +56,7 @@ public class GameEngine {
   }
 
   private void registerEventHandlers() {
-    eventBus.registerHandler(new EventLoggerHandler<>());
+//    eventBus.registerHandler(new EventLoggerHandler<>());
     eventBus.registerHandler(WindowResizeEvent.class, new WindowResizedEventHandler());
     eventBus.registerHandler(MouseMoveEvent.class, new MouseMoveEventHandler(mouseTracker));
     eventBus.registerHandler(ToggleWireframeEvent.class, new ToggleWireframeEventHandler());

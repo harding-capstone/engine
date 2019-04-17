@@ -10,6 +10,7 @@ import com.shepherdjerred.capstone.engine.engine.scene.position.AbsoluteScenePos
 import com.shepherdjerred.capstone.engine.engine.scene.position.ScenePositioner;
 import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
 import lombok.Getter;
+import lombok.Setter;
 
 public class MapObject implements GameObject {
 
@@ -18,6 +19,13 @@ public class MapObject implements GameObject {
   private final GameMapName gameMapName;
   @Getter
   private MapLayers mapLayers;
+  @Getter
+  @Setter
+  private int xOffset;
+  @Getter
+  @Setter
+  private int yOffset;
+
 
   public MapObject(ResourceManager resourceManager, GameMapName gameMapName) {
     this.resourceManager = resourceManager;

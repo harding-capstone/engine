@@ -42,6 +42,7 @@ public class GameRenderer implements SceneRenderer<GameScene> {
     initializeEventHandlerFrame();
     OpenGlHelper.setClearColor(Color.black());
     OpenGlHelper.enableDepthBuffer();
+    OpenGlHelper.enableTransparency();
 
     for (GameObject gameObject : scene.getGameObjects()) {
       gameObject.initialize();

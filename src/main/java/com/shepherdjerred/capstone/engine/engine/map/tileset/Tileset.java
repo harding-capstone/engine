@@ -27,14 +27,17 @@ public class Tileset implements Comparable<Tileset> {
     var value = tile - firstTile;
     var column = value / rows;
     var row = value % rows;
+    var width = rows * tileSize;
+    var height = columns * tileSize;
 
-    log.info(String.format("v: %s, r: %s, c: %s", value, row, column));
+//    log.info(String.format("v: %s, r: %s, c: %s", value, row, column));
 
-    var minX = row * tileSize;
-    var maxX = row * tileSize + tileSize;
-    var minY = column * tileSize;
-    var maxY = column * tileSize + tileSize;
-    return new TextureSheetCoordinates(minX, maxX, minY, maxY);
+    double minX = row * tileSize;
+    double maxX = row * tileSize + tileSize;
+    double minY = column * tileSize;
+    double maxY = column * tileSize + tileSize;
+
+    return new TextureSheetCoordinates(minX / width, maxX / width, minY / height, maxY / height);
   }
 
   @Override
