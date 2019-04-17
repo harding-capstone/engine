@@ -6,6 +6,7 @@ module com.shepherdjerred.capstone.engine {
   requires org.joml;
   requires org.lwjgl.stb;
   requires com.google.common;
+  requires io.netty.all;
   requires com.shepherdjerred.capstone.events;
   requires com.shepherdjerred.capstone.logic;
   requires com.shepherdjerred.capstone.common;

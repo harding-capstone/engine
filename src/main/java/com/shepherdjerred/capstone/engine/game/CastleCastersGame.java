@@ -1,5 +1,10 @@
 package com.shepherdjerred.capstone.engine.game;
 
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
+import com.shepherdjerred.capstone.common.chat.ChatHistory;
+import com.shepherdjerred.capstone.common.chat.ChatMessage;
+import com.shepherdjerred.capstone.common.player.Player;
 import com.shepherdjerred.capstone.engine.engine.GameLogic;
 import com.shepherdjerred.capstone.engine.engine.audio.AudioLoader;
 import com.shepherdjerred.capstone.engine.engine.audio.AudioName;
@@ -22,6 +27,27 @@ import com.shepherdjerred.capstone.engine.engine.resource.ResourceManager;
 import com.shepherdjerred.capstone.engine.engine.scene.Scene;
 import com.shepherdjerred.capstone.engine.engine.scene.SceneTransitioner;
 import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
+import com.shepherdjerred.capstone.engine.game.events.EditLobbyEvent;
+import com.shepherdjerred.capstone.engine.game.events.HostLeaveEvent;
+import com.shepherdjerred.capstone.engine.game.events.PlayerChatEvent;
+import com.shepherdjerred.capstone.engine.game.events.PlayerEvictEvent;
+import com.shepherdjerred.capstone.engine.game.events.PlayerJoinEvent;
+import com.shepherdjerred.capstone.engine.game.events.PlayerLeaveEvent;
+import com.shepherdjerred.capstone.engine.game.events.StartGameEvent;
+import com.shepherdjerred.capstone.engine.game.events.TurnEvent;
+import com.shepherdjerred.capstone.engine.game.handlers.EditLobbyEventHandler;
+import com.shepherdjerred.capstone.engine.game.handlers.HostLeaveEventHandler;
+import com.shepherdjerred.capstone.engine.game.handlers.PacketReceivedEventHandler;
+import com.shepherdjerred.capstone.engine.game.handlers.PlayerChatEventHandler;
+import com.shepherdjerred.capstone.engine.game.handlers.PlayerEvictEventHandler;
+import com.shepherdjerred.capstone.engine.game.handlers.PlayerJoinEventHandler;
+import com.shepherdjerred.capstone.engine.game.handlers.PlayerLeaveEventHandler;
+import com.shepherdjerred.capstone.engine.game.handlers.StartGameEventHandler;
+import com.shepherdjerred.capstone.engine.game.handlers.TurnEventHandler;
+import com.shepherdjerred.capstone.engine.game.netty.ConnectorHub;
+import com.shepherdjerred.capstone.engine.game.netty.networkEvents.ClientDisconnectedEvent;
+import com.shepherdjerred.capstone.engine.game.netty.networkEvents.PacketReceivedEvent;
+import com.shepherdjerred.capstone.engine.game.handlers.ClientDisconnectedEventHandler;
 import com.shepherdjerred.capstone.engine.game.scenes.game.GameRenderer;
 import com.shepherdjerred.capstone.engine.game.scenes.game.GameScene;
 import com.shepherdjerred.capstone.engine.game.scenes.mainmenu.MainMenuAudio;
@@ -31,23 +57,60 @@ import com.shepherdjerred.capstone.engine.game.scenes.teamintro.TeamIntroRendere
 import com.shepherdjerred.capstone.engine.game.scenes.teamintro.TeamIntroScene;
 import com.shepherdjerred.capstone.events.Event;
 import com.shepherdjerred.capstone.events.EventBus;
+import com.shepherdjerred.capstone.events.handlers.EventLoggerHandler;
+import com.shepherdjerred.capstone.logic.match.Match;
+import com.shepherdjerred.capstone.logic.turn.Turn;
+import java.util.UUID;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 public class CastleCastersGame implements GameLogic {
 
   private final EventBus<Event> eventBus;
+  private final ConnectorHub connectorHub;
+  private final BiMap<UUID, Player> handlePlayerMap;
   private final ResourceManager resourceManager;
   private final SceneTransitioner sceneTransitioner;
   private final AudioPlayer audioPlayer;
+  @Getter
+  @Setter
+  private Player myPlayer;
   private WindowSize windowSize;
+  @Getter
+  @Setter
+  private Match match;
+  @Getter
+  private ChatHistory chatHistory;
 
   public CastleCastersGame(EventBus<Event> eventBus) {
     this.eventBus = eventBus;
+    this.connectorHub = new ConnectorHub(eventBus);
+    this.handlePlayerMap = HashBiMap.create();
     this.resourceManager = new ResourceManager();
     this.audioPlayer = new AudioPlayer(eventBus);
     this.sceneTransitioner = new SceneTransitioner(eventBus);
+    this.chatHistory = new ChatHistory();
     registerLoaders();
+    registerNetworkEventHandlers();
+    registerEventHandlers();
+  }
+
+  public Player getPlayerByClientId(UUID clientId) {
+    return handlePlayerMap.get(clientId);
+  }
+
+  public void makeTurn(Turn turn) {
+    this.match.doTurn(turn);
+  }
+
+  public void addPlayer(Player player) {
+    handlePlayerMap.put(player.getUuid(), player);
+  }
+
+  public void removePlayer(Player player) {
+    handlePlayerMap.remove(player.getUuid(), player);
   }
 
   private void registerLoaders() {
@@ -111,6 +174,39 @@ public class CastleCastersGame implements GameLogic {
         new MainMenuAudio(eventBus, resourceManager));
   }
 
+  public void addChatMessage(ChatMessage message) {
+    chatHistory = chatHistory.addMessage(message);
+  }
+
+  private void registerNetworkEventHandlers() {
+    eventBus.registerHandler(new EventLoggerHandler<>());
+    eventBus.registerHandler(ClientDisconnectedEvent.class,
+        new ClientDisconnectedEventHandler(this, connectorHub));
+    eventBus.registerHandler(PacketReceivedEvent.class,
+        new PacketReceivedEventHandler(this));
+  }
+
+  private void registerEventHandlers() {
+    eventBus.registerHandler(PacketReceivedEvent.class,
+        new PacketReceivedEventHandler(this));
+    eventBus.registerHandler(PlayerChatEvent.class,
+        new PlayerChatEventHandler(this, connectorHub));
+    eventBus.registerHandler(EditLobbyEvent.class,
+        new EditLobbyEventHandler(this, connectorHub));
+    eventBus.registerHandler(HostLeaveEvent.class,
+        new HostLeaveEventHandler(this, connectorHub));
+    eventBus.registerHandler(PlayerEvictEvent.class,
+        new PlayerEvictEventHandler(this, connectorHub));
+    eventBus.registerHandler(PlayerJoinEvent.class,
+        new PlayerJoinEventHandler(this, connectorHub));
+    eventBus.registerHandler(PlayerLeaveEvent.class,
+        new PlayerLeaveEventHandler(this, connectorHub));
+    eventBus.registerHandler(StartGameEvent.class,
+        new StartGameEventHandler(this, connectorHub));
+    eventBus.registerHandler(TurnEvent.class,
+        new TurnEventHandler(this, connectorHub));
+  }
+
   @Override
   public void updateGameState(float interval) {
     sceneTransitioner.getScene().updateState(interval);
@@ -135,5 +231,9 @@ public class CastleCastersGame implements GameLogic {
 
     audioPlayer.cleanup();
     resourceManager.freeAll();
+  }
+
+  public void dispatch(Event event) {
+    eventBus.dispatch(event);
   }
 }
