@@ -1,7 +1,7 @@
 package com.shepherdjerred.capstone.engine.game.network.netty;
 
 import com.shepherdjerred.capstone.engine.game.network.Connector;
-import com.shepherdjerred.capstone.engine.game.network.events.networkEvents.NetworkEvent;
+import com.shepherdjerred.capstone.engine.game.network.events.network.NetworkEvent;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -53,14 +53,7 @@ public class NettyServerConnector implements Connector {
           e.printStackTrace();
         }
       }
-    }).start();
-
-    new Thread(() -> {
-      while(true) {
-        var nettyClientDiscovery = new NettyServerDiscovery();
-        nettyClientDiscovery.receiveBroadcast(nettyClientSettings, eventQueue);
-      }
-    });
+    }, "CLIENT NETWORK").start();
   }
 
   @Override

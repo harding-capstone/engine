@@ -28,8 +28,9 @@ import com.shepherdjerred.capstone.engine.game.objects.background.parallax.Paral
 import com.shepherdjerred.capstone.engine.game.objects.background.parallax.ParallaxBackgroundRenderer;
 import com.shepherdjerred.capstone.engine.game.scenes.game.GameRenderer;
 import com.shepherdjerred.capstone.engine.game.scenes.game.GameScene;
-import com.shepherdjerred.capstone.engine.game.scenes.lobby.LobbyRenderer;
-import com.shepherdjerred.capstone.engine.game.scenes.lobby.LobbyScene;
+import com.shepherdjerred.capstone.engine.game.scenes.lobby.details.LobbyRenderer;
+import com.shepherdjerred.capstone.engine.game.scenes.lobby.details.LobbyScene;
+import com.shepherdjerred.capstone.engine.game.scenes.lobby.list.LobbyListScene;
 import com.shepherdjerred.capstone.engine.game.scenes.mainmenu.MainMenuAudio;
 import com.shepherdjerred.capstone.engine.game.scenes.mainmenu.MainMenuRenderer;
 import com.shepherdjerred.capstone.engine.game.scenes.mainmenu.MainMenuScene;
@@ -90,7 +91,7 @@ public class CastleCastersGame implements GameLogic {
 
     this.windowSize = windowSize;
 
-    var scene = getLobbyScene(windowSize);
+    var scene = getTeamScene(windowSize);
     sceneTransitioner.initialize(scene);
     audioPlayer.initialize();
     registerEventHandlers();
@@ -123,6 +124,11 @@ public class CastleCastersGame implements GameLogic {
         new MainMenuAudio(eventBus, resourceManager));
   }
 
+  private Scene getLobbyListScene(WindowSize windowSize) {
+    return new LobbyListScene(new ParallaxBackground(new ParallaxBackgroundRenderer(resourceManager,
+        windowSize), Type.PURPLE_MOUNTAINS), eventBus, resourceManager, windowSize);
+  }
+
   private Scene getLobbyScene(WindowSize windowSize) {
     var renderer = new LobbyRenderer(resourceManager, eventBus, windowSize);
     return new LobbyScene(new ParallaxBackground(new ParallaxBackgroundRenderer(resourceManager,
@@ -136,7 +142,6 @@ public class CastleCastersGame implements GameLogic {
 
   @Override
   public void render() {
-    // TODO handle resizes
     sceneTransitioner.getScene().render(windowSize);
   }
 

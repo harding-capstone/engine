@@ -5,7 +5,7 @@ import static org.lwjgl.opengl.GL11.glViewport;
 import com.shepherdjerred.capstone.engine.engine.events.WindowResizeEvent;
 import com.shepherdjerred.capstone.events.handlers.EventHandler;
 
-public class WindowResizedEventHandler implements EventHandler<WindowResizeEvent> {
+public class OpenGlWindowResizeHandler implements EventHandler<WindowResizeEvent> {
 
   @Override
   public void handle(WindowResizeEvent windowResizeEvent) {

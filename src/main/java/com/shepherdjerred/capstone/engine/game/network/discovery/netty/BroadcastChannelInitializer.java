@@ -1,4 +1,4 @@
-package com.shepherdjerred.capstone.engine.game.network.netty;
+package com.shepherdjerred.capstone.engine.game.network.discovery.netty;
 
 import com.shepherdjerred.capstone.engine.game.network.events.network.NetworkEvent;
 import com.shepherdjerred.capstone.network.netty.PacketCodec;
@@ -11,7 +11,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public class ClientChannelInitializer extends ChannelInitializer<SocketChannel> {
+public class BroadcastChannelInitializer extends ChannelInitializer<SocketChannel> {
 
   private final ConcurrentLinkedQueue<NetworkEvent> eventQueue;
 
@@ -22,7 +22,7 @@ public class ClientChannelInitializer extends ChannelInitializer<SocketChannel> 
 
     pipeline.addLast(new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 0, 4));
     pipeline.addLast(new PacketCodec(serializer));
-    pipeline.addLast(new QueueingChannelHandler(eventQueue));
+    pipeline.addLast(new BroadcastChannelInboundHandler(eventQueue));
     pipeline.addLast(new ExceptionLoggerHandler());
   }
 }

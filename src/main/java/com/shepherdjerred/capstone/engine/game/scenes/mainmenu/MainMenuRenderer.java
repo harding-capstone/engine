@@ -1,6 +1,5 @@
 package com.shepherdjerred.capstone.engine.game.scenes.mainmenu;
 
-import com.shepherdjerred.capstone.engine.engine.events.WindowResizeEvent;
 import com.shepherdjerred.capstone.engine.engine.graphics.Color;
 import com.shepherdjerred.capstone.engine.engine.graphics.OpenGlHelper;
 import com.shepherdjerred.capstone.engine.engine.graphics.matrices.ProjectionMatrix;
@@ -13,7 +12,6 @@ import com.shepherdjerred.capstone.engine.engine.scene.SceneRenderer;
 import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
 import com.shepherdjerred.capstone.events.Event;
 import com.shepherdjerred.capstone.events.EventBus;
-import com.shepherdjerred.capstone.events.handlers.EventHandler;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
@@ -51,25 +49,12 @@ public class MainMenuRenderer implements SceneRenderer<MainMenuScene> {
   public void initialize(MainMenuScene scene) throws Exception {
     updateProjectionMatrix();
     createShaderProgram();
-    registerEventHandlers();
     OpenGlHelper.setClearColor(Color.black());
     OpenGlHelper.enableDepthBuffer();
 
     for (GameObject gameObject : scene.getGameObjects()) {
       gameObject.initialize();
     }
-  }
-
-  private void registerEventHandlers() {
-    var windowResizeEventHandler = new EventHandler<WindowResizeEvent>() {
-      @Override
-      public void handle(WindowResizeEvent windowResizeEvent) {
-        windowSize = windowResizeEvent.getNewWindowSize();
-        updateProjectionMatrix();
-      }
-    };
-
-    eventBus.registerHandler(WindowResizeEvent.class, windowResizeEventHandler);
   }
 
   private void createShaderProgram() throws Exception {

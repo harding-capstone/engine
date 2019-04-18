@@ -1,6 +1,5 @@
 package com.shepherdjerred.capstone.engine.game.scenes.game;
 
-import com.shepherdjerred.capstone.engine.engine.events.WindowResizeEvent;
 import com.shepherdjerred.capstone.engine.engine.graphics.Color;
 import com.shepherdjerred.capstone.engine.engine.graphics.OpenGlHelper;
 import com.shepherdjerred.capstone.engine.engine.graphics.matrices.ProjectionMatrix;
@@ -13,7 +12,6 @@ import com.shepherdjerred.capstone.engine.engine.scene.SceneRenderer;
 import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
 import com.shepherdjerred.capstone.events.Event;
 import com.shepherdjerred.capstone.events.EventBus;
-import com.shepherdjerred.capstone.events.handlers.EventHandler;
 import com.shepherdjerred.capstone.events.handlers.EventHandlerFrame;
 
 public class GameRenderer implements SceneRenderer<GameScene> {
@@ -39,7 +37,6 @@ public class GameRenderer implements SceneRenderer<GameScene> {
   public void initialize(GameScene scene) throws Exception {
     updateProjectionMatrix();
     createShaderProgram();
-    initializeEventHandlerFrame();
     OpenGlHelper.setClearColor(Color.black());
     OpenGlHelper.enableDepthBuffer();
     OpenGlHelper.enableTransparency();
@@ -49,19 +46,6 @@ public class GameRenderer implements SceneRenderer<GameScene> {
     }
 
     eventBus.registerHandlerFrame(eventHandlerFrame);
-  }
-
-  private void initializeEventHandlerFrame() {
-    var windowResizeEventHandler = new EventHandler<WindowResizeEvent>() {
-      @Override
-      public void handle(WindowResizeEvent windowResizeEvent) {
-        windowSize = windowResizeEvent.getNewWindowSize();
-        updateProjectionMatrix();
-        // TODO recreate all renderer classes
-      }
-    };
-
-    eventHandlerFrame.registerHandler(WindowResizeEvent.class, windowResizeEventHandler);
   }
 
   private void createShaderProgram() throws Exception {

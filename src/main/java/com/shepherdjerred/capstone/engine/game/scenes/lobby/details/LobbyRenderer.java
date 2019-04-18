@@ -1,4 +1,4 @@
-package com.shepherdjerred.capstone.engine.game.scenes.teamintro;
+package com.shepherdjerred.capstone.engine.game.scenes.lobby.details;
 
 import com.shepherdjerred.capstone.engine.engine.graphics.Color;
 import com.shepherdjerred.capstone.engine.engine.graphics.OpenGlHelper;
@@ -15,7 +15,7 @@ import com.shepherdjerred.capstone.events.EventBus;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-public class TeamIntroRenderer implements SceneRenderer<TeamIntroScene> {
+public class LobbyRenderer implements SceneRenderer<LobbyScene> {
 
   private final ResourceManager resourceManager;
   private final EventBus<Event> eventBus;
@@ -23,7 +23,7 @@ public class TeamIntroRenderer implements SceneRenderer<TeamIntroScene> {
   private ProjectionMatrix projectionMatrix;
   private ShaderProgram defaultShaderProgram;
 
-  public TeamIntroRenderer(ResourceManager resourceManager,
+  public LobbyRenderer(ResourceManager resourceManager,
       EventBus<Event> eventBus,
       WindowSize windowSize) {
     this.resourceManager = resourceManager;
@@ -32,7 +32,7 @@ public class TeamIntroRenderer implements SceneRenderer<TeamIntroScene> {
   }
 
   @Override
-  public void render(TeamIntroScene scene) {
+  public void render(LobbyScene scene) {
     OpenGlHelper.clearScreen();
     updateProjectionMatrix();
 
@@ -43,10 +43,10 @@ public class TeamIntroRenderer implements SceneRenderer<TeamIntroScene> {
   }
 
   @Override
-  public void initialize(TeamIntroScene scene) throws Exception {
+  public void initialize(LobbyScene scene) throws Exception {
     updateProjectionMatrix();
     createShaderProgram();
-    OpenGlHelper.setClearColor(Color.white());
+    OpenGlHelper.setClearColor(Color.black());
 
     for (GameObject gameObject : scene.getGameObjects()) {
       gameObject.initialize();
@@ -64,5 +64,11 @@ public class TeamIntroRenderer implements SceneRenderer<TeamIntroScene> {
   @Override
   public void cleanup() {
     resourceManager.free(ShaderProgramName.DEFAULT);
+    removeEventHandlers();
+  }
+
+  // TODO
+  private void removeEventHandlers() {
+
   }
 }

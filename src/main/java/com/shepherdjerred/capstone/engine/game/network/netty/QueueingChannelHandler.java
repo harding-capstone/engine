@@ -1,9 +1,9 @@
 package com.shepherdjerred.capstone.engine.game.network.netty;
 
-import com.shepherdjerred.capstone.engine.game.network.events.networkEvents.ServerConnectedEvent;
-import com.shepherdjerred.capstone.engine.game.network.events.networkEvents.ServerDisconnectedEvent;
-import com.shepherdjerred.capstone.engine.game.network.events.networkEvents.NetworkEvent;
-import com.shepherdjerred.capstone.engine.game.network.events.networkEvents.PacketReceivedEvent;
+import com.shepherdjerred.capstone.engine.game.network.events.network.ServerConnectedEvent;
+import com.shepherdjerred.capstone.engine.game.network.events.network.ServerDisconnectedEvent;
+import com.shepherdjerred.capstone.engine.game.network.events.network.NetworkEvent;
+import com.shepherdjerred.capstone.engine.game.network.events.network.PacketReceivedEvent;
 import com.shepherdjerred.capstone.network.packet.packets.Packet;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFutureListener;

@@ -1,4 +1,4 @@
-package com.shepherdjerred.capstone.engine.game.scenes.lobby;
+package com.shepherdjerred.capstone.engine.game.scenes.lobby.details;
 
 import com.shepherdjerred.capstone.common.lobby.Lobby;
 import com.shepherdjerred.capstone.common.lobby.LobbySettings;
@@ -15,7 +15,6 @@ import com.shepherdjerred.capstone.engine.engine.scene.position.WindowRelativeSc
 import com.shepherdjerred.capstone.engine.engine.scene.position.WindowRelativeScenePositioner.VerticalPosition;
 import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
 import com.shepherdjerred.capstone.engine.game.network.NetworkClient;
-import com.shepherdjerred.capstone.engine.game.network.netty.NettyClientSettings;
 import com.shepherdjerred.capstone.engine.game.objects.background.parallax.ParallaxBackground;
 import com.shepherdjerred.capstone.engine.game.objects.text.Text;
 import com.shepherdjerred.capstone.engine.game.objects.text.TextRenderer;
@@ -78,7 +77,7 @@ public class LobbyScene implements Scene {
         log.info("Running server");
         var gameServer = new GameServer(defaultLobbySettings);
         var connector = new NettyServerConnector(new NettyServerSettings(localHostname,
-            port));
+            port, localHostname, defaultLobbySettings));
         gameServer.registerConnector(connector);
         gameServer.run();
       } catch (InterruptedException e) {
@@ -90,7 +89,6 @@ public class LobbyScene implements Scene {
 
   private void createClient() {
     networkClient = new NetworkClient(eventBus);
-    networkClient.connect(new NettyClientSettings(localHostname, port));
   }
 
   private void createGameObjects() throws Exception {

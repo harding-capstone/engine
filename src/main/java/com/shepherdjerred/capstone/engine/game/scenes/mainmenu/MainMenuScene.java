@@ -30,8 +30,7 @@ import com.shepherdjerred.capstone.engine.game.objects.logo.LogoRenderer;
 import com.shepherdjerred.capstone.engine.game.objects.text.Text;
 import com.shepherdjerred.capstone.engine.game.objects.text.TextRenderer;
 import com.shepherdjerred.capstone.engine.game.objects.textbutton.TextButton;
-import com.shepherdjerred.capstone.engine.game.scenes.lobby.LobbyRenderer;
-import com.shepherdjerred.capstone.engine.game.scenes.lobby.LobbyScene;
+import com.shepherdjerred.capstone.engine.game.scenes.lobby.list.LobbyListScene;
 import com.shepherdjerred.capstone.events.Event;
 import com.shepherdjerred.capstone.events.EventBus;
 import com.shepherdjerred.capstone.events.handlers.EventHandlerFrame;
@@ -106,26 +105,15 @@ public class MainMenuScene implements Scene {
         buttonSize,
         HOME,
         () -> {
-          var scene = new LobbyScene(background,
+          var scene = new LobbyListScene(background,
               eventBus,
               resourceManager,
-              new LobbyRenderer(resourceManager,
-                  eventBus,
-                  windowSize));
+              windowSize);
           eventBus.dispatch(new SceneTransitionEvent(scene));
         });
 
-    var spt = new Text(
-        new TextRenderer(resourceManager),
-        "Single Player",
-        FontName.M5X7,
-        Color.white(),
-        12,
-        new ObjectRelativeScenePositioner(singlePlayerButton, new SceneCoordinateOffset(0, 0), 2));
-
     gameObjects.add(singlePlayerButton);
     gameObjects.add(logo);
-    gameObjects.add(spt);
     gameObjects.add(text);
     gameObjects.add(background);
   }
@@ -147,7 +135,6 @@ public class MainMenuScene implements Scene {
 
   @Override
   public void cleanup() {
-    // TODO remove event handlers
     gameObjects.forEach(GameObject::cleanup);
     renderer.cleanup();
     sceneAudio.cleanup();

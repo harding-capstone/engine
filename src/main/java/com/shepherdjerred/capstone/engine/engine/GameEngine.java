@@ -7,7 +7,7 @@ import com.shepherdjerred.capstone.engine.engine.events.WindowResizeEvent;
 import com.shepherdjerred.capstone.engine.engine.events.handlers.ToggleBlendingEventHandler;
 import com.shepherdjerred.capstone.engine.engine.events.handlers.ToggleDepthEventHandler;
 import com.shepherdjerred.capstone.engine.engine.events.handlers.ToggleWireframeEventHandler;
-import com.shepherdjerred.capstone.engine.engine.events.handlers.WindowResizedEventHandler;
+import com.shepherdjerred.capstone.engine.engine.events.handlers.OpenGlWindowResizeHandler;
 import com.shepherdjerred.capstone.engine.engine.events.handlers.input.KeyReleasedEventHandler;
 import com.shepherdjerred.capstone.engine.engine.events.handlers.input.MouseMoveEventHandler;
 import com.shepherdjerred.capstone.engine.engine.events.input.KeyReleasedEvent;
@@ -58,7 +58,7 @@ public class GameEngine {
 
   private void registerEventHandlers() {
     eventBus.registerHandler(new EventLoggerHandler<>());
-    eventBus.registerHandler(WindowResizeEvent.class, new WindowResizedEventHandler());
+    eventBus.registerHandler(WindowResizeEvent.class, new OpenGlWindowResizeHandler());
     eventBus.registerHandler(MouseMoveEvent.class, new MouseMoveEventHandler(mouseTracker));
     eventBus.registerHandler(ToggleWireframeEvent.class, new ToggleWireframeEventHandler());
     eventBus.registerHandler(ToggleBlendingEvent.class, new ToggleBlendingEventHandler());
