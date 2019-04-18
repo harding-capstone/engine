@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <install4j version="7.0.10" transformSequenceNumber="7">
-  <directoryPresets config="/Users/jerred/Desktop" />
+  <directoryPresets config="/Users/jerred/Programming/capstone/engine/src/main/resources/executable" />
   <application name="Castle Casters" distributionSourceDir="" applicationId="8861-5051-4857-7176" mediaDir="/Users/jerred/Desktop" mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="false" pack200Compression="false" excludeSignedFromPacking="true" commonExternalFiles="false" createMd5Sums="true" shrinkRuntime="true" shortName="CastleCasters" publisher="Shepherd's Sheep" publisherWeb="https://github.com/harding-capstone" version="1.0.0" allPathsRelative="false" backupOnSave="false" autoSave="false" convertDotsToUnderscores="true" macSignature="????" macVolumeId="76c286597837dde6" javaMinVersion="11" javaMaxVersion="" allowBetaVM="false" jdkMode="jdk" jdkName="JDK 11.0">
     <languages skipLanguageSelection="false" languageSelectionInPrincipalLanguage="false">
       <principalLanguage id="en" customLocalizationFile="" />
@@ -59,7 +59,9 @@
       <infoPlist mode="1" file="">
         <content />
       </infoPlist>
-      <iconImageFiles />
+      <iconImageFiles>
+        <file path="/Users/jerred/Programming/capstone/engine/src/main/resources/executable/icon.png" />
+      </iconImageFiles>
     </launcher>
   </launchers>
   <installerGui installerType="1" addOnAppId="" suggestPreviousLocations="true" autoUpdateDescriptorUrl="" useAutoUpdateBaseUrl="false" autoUpdateBaseUrl="">

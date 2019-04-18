@@ -28,6 +28,14 @@ public class TextureSheetCoordinates {
     this.bottomRight = new RendererCoordinate((float) maxX, (float) maxY);
   }
 
+  public TextureSheetCoordinates flipX() {
+    return new TextureSheetCoordinates(maxX, minX, minY, maxY);
+  }
+
+  public TextureSheetCoordinates flipY() {
+    return new TextureSheetCoordinates(minX, maxX, maxY, minY);
+  }
+
   // TODO better name
   public float[] firstHalf() {
     return new float[] {
@@ -59,10 +67,19 @@ public class TextureSheetCoordinates {
 
   public float[] asIndexedFloatArray() {
     return new float[] {
-        bottomLeft.getX(), bottomLeft.getY(),
         topLeft.getX(), topLeft.getY(),
+        bottomLeft.getX(), bottomLeft.getY(),
+        topRight.getX(), topRight.getY(),
+        bottomRight.getX(), bottomRight.getY()
+    };
+  }
+
+  public float[] asHorizontallyFlippedArray() {
+    return new float[] {
+        topRight.getX(), topRight.getY(),
         bottomRight.getX(), bottomRight.getY(),
-        topRight.getX(), topRight.getY()
+        topLeft.getX(), topLeft.getY(),
+        bottomLeft.getX(), bottomLeft.getY()
     };
   }
 }

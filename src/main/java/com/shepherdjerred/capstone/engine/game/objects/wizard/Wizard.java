@@ -22,8 +22,11 @@ public class Wizard implements GameObject {
   @Setter
   private ScenePositioner position;
   @Setter
+  @Getter
   private State state;
+  @Getter
   private int frame;
+  private float frameAccumulator;
   @Getter
   private final SceneObjectDimensions sceneObjectDimensions;
 
@@ -56,7 +59,7 @@ public class Wizard implements GameObject {
 
   @Override
   public void update(float interval) {
-    frame += 1;
+    frameAccumulator += interval * 3;
     int maxFrames;
     if (state == State.STILL) {
       maxFrames = 3;
@@ -65,8 +68,10 @@ public class Wizard implements GameObject {
     } else {
       maxFrames = 3;
     }
+    frame = (int) frameAccumulator;
     if (frame > maxFrames - 1) {
       frame = 0;
+      frameAccumulator = 0;
     }
   }
 

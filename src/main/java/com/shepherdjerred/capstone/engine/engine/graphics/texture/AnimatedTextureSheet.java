@@ -8,4 +8,6 @@ public class AnimatedTextureSheet {
 
   private final Texture texture;
   private final Map<Integer, TextureSheetCoordinates> frames;
+
+
 }

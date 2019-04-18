@@ -57,6 +57,10 @@ public class ResourceManager {
   }
 
   public void free(ResourceIdentifier identifier) {
+    if (!referenceCounter.containsKey(identifier)) {
+      log.error("Freeing unallocated resource: " + identifier);
+      return;
+    }
     var newReferenceCount = referenceCounter.get(identifier) - 1;
     log.trace(String.format("Freeing %s %s. New reference count is %s.",
         identifier.getClass().getSimpleName().replace("Name", ""),

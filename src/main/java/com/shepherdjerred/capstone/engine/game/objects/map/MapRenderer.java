@@ -57,8 +57,8 @@ public class MapRenderer implements GameObjectRenderer<MapObject> {
             3, 1, 2
         };
 
-        var mesh = new Mesh(vertices, tile.getTextureSheetCoordinates().asFloatArray(), indices);
-        var texture = (Texture) resourceManager.get(tile.getTextureName());
+        var mesh = new Mesh(vertices, tile.getTextureSheetCoordinates().asIndexedFloatArray(), indices);
+        Texture texture = resourceManager.get(tile.getTextureName());
         var texturedMesh = new TexturedMesh(mesh, texture);
 
 //        log.info(String.format("T: %s, C: %s", texture.getTextureName(), tile.getTextureSheetCoordinates()));
@@ -111,5 +111,7 @@ public class MapRenderer implements GameObjectRenderer<MapObject> {
       texturedMesh.getMesh().cleanup();
       texturedMesh.getTexture().cleanup();
     });
+    resourceManager.free(shaderProgram.getShaderProgramName());
+
   }
 }
