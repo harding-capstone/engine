@@ -11,6 +11,7 @@ import com.shepherdjerred.capstone.engine.engine.scene.position.WindowRelativeSc
 import com.shepherdjerred.capstone.engine.engine.scene.position.WindowRelativeScenePositioner.HorizontalPosition;
 import com.shepherdjerred.capstone.engine.engine.scene.position.WindowRelativeScenePositioner.VerticalPosition;
 import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
+import com.shepherdjerred.capstone.engine.game.network.discovery.ServerDiscoverer;
 import com.shepherdjerred.capstone.engine.game.network.discovery.ServerInformation;
 import com.shepherdjerred.capstone.engine.game.network.discovery.netty.NettyServerDiscoverer;
 import com.shepherdjerred.capstone.engine.game.objects.background.parallax.ParallaxBackground;
@@ -34,7 +35,7 @@ public class LobbyListScene implements Scene {
   private final SceneRenderer<LobbyListScene> sceneRenderer;
   @Getter
   private final List<GameObject> gameObjects;
-  private final NettyServerDiscoverer discoverer;
+  private final ServerDiscoverer discoverer;
   private final Thread discovererThread;
   private final Set<ServerInformation> servers;
   private final EventHandlerFrame<Event> eventHandlerFrame;

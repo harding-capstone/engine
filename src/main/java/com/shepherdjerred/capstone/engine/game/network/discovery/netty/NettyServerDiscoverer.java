@@ -1,12 +1,12 @@
 package com.shepherdjerred.capstone.engine.game.network.discovery.netty;
 
-import static com.shepherdjerred.capstone.engine.game.Constants.DISCOVERY_PORT;
 
-import com.shepherdjerred.capstone.engine.game.network.discovery.NetworkConnectionData;
+import com.shepherdjerred.capstone.common.Constants;
 import com.shepherdjerred.capstone.engine.game.network.discovery.ServerDiscoverer;
 import com.shepherdjerred.capstone.engine.game.network.events.network.NetworkEvent;
 import com.shepherdjerred.capstone.events.Event;
 import com.shepherdjerred.capstone.events.EventBus;
+import java.net.InetSocketAddress;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import lombok.extern.log4j.Log4j2;
 
@@ -24,8 +24,8 @@ public class NettyServerDiscoverer implements ServerDiscoverer, Runnable {
   @Override
   public void discoverServers() {
     log.info("Discovering servers");
-    new Thread(new NettyBroadcastBootstrap(new NetworkConnectionData("0.0.0.0", DISCOVERY_PORT),
-        eventQueue));
+    new NettyDiscoveryBootstrap(new InetSocketAddress(Constants.DISCOVERY_PORT),
+        eventQueue).run();
   }
 
   public void handleLatestEvent() {

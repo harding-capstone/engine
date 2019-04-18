@@ -1,6 +1,5 @@
 package com.shepherdjerred.capstone.engine.game.network.discovery.netty;
 
-import com.shepherdjerred.capstone.engine.game.network.discovery.NetworkConnectionData;
 import com.shepherdjerred.capstone.engine.game.network.discovery.ServerInformation;
 import com.shepherdjerred.capstone.engine.game.network.discovery.event.ServerDiscoveredEvent;
 import com.shepherdjerred.capstone.engine.game.network.events.network.NetworkEvent;
@@ -10,19 +9,23 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import lombok.AllArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 
+@Log4j2
 @AllArgsConstructor
-public class BroadcastChannelInboundHandler extends ChannelInboundHandlerAdapter {
+public class DiscoveryChannelInboundHandler extends ChannelInboundHandlerAdapter {
 
   private final ConcurrentLinkedQueue<NetworkEvent> eventQueue;
 
   @Override
   public void channelRead(ChannelHandlerContext context, Object message) {
+    log.info(message);
     var packet = (Packet) message;
     if (packet instanceof ServerBroadcastPacket) {
       var serverBroadcastPacket = (ServerBroadcastPacket) packet;
-      var serverInformation = new ServerInformation(new NetworkConnectionData(null,
-          0), serverBroadcastPacket.lobbySettings);
+      var remote = context.channel().remoteAddress();
+
+      var serverInformation = new ServerInformation(remote, serverBroadcastPacket.lobbySettings);
       var serverDiscoveredEvent = new ServerDiscoveredEvent(serverInformation);
 
       eventQueue.add(serverDiscoveredEvent);
