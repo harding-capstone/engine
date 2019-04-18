@@ -2,65 +2,48 @@ package com.shepherdjerred.capstone.engine.game.scenes.mainmenu;
 
 import static com.shepherdjerred.capstone.engine.game.objects.button.Button.Type.GENERIC;
 
-import com.shepherdjerred.capstone.engine.engine.events.input.MouseButtonDownEvent;
-import com.shepherdjerred.capstone.engine.engine.events.input.MouseButtonUpEvent;
-import com.shepherdjerred.capstone.engine.engine.events.input.MouseMoveEvent;
+import com.shepherdjerred.capstone.common.lobby.LobbySettings.LobbyType;
 import com.shepherdjerred.capstone.engine.engine.events.scene.SceneTransitionEvent;
 import com.shepherdjerred.capstone.engine.engine.graphics.Color;
 import com.shepherdjerred.capstone.engine.engine.graphics.font.FontName;
-import com.shepherdjerred.capstone.engine.engine.object.GameObject;
 import com.shepherdjerred.capstone.engine.engine.object.SceneObjectDimensions;
 import com.shepherdjerred.capstone.engine.engine.resource.ResourceManager;
-import com.shepherdjerred.capstone.engine.engine.scene.Scene;
-import com.shepherdjerred.capstone.engine.engine.scene.SceneRenderer;
+import com.shepherdjerred.capstone.engine.engine.scene.InteractableScene;
 import com.shepherdjerred.capstone.engine.engine.scene.position.ObjectRelativeScenePositioner;
 import com.shepherdjerred.capstone.engine.engine.scene.position.SceneCoordinateOffset;
 import com.shepherdjerred.capstone.engine.engine.scene.position.WindowRelativeScenePositioner;
 import com.shepherdjerred.capstone.engine.engine.scene.position.WindowRelativeScenePositioner.HorizontalPosition;
 import com.shepherdjerred.capstone.engine.engine.scene.position.WindowRelativeScenePositioner.VerticalPosition;
 import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
-import com.shepherdjerred.capstone.engine.game.handlers.MouseDownClickableHandler;
-import com.shepherdjerred.capstone.engine.game.handlers.MouseMoveHoverableEventHandler;
-import com.shepherdjerred.capstone.engine.game.handlers.MouseUpClickableHandler;
 import com.shepherdjerred.capstone.engine.game.objects.background.parallax.ParallaxBackground;
 import com.shepherdjerred.capstone.engine.game.objects.background.parallax.ParallaxBackground.Type;
 import com.shepherdjerred.capstone.engine.game.objects.logo.Logo;
 import com.shepherdjerred.capstone.engine.game.objects.text.Text;
 import com.shepherdjerred.capstone.engine.game.objects.textbutton.TextButton;
+import com.shepherdjerred.capstone.engine.game.scenes.lobby.host.HostLobbyScene;
 import com.shepherdjerred.capstone.engine.game.scenes.lobby.list.LobbyListScene;
 import com.shepherdjerred.capstone.events.Event;
 import com.shepherdjerred.capstone.events.EventBus;
-import com.shepherdjerred.capstone.events.handlers.EventHandlerFrame;
-import java.util.ArrayList;
-import java.util.List;
-import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-public class MainMenuScene implements Scene {
+public class MainMenuScene extends InteractableScene {
 
   private final ResourceManager resourceManager;
-  private final EventBus<Event> eventBus;
-  @Getter
-  private final List<GameObject> gameObjects;
   private final WindowSize windowSize;
-  private final SceneRenderer<MainMenuScene> renderer;
   private final MainMenuAudio sceneAudio;
-  private final EventHandlerFrame<Event> handlerFrame;
   private ParallaxBackground background;
 
-  public MainMenuScene(SceneRenderer<MainMenuScene> renderer,
-      ResourceManager resourceManager,
+  public MainMenuScene(ResourceManager resourceManager,
       EventBus<Event> eventBus,
-      WindowSize windowSize,
-      MainMenuAudio sceneAudio) {
-    this.renderer = renderer;
+      WindowSize windowSize) {
+    super(windowSize,
+        resourceManager,
+        new MainMenuRenderer(resourceManager, eventBus, windowSize),
+        eventBus);
     this.resourceManager = resourceManager;
-    this.eventBus = eventBus;
     this.windowSize = windowSize;
-    this.sceneAudio = sceneAudio;
-    this.handlerFrame = new EventHandlerFrame<>();
-    gameObjects = new ArrayList<>();
+    this.sceneAudio = new MainMenuAudio(eventBus, resourceManager);
     createGameObjects();
   }
 
@@ -90,10 +73,29 @@ public class MainMenuScene implements Scene {
 
     var buttonSize = new SceneObjectDimensions(100, 50);
 
-    var playButton = new TextButton(resourceManager,
+    var singleplayerButton = new TextButton(resourceManager,
         windowSize,
         new ObjectRelativeScenePositioner(logo, new SceneCoordinateOffset(0, 200), 1),
-        "Play",
+        "Single Player",
+        FontName.M5X7,
+        Color.white(),
+        12,
+        buttonSize,
+        GENERIC,
+        () -> {
+          background.setCleanupDisabled(true);
+          var scene = new HostLobbyScene(background,
+              eventBus,
+              resourceManager,
+              windowSize,
+              LobbyType.LOCAL);
+          eventBus.dispatch(new SceneTransitionEvent(scene));
+        });
+
+    var multiplayerButton = new TextButton(resourceManager,
+        windowSize,
+        new ObjectRelativeScenePositioner(singleplayerButton, new SceneCoordinateOffset(0, 75), 1),
+        "Multiplayer",
         FontName.M5X7,
         Color.white(),
         12,
@@ -110,7 +112,7 @@ public class MainMenuScene implements Scene {
 
     var helpButton = new TextButton(resourceManager,
         windowSize,
-        new ObjectRelativeScenePositioner(playButton, new SceneCoordinateOffset(0, 75), 1),
+        new ObjectRelativeScenePositioner(multiplayerButton, new SceneCoordinateOffset(0, 75), 1),
         "Help",
         FontName.M5X7,
         Color.white(),
@@ -120,7 +122,8 @@ public class MainMenuScene implements Scene {
         () -> {
         });
 
-    gameObjects.add(playButton);
+    gameObjects.add(singleplayerButton);
+    gameObjects.add(multiplayerButton);
     gameObjects.add(helpButton);
     gameObjects.add(logo);
     gameObjects.add(text);
@@ -129,34 +132,14 @@ public class MainMenuScene implements Scene {
 
   @Override
   public void initialize() throws Exception {
-    var mouseDownClickable = new MouseDownClickableHandler(this);
-    var mouseUpClickable = new MouseUpClickableHandler(this);
-    var mouseMoveHoverable = new MouseMoveHoverableEventHandler(this);
-
-    handlerFrame.registerHandler(MouseButtonDownEvent.class, mouseDownClickable);
-    handlerFrame.registerHandler(MouseButtonUpEvent.class, mouseUpClickable);
-    handlerFrame.registerHandler(MouseMoveEvent.class, mouseMoveHoverable);
-    eventBus.registerHandlerFrame(handlerFrame);
-
-    renderer.initialize(this);
+    super.initialize();
     sceneAudio.initialize();
   }
 
   @Override
   public void cleanup() {
-    gameObjects.forEach(GameObject::cleanup);
-    renderer.cleanup();
+    super.cleanup();
     sceneAudio.cleanup();
-    eventBus.removeHandlerFrame(handlerFrame);
   }
 
-  @Override
-  public void updateState(float interval) {
-    gameObjects.forEach(gameObject -> gameObject.update(interval));
-  }
-
-  @Override
-  public void render(WindowSize windowSize) {
-    renderer.render(this);
-  }
 }

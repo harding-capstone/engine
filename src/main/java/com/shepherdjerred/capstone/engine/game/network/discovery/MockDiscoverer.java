@@ -26,6 +26,11 @@ public class MockDiscoverer implements ServerDiscoverer {
   }
 
   @Override
+  public void stop() {
+
+  }
+
+  @Override
   public void run() {
     discoverServers();
   }

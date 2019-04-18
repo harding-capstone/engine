@@ -19,9 +19,9 @@ import com.shepherdjerred.capstone.engine.engine.scene.SceneCoordinate;
 import com.shepherdjerred.capstone.engine.engine.scene.position.AbsoluteScenePositioner;
 import com.shepherdjerred.capstone.engine.engine.scene.position.SceneCoordinateOffset;
 import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
-import com.shepherdjerred.capstone.engine.game.objects.map.MapObject;
-import com.shepherdjerred.capstone.engine.game.objects.wizard.Wizard;
-import com.shepherdjerred.capstone.engine.game.objects.wizard.Wizard.State;
+import com.shepherdjerred.capstone.engine.game.objects.game.map.MapObject;
+import com.shepherdjerred.capstone.engine.game.objects.game.wizard.Wizard;
+import com.shepherdjerred.capstone.engine.game.objects.game.wizard.Wizard.State;
 import com.shepherdjerred.capstone.events.Event;
 import com.shepherdjerred.capstone.events.EventBus;
 import com.shepherdjerred.capstone.events.handlers.EventHandler;
@@ -53,12 +53,11 @@ public class GameScene implements Scene {
 
   public GameScene(ResourceManager resourceManager,
       EventBus<Event> eventBus,
-      GameRenderer gameRenderer,
       GameMapName gameMapName,
       WindowSize windowSize) {
     this.resourceManager = resourceManager;
     this.eventBus = eventBus;
-    this.gameRenderer = gameRenderer;
+    this.gameRenderer = new GameRenderer(resourceManager, eventBus, windowSize);
     this.gameObjects = new ArrayList<>();
     this.windowSize = windowSize;
     this.gameMapName = gameMapName;

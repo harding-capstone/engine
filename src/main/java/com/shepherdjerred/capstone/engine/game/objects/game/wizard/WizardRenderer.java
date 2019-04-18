@@ -1,4 +1,4 @@
-package com.shepherdjerred.capstone.engine.game.objects.wizard;
+package com.shepherdjerred.capstone.engine.game.objects.game.wizard;
 
 import com.shepherdjerred.capstone.common.player.Element;
 import com.shepherdjerred.capstone.engine.engine.graphics.RendererCoordinate;
@@ -16,7 +16,7 @@ import com.shepherdjerred.capstone.engine.engine.object.GameObjectRenderer;
 import com.shepherdjerred.capstone.engine.engine.object.SceneObjectDimensions;
 import com.shepherdjerred.capstone.engine.engine.resource.ResourceManager;
 import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
-import com.shepherdjerred.capstone.engine.game.objects.wizard.Wizard.State;
+import com.shepherdjerred.capstone.engine.game.objects.game.wizard.Wizard.State;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.extern.log4j.Log4j2;

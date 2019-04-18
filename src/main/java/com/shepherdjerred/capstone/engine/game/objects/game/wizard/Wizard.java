@@ -1,4 +1,4 @@
-package com.shepherdjerred.capstone.engine.game.objects.wizard;
+package com.shepherdjerred.capstone.engine.game.objects.game.wizard;
 
 import com.shepherdjerred.capstone.common.player.Element;
 import com.shepherdjerred.capstone.engine.engine.object.GameObject;

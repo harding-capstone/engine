@@ -1,4 +1,4 @@
-package com.shepherdjerred.capstone.engine.game.objects.map;
+package com.shepherdjerred.capstone.engine.game.objects.game.map;
 
 import static com.shepherdjerred.capstone.engine.game.Constants.RENDER_TILE_RESOLUTION;
 

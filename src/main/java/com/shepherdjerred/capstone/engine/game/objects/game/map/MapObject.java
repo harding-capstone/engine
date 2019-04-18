@@ -1,4 +1,4 @@
-package com.shepherdjerred.capstone.engine.game.objects.map;
+package com.shepherdjerred.capstone.engine.game.objects.game.map;
 
 import com.shepherdjerred.capstone.engine.engine.map.MapLayers;
 import com.shepherdjerred.capstone.engine.engine.map.GameMapName;

@@ -1,4 +1,4 @@
-package com.shepherdjerred.capstone.engine.game.objects.wall;
+package com.shepherdjerred.capstone.engine.game.objects.game.wall;
 
 import com.shepherdjerred.capstone.engine.engine.object.GameObjectRenderer;
 import com.shepherdjerred.capstone.engine.engine.window.WindowSize;

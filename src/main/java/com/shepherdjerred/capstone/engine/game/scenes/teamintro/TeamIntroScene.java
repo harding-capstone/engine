@@ -11,8 +11,6 @@ import com.shepherdjerred.capstone.engine.engine.scene.position.WindowRelativeSc
 import com.shepherdjerred.capstone.engine.engine.scene.position.WindowRelativeScenePositioner.VerticalPosition;
 import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
 import com.shepherdjerred.capstone.engine.game.objects.logo.Logo;
-import com.shepherdjerred.capstone.engine.game.scenes.mainmenu.MainMenuAudio;
-import com.shepherdjerred.capstone.engine.game.scenes.mainmenu.MainMenuRenderer;
 import com.shepherdjerred.capstone.engine.game.scenes.mainmenu.MainMenuScene;
 import com.shepherdjerred.capstone.events.Event;
 import com.shepherdjerred.capstone.events.EventBus;
@@ -73,14 +71,10 @@ public class TeamIntroScene implements Scene {
   public void updateState(float interval) {
     time += interval;
     if (time > 5 && !hasTransitioned) {
-      eventBus.dispatch(new SceneTransitionEvent(new MainMenuScene(new MainMenuRenderer(
+      eventBus.dispatch(new SceneTransitionEvent(new MainMenuScene(
           resourceManager,
           eventBus,
-          windowSize),
-          resourceManager,
-          eventBus,
-          windowSize,
-          new MainMenuAudio(eventBus, resourceManager))));
+          windowSize)));
       hasTransitioned = true;
     }
   }

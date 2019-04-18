@@ -1,5 +1,6 @@
 package com.shepherdjerred.capstone.engine.game.scenes.lobby.list;
 
+import com.shepherdjerred.capstone.common.lobby.LobbySettings.LobbyType;
 import com.shepherdjerred.capstone.engine.engine.events.input.MouseButtonDownEvent;
 import com.shepherdjerred.capstone.engine.engine.events.input.MouseButtonUpEvent;
 import com.shepherdjerred.capstone.engine.engine.events.input.MouseMoveEvent;
@@ -28,8 +29,7 @@ import com.shepherdjerred.capstone.engine.game.objects.background.parallax.Paral
 import com.shepherdjerred.capstone.engine.game.objects.button.Button.Type;
 import com.shepherdjerred.capstone.engine.game.objects.text.Text;
 import com.shepherdjerred.capstone.engine.game.objects.textbutton.TextButton;
-import com.shepherdjerred.capstone.engine.game.scenes.mainmenu.MainMenuAudio;
-import com.shepherdjerred.capstone.engine.game.scenes.mainmenu.MainMenuRenderer;
+import com.shepherdjerred.capstone.engine.game.scenes.lobby.host.HostLobbyScene;
 import com.shepherdjerred.capstone.engine.game.scenes.mainmenu.MainMenuScene;
 import com.shepherdjerred.capstone.events.Event;
 import com.shepherdjerred.capstone.events.EventBus;
@@ -55,6 +55,7 @@ public class LobbyListScene implements Scene {
   private final EventHandlerFrame<Event> eventHandlerFrame;
   private final Map<ServerInformation, GameObject> serverInfoMap;
   private final WindowSize windowSize;
+  private final ParallaxBackground background;
 
   public LobbyListScene(ParallaxBackground background,
       EventBus<Event> eventBus,
@@ -69,6 +70,7 @@ public class LobbyListScene implements Scene {
     discovererThread = new Thread(discoverer, "DISCOVERER");
     eventHandlerFrame = new EventHandlerFrame<>();
     serverInfoMap = new HashMap<>();
+    this.background = background;
     gameObjects.add(background);
     createEventHandler();
     eventBus.registerHandlerFrame(eventHandlerFrame);
@@ -155,12 +157,9 @@ public class LobbyListScene implements Scene {
         new SceneObjectDimensions(100, 50),
         Type.GENERIC,
         () -> {
-          var sceneRenderer = new MainMenuRenderer(resourceManager, eventBus, windowSize);
-          var scene = new MainMenuScene(sceneRenderer,
-              resourceManager,
+          var scene = new MainMenuScene(resourceManager,
               eventBus,
-              windowSize,
-              new MainMenuAudio(eventBus, resourceManager));
+              windowSize);
           eventBus.dispatch(new SceneTransitionEvent(scene));
         });
 
@@ -177,12 +176,9 @@ public class LobbyListScene implements Scene {
         new SceneObjectDimensions(100, 50),
         Type.GENERIC,
         () -> {
-          var sceneRenderer = new MainMenuRenderer(resourceManager, eventBus, windowSize);
-          var scene = new MainMenuScene(sceneRenderer,
-              resourceManager,
+          var scene = new HostLobbyScene(background,
               eventBus,
-              windowSize,
-              new MainMenuAudio(eventBus, resourceManager));
+              resourceManager, windowSize, LobbyType.NETWORK);
           eventBus.dispatch(new SceneTransitionEvent(scene));
         });
 
@@ -195,6 +191,7 @@ public class LobbyListScene implements Scene {
   public void cleanup() {
     gameObjects.forEach(GameObject::cleanup);
     sceneRenderer.cleanup();
+    discoverer.stop();
     eventBus.removeHandlerFrame(eventHandlerFrame);
   }
 

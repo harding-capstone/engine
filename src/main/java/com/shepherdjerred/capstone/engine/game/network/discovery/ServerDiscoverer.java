@@ -7,5 +7,7 @@ public interface ServerDiscoverer extends Runnable {
 
   void discoverServers();
 
+  void stop();
+
   Optional<Event> getEvent();
 }

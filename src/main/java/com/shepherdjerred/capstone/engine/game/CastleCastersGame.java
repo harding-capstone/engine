@@ -25,13 +25,8 @@ import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
 import com.shepherdjerred.capstone.engine.game.network.Connection;
 import com.shepherdjerred.capstone.engine.game.objects.background.parallax.ParallaxBackground;
 import com.shepherdjerred.capstone.engine.game.objects.background.parallax.ParallaxBackground.Type;
-import com.shepherdjerred.capstone.engine.game.scenes.game.GameRenderer;
 import com.shepherdjerred.capstone.engine.game.scenes.game.GameScene;
-import com.shepherdjerred.capstone.engine.game.scenes.lobby.details.LobbyRenderer;
-import com.shepherdjerred.capstone.engine.game.scenes.lobby.details.LobbyScene;
 import com.shepherdjerred.capstone.engine.game.scenes.lobby.list.LobbyListScene;
-import com.shepherdjerred.capstone.engine.game.scenes.mainmenu.MainMenuAudio;
-import com.shepherdjerred.capstone.engine.game.scenes.mainmenu.MainMenuRenderer;
 import com.shepherdjerred.capstone.engine.game.scenes.mainmenu.MainMenuScene;
 import com.shepherdjerred.capstone.engine.game.scenes.teamintro.TeamIntroRenderer;
 import com.shepherdjerred.capstone.engine.game.scenes.teamintro.TeamIntroScene;
@@ -102,8 +97,7 @@ public class CastleCastersGame implements GameLogic {
   }
 
   private Scene getGameScene(WindowSize windowSize) {
-    var sceneRenderer = new GameRenderer(resourceManager, eventBus, windowSize);
-    return new GameScene(resourceManager, eventBus, sceneRenderer, GameMapName.GRASS, windowSize);
+    return new GameScene(resourceManager, eventBus, GameMapName.GRASS, windowSize);
   }
 
   private Scene getTeamScene(WindowSize windowSize) {
@@ -115,25 +109,15 @@ public class CastleCastersGame implements GameLogic {
   }
 
   private Scene getMainMenuScene(WindowSize windowSize) {
-    var sceneRenderer = new MainMenuRenderer(resourceManager, eventBus, windowSize);
-    return new MainMenuScene(sceneRenderer,
-        resourceManager,
+    return new MainMenuScene(resourceManager,
         eventBus,
-        windowSize,
-        new MainMenuAudio(eventBus, resourceManager));
+        windowSize);
   }
 
   private Scene getLobbyListScene(WindowSize windowSize) {
     return new LobbyListScene(new ParallaxBackground(resourceManager,
         windowSize,
         Type.PURPLE_MOUNTAINS), eventBus, resourceManager, windowSize);
-  }
-
-  private Scene getLobbyScene(WindowSize windowSize) {
-    var renderer = new LobbyRenderer(resourceManager, eventBus, windowSize);
-    return new LobbyScene(new ParallaxBackground(resourceManager,
-        windowSize,
-        Type.PURPLE_MOUNTAINS), eventBus, resourceManager, renderer);
   }
 
   @Override

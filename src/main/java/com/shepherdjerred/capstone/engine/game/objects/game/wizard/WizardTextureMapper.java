@@ -1,8 +1,8 @@
-package com.shepherdjerred.capstone.engine.game.objects.wizard;
+package com.shepherdjerred.capstone.engine.game.objects.game.wizard;
 
 import com.shepherdjerred.capstone.common.player.Element;
 import com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName;
-import com.shepherdjerred.capstone.engine.game.objects.wizard.Wizard.State;
+import com.shepherdjerred.capstone.engine.game.objects.game.wizard.Wizard.State;
 import java.util.HashMap;
 import java.util.Map;
 

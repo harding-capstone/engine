@@ -1,7 +1,7 @@
-package com.shepherdjerred.capstone.engine.game.objects.wall;
+package com.shepherdjerred.capstone.engine.game.objects.game.wall;
 
 import com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureSheetCoordinates;
-import com.shepherdjerred.capstone.engine.game.objects.wall.Wall.Type;
+import com.shepherdjerred.capstone.engine.game.objects.game.wall.Wall.Type;
 import java.util.HashMap;
 import java.util.Map;
 

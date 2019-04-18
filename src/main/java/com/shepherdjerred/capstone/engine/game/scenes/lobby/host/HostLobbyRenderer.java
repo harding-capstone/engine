@@ -1,4 +1,4 @@
-package com.shepherdjerred.capstone.engine.game.scenes.lobby.details;
+package com.shepherdjerred.capstone.engine.game.scenes.lobby.host;
 
 import com.shepherdjerred.capstone.engine.engine.graphics.Color;
 import com.shepherdjerred.capstone.engine.engine.graphics.OpenGlHelper;
@@ -15,7 +15,7 @@ import com.shepherdjerred.capstone.events.EventBus;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-public class LobbyRenderer implements SceneRenderer<LobbyScene> {
+public class HostLobbyRenderer implements SceneRenderer<HostLobbyScene> {
 
   private final ResourceManager resourceManager;
   private final EventBus<Event> eventBus;
@@ -23,7 +23,7 @@ public class LobbyRenderer implements SceneRenderer<LobbyScene> {
   private ProjectionMatrix projectionMatrix;
   private ShaderProgram defaultShaderProgram;
 
-  public LobbyRenderer(ResourceManager resourceManager,
+  public HostLobbyRenderer(ResourceManager resourceManager,
       EventBus<Event> eventBus,
       WindowSize windowSize) {
     this.resourceManager = resourceManager;
@@ -32,7 +32,7 @@ public class LobbyRenderer implements SceneRenderer<LobbyScene> {
   }
 
   @Override
-  public void render(LobbyScene scene) {
+  public void render(HostLobbyScene scene) {
     OpenGlHelper.clearScreen();
     updateProjectionMatrix();
 
@@ -43,7 +43,7 @@ public class LobbyRenderer implements SceneRenderer<LobbyScene> {
   }
 
   @Override
-  public void initialize(LobbyScene scene) throws Exception {
+  public void initialize(HostLobbyScene scene) throws Exception {
     updateProjectionMatrix();
     createShaderProgram();
     OpenGlHelper.setClearColor(Color.black());
