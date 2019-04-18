@@ -1,10 +1,5 @@
 package com.shepherdjerred.capstone.engine.game;
 
-import com.google.common.collect.BiMap;
-import com.google.common.collect.HashBiMap;
-import com.shepherdjerred.capstone.common.chat.ChatHistory;
-import com.shepherdjerred.capstone.common.chat.ChatMessage;
-import com.shepherdjerred.capstone.common.player.Player;
 import com.shepherdjerred.capstone.engine.engine.GameLogic;
 import com.shepherdjerred.capstone.engine.engine.audio.AudioLoader;
 import com.shepherdjerred.capstone.engine.engine.audio.AudioName;
@@ -28,28 +23,13 @@ import com.shepherdjerred.capstone.engine.engine.scene.Scene;
 import com.shepherdjerred.capstone.engine.engine.scene.SceneTransitioner;
 import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
 import com.shepherdjerred.capstone.engine.game.network.Connection;
-import com.shepherdjerred.capstone.engine.game.network.events.EditLobbyEvent;
-import com.shepherdjerred.capstone.engine.game.network.events.HostLeaveEvent;
-import com.shepherdjerred.capstone.engine.game.network.events.PlayerChatEvent;
-import com.shepherdjerred.capstone.engine.game.network.events.PlayerEvictEvent;
-import com.shepherdjerred.capstone.engine.game.network.events.PlayerJoinEvent;
-import com.shepherdjerred.capstone.engine.game.network.events.PlayerLeaveEvent;
-import com.shepherdjerred.capstone.engine.game.network.events.StartGameEvent;
-import com.shepherdjerred.capstone.engine.game.network.events.TurnEvent;
-import com.shepherdjerred.capstone.engine.game.network.handlers.EditLobbyEventHandler;
-import com.shepherdjerred.capstone.engine.game.network.handlers.HostLeaveEventHandler;
-import com.shepherdjerred.capstone.engine.game.network.handlers.PacketReceivedEventHandler;
-import com.shepherdjerred.capstone.engine.game.network.handlers.PlayerChatEventHandler;
-import com.shepherdjerred.capstone.engine.game.network.handlers.PlayerEvictEventHandler;
-import com.shepherdjerred.capstone.engine.game.network.handlers.PlayerJoinEventHandler;
-import com.shepherdjerred.capstone.engine.game.network.handlers.PlayerLeaveEventHandler;
-import com.shepherdjerred.capstone.engine.game.network.handlers.StartGameEventHandler;
-import com.shepherdjerred.capstone.engine.game.network.handlers.TurnEventHandler;
-import com.shepherdjerred.capstone.engine.game.network.events.networkEvents.ServerDisconnectedEvent;
-import com.shepherdjerred.capstone.engine.game.network.events.networkEvents.PacketReceivedEvent;
-import com.shepherdjerred.capstone.engine.game.network.handlers.ServerDisconnectedEventHandler;
+import com.shepherdjerred.capstone.engine.game.objects.background.parallax.ParallaxBackground;
+import com.shepherdjerred.capstone.engine.game.objects.background.parallax.ParallaxBackground.Type;
+import com.shepherdjerred.capstone.engine.game.objects.background.parallax.ParallaxBackgroundRenderer;
 import com.shepherdjerred.capstone.engine.game.scenes.game.GameRenderer;
 import com.shepherdjerred.capstone.engine.game.scenes.game.GameScene;
+import com.shepherdjerred.capstone.engine.game.scenes.lobby.LobbyRenderer;
+import com.shepherdjerred.capstone.engine.game.scenes.lobby.LobbyScene;
 import com.shepherdjerred.capstone.engine.game.scenes.mainmenu.MainMenuAudio;
 import com.shepherdjerred.capstone.engine.game.scenes.mainmenu.MainMenuRenderer;
 import com.shepherdjerred.capstone.engine.game.scenes.mainmenu.MainMenuScene;
@@ -57,11 +37,6 @@ import com.shepherdjerred.capstone.engine.game.scenes.teamintro.TeamIntroRendere
 import com.shepherdjerred.capstone.engine.game.scenes.teamintro.TeamIntroScene;
 import com.shepherdjerred.capstone.events.Event;
 import com.shepherdjerred.capstone.events.EventBus;
-import com.shepherdjerred.capstone.events.handlers.EventHandlerFrame;
-import com.shepherdjerred.capstone.events.handlers.EventLoggerHandler;
-import com.shepherdjerred.capstone.logic.match.Match;
-import com.shepherdjerred.capstone.logic.turn.Turn;
-import java.util.UUID;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
@@ -73,7 +48,6 @@ public class CastleCastersGame implements GameLogic {
   @Getter
   @Setter
   private Connection serverConnection;
-  private final BiMap<UUID, Player> handlePlayerMap; //lobby
   private final ResourceManager resourceManager;
   private final SceneTransitioner sceneTransitioner;
   private final AudioPlayer audioPlayer;
@@ -81,7 +55,6 @@ public class CastleCastersGame implements GameLogic {
 
   public CastleCastersGame(EventBus<Event> eventBus) {
     this.eventBus = eventBus;
-    this.handlePlayerMap = HashBiMap.create();
     this.resourceManager = new ResourceManager();
     this.audioPlayer = new AudioPlayer(eventBus);
     this.sceneTransitioner = new SceneTransitioner(eventBus);
@@ -117,7 +90,7 @@ public class CastleCastersGame implements GameLogic {
 
     this.windowSize = windowSize;
 
-    var scene = getGameScene(windowSize);
+    var scene = getLobbyScene(windowSize);
     sceneTransitioner.initialize(scene);
     audioPlayer.initialize();
     registerEventHandlers();
@@ -148,6 +121,12 @@ public class CastleCastersGame implements GameLogic {
         eventBus,
         windowSize,
         new MainMenuAudio(eventBus, resourceManager));
+  }
+
+  private Scene getLobbyScene(WindowSize windowSize) {
+    var renderer = new LobbyRenderer(resourceManager, eventBus, windowSize);
+    return new LobbyScene(new ParallaxBackground(new ParallaxBackgroundRenderer(resourceManager,
+        windowSize), Type.PURPLE_MOUNTAINS), eventBus, resourceManager, renderer);
   }
 
   @Override

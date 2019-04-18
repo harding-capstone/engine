@@ -1,12 +1,10 @@
 package com.shepherdjerred.capstone.engine.game.network.handlers;
 
-import com.shepherdjerred.capstone.engine.game.CastleCastersGame;
-import com.shepherdjerred.capstone.engine.game.GameClient;
+import com.shepherdjerred.capstone.engine.game.network.NetworkClient;
 import com.shepherdjerred.capstone.engine.game.network.events.EditLobbyEvent;
 import com.shepherdjerred.capstone.engine.game.network.events.GameOverEvent;
 import com.shepherdjerred.capstone.engine.game.network.events.HostLeaveEvent;
 import com.shepherdjerred.capstone.engine.game.network.events.PlayerChatEvent;
-import com.shepherdjerred.capstone.engine.game.network.events.PlayerCreatedEvent;
 import com.shepherdjerred.capstone.engine.game.network.events.PlayerEvictEvent;
 import com.shepherdjerred.capstone.engine.game.network.events.PlayerJoinEvent;
 import com.shepherdjerred.capstone.engine.game.network.events.PlayerLeaveEvent;
@@ -27,7 +25,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class PacketReceivedEventHandler implements EventHandler<PacketReceivedEvent> {
 
-  private final GameClient game;
+  private final NetworkClient game;
 
   @Override
   public void handle(PacketReceivedEvent event) {
@@ -83,7 +81,8 @@ public class PacketReceivedEventHandler implements EventHandler<PacketReceivedEv
   }
 
   private void handleCreatedPlayerPacket(CreatedPlayerPacket packet) {
-    game.dispatch(new PlayerCreatedEvent(packet.getPlayer(), packet.getLobby()));
+    // TODO
+//    game.dispatch(new PlayerCreatedEvent(packet.getPlayer(), packet.getLobby()));
   }
 
 

@@ -8,7 +8,7 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioDatagramChannel;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-public class NettyClientDiscovery {
+public class NettyServerDiscovery {
 
   public void receiveBroadcast(NettyClientSettings nettyClientSettings, ConcurrentLinkedQueue<NetworkEvent> eventQueue) {
     EventLoopGroup group = new NioEventLoopGroup();

@@ -14,12 +14,12 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-public class NettyClientConnector implements Connector {
+public class NettyServerConnector implements Connector {
 
   private final ConcurrentLinkedQueue<NetworkEvent> eventQueue;
   private final NettyClientSettings nettyClientSettings;
 
-  public NettyClientConnector(NettyClientSettings nettyClientSettings) {
+  public NettyServerConnector(NettyClientSettings nettyClientSettings) {
     this.eventQueue = new ConcurrentLinkedQueue<>();
     this.nettyClientSettings = nettyClientSettings;
   }
@@ -57,7 +57,7 @@ public class NettyClientConnector implements Connector {
 
     new Thread(() -> {
       while(true) {
-        var nettyClientDiscovery = new NettyClientDiscovery();
+        var nettyClientDiscovery = new NettyServerDiscovery();
         nettyClientDiscovery.receiveBroadcast(nettyClientSettings, eventQueue);
       }
     });

@@ -11,5 +11,4 @@ public class NettyClientSettings {
 
   private final String hostname;
   private final int port;
-  private final String ip;
 }

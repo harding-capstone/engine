@@ -1,12 +1,10 @@
-package com.shepherdjerred.capstone.engine.game;
+package com.shepherdjerred.capstone.engine.game.network;
 
-import com.google.common.collect.BiMap;
 import com.shepherdjerred.capstone.common.chat.ChatHistory;
 import com.shepherdjerred.capstone.common.chat.ChatMessage;
 import com.shepherdjerred.capstone.common.lobby.Lobby;
 import com.shepherdjerred.capstone.common.lobby.LobbySettings;
 import com.shepherdjerred.capstone.common.player.Player;
-import com.shepherdjerred.capstone.engine.game.network.Connection;
 import com.shepherdjerred.capstone.engine.game.network.events.EditLobbyEvent;
 import com.shepherdjerred.capstone.engine.game.network.events.HostLeaveEvent;
 import com.shepherdjerred.capstone.engine.game.network.events.PlayerChatEvent;
@@ -15,6 +13,7 @@ import com.shepherdjerred.capstone.engine.game.network.events.PlayerJoinEvent;
 import com.shepherdjerred.capstone.engine.game.network.events.PlayerLeaveEvent;
 import com.shepherdjerred.capstone.engine.game.network.events.StartGameEvent;
 import com.shepherdjerred.capstone.engine.game.network.events.TurnEvent;
+import com.shepherdjerred.capstone.engine.game.network.events.networkEvents.NetworkEvent;
 import com.shepherdjerred.capstone.engine.game.network.events.networkEvents.PacketReceivedEvent;
 import com.shepherdjerred.capstone.engine.game.network.events.networkEvents.ServerDisconnectedEvent;
 import com.shepherdjerred.capstone.engine.game.network.exception.LobbyFullException;
@@ -28,15 +27,20 @@ import com.shepherdjerred.capstone.engine.game.network.handlers.PlayerLeaveEvent
 import com.shepherdjerred.capstone.engine.game.network.handlers.ServerDisconnectedEventHandler;
 import com.shepherdjerred.capstone.engine.game.network.handlers.StartGameEventHandler;
 import com.shepherdjerred.capstone.engine.game.network.handlers.TurnEventHandler;
+import com.shepherdjerred.capstone.engine.game.network.netty.NettyClientSettings;
+import com.shepherdjerred.capstone.engine.game.network.netty.NettyServerConnector;
+import com.shepherdjerred.capstone.engine.game.network.netty.NettyServerDiscovery;
 import com.shepherdjerred.capstone.events.Event;
 import com.shepherdjerred.capstone.events.EventBus;
 import com.shepherdjerred.capstone.events.handlers.EventHandlerFrame;
 import com.shepherdjerred.capstone.logic.match.Match;
 import com.shepherdjerred.capstone.logic.turn.Turn;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import lombok.Getter;
 import lombok.Setter;
 
-public class GameClient {
+public class NetworkClient {
+
   private final EventBus<Event> eventBus;
   @Getter
   @Setter
@@ -52,11 +56,30 @@ public class GameClient {
   private Match match;
   @Getter
   private ChatHistory chatHistory;
+  private EventHandlerFrame<Event> networkHandlerFrame;
+  private EventHandlerFrame<Event> eventHandlerFrame;
+  private ConcurrentLinkedQueue<NetworkEvent> eventQueue;
 
-  public GameClient(EventBus<Event> eventBus) {
+  public NetworkClient(EventBus<Event> eventBus) {
     this.eventBus = eventBus;
+    this.eventQueue = new ConcurrentLinkedQueue<>();
     registerEventHandlers();
     registerNetworkEventHandlers();
+  }
+
+  public void discover() {
+    new NettyServerDiscovery();
+  }
+
+  public void connect(NettyClientSettings nettyClientSettings) {
+    var server = new NettyServerConnector(nettyClientSettings);
+  }
+
+  public void handleLatestEvent() {
+    if (eventQueue.size() > 0) {
+      var event = eventQueue.poll();
+      eventBus.dispatch(event);
+    }
   }
 
   public void makeTurn(Turn turn) {
@@ -84,38 +107,42 @@ public class GameClient {
   }
 
   private void registerNetworkEventHandlers() {
-    var frame = new EventHandlerFrame<Event>();
-    frame.registerHandler(ServerDisconnectedEvent.class,
+    networkHandlerFrame = new EventHandlerFrame<>();
+    networkHandlerFrame.registerHandler(ServerDisconnectedEvent.class,
         new ServerDisconnectedEventHandler(this));
-    eventBus.registerHandlerFrame(frame);
+    eventBus.registerHandlerFrame(networkHandlerFrame);
   }
 
   private void registerEventHandlers() {
-    var frame = new EventHandlerFrame<Event>();
-    frame.registerHandler(PacketReceivedEvent.class,
+    eventHandlerFrame = new EventHandlerFrame<>();
+    eventHandlerFrame.registerHandler(PacketReceivedEvent.class,
         new PacketReceivedEventHandler(this));
-    frame.registerHandler(PlayerChatEvent.class,
+    eventHandlerFrame.registerHandler(PlayerChatEvent.class,
         new PlayerChatEventHandler(this));
-    frame.registerHandler(EditLobbyEvent.class,
+    eventHandlerFrame.registerHandler(EditLobbyEvent.class,
         new EditLobbyEventHandler(this));
-    frame.registerHandler(HostLeaveEvent.class,
+    eventHandlerFrame.registerHandler(HostLeaveEvent.class,
         new HostLeaveEventHandler(this));
-    frame.registerHandler(PlayerEvictEvent.class,
+    eventHandlerFrame.registerHandler(PlayerEvictEvent.class,
         new PlayerEvictEventHandler(this));
-    frame.registerHandler(PlayerJoinEvent.class,
+    eventHandlerFrame.registerHandler(PlayerJoinEvent.class,
         new PlayerJoinEventHandler(this));
-    frame.registerHandler(PlayerLeaveEvent.class,
+    eventHandlerFrame.registerHandler(PlayerLeaveEvent.class,
         new PlayerLeaveEventHandler(this));
-    frame.registerHandler(StartGameEvent.class,
+    eventHandlerFrame.registerHandler(StartGameEvent.class,
         new StartGameEventHandler(this));
-    frame.registerHandler(TurnEvent.class,
+    eventHandlerFrame.registerHandler(TurnEvent.class,
         new TurnEventHandler(this));
 
-    eventBus.registerHandlerFrame(frame);
+    eventBus.registerHandlerFrame(eventHandlerFrame);
   }
 
   public void dispatch(Event event) {
     eventBus.dispatch(event);
   }
 
+  public void cleanup() {
+    eventBus.removeHandlerFrame(networkHandlerFrame);
+    eventBus.removeHandlerFrame(eventHandlerFrame);
+  }
 }
