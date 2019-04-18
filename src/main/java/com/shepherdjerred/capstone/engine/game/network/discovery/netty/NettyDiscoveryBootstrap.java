@@ -1,6 +1,6 @@
 package com.shepherdjerred.capstone.engine.game.network.discovery.netty;
 
-import com.shepherdjerred.capstone.engine.game.network.events.network.NetworkEvent;
+import com.shepherdjerred.capstone.engine.game.network.event.NetworkEvent;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;

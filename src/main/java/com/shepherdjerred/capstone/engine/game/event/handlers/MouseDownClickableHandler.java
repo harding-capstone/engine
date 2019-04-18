@@ -1,4 +1,4 @@
-package com.shepherdjerred.capstone.engine.game.handlers;
+package com.shepherdjerred.capstone.engine.game.event.handlers;
 
 import com.shepherdjerred.capstone.engine.engine.events.input.MouseButtonDownEvent;
 import com.shepherdjerred.capstone.engine.engine.scene.Scene;

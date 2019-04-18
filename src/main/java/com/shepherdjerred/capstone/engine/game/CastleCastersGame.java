@@ -1,5 +1,7 @@
 package com.shepherdjerred.capstone.engine.game;
 
+import static com.shepherdjerred.capstone.engine.engine.map.GameMapName.GRASS;
+
 import com.shepherdjerred.capstone.engine.engine.GameLogic;
 import com.shepherdjerred.capstone.engine.engine.audio.AudioLoader;
 import com.shepherdjerred.capstone.engine.engine.audio.AudioName;
@@ -22,7 +24,6 @@ import com.shepherdjerred.capstone.engine.engine.resource.ResourceManager;
 import com.shepherdjerred.capstone.engine.engine.scene.Scene;
 import com.shepherdjerred.capstone.engine.engine.scene.SceneTransitioner;
 import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
-import com.shepherdjerred.capstone.engine.game.network.Connection;
 import com.shepherdjerred.capstone.engine.game.objects.background.parallax.ParallaxBackground;
 import com.shepherdjerred.capstone.engine.game.objects.background.parallax.ParallaxBackground.Type;
 import com.shepherdjerred.capstone.engine.game.scenes.game.GameScene;
@@ -32,17 +33,12 @@ import com.shepherdjerred.capstone.engine.game.scenes.teamintro.TeamIntroRendere
 import com.shepherdjerred.capstone.engine.game.scenes.teamintro.TeamIntroScene;
 import com.shepherdjerred.capstone.events.Event;
 import com.shepherdjerred.capstone.events.EventBus;
-import lombok.Getter;
-import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 public class CastleCastersGame implements GameLogic {
 
   private final EventBus<Event> eventBus;
-  @Getter
-  @Setter
-  private Connection serverConnection;
   private final ResourceManager resourceManager;
   private final SceneTransitioner sceneTransitioner;
   private final AudioPlayer audioPlayer;
@@ -97,7 +93,7 @@ public class CastleCastersGame implements GameLogic {
   }
 
   private Scene getGameScene(WindowSize windowSize) {
-    return new GameScene(resourceManager, eventBus, GameMapName.GRASS, windowSize);
+    return new GameScene(resourceManager, eventBus, GRASS, windowSize);
   }
 
   private Scene getTeamScene(WindowSize windowSize) {

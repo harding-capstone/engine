@@ -1,7 +1,5 @@
 package com.shepherdjerred.capstone.engine.game.scenes.lobby.host;
 
-import static com.shepherdjerred.capstone.engine.engine.map.GameMapName.GRASS;
-
 import com.shepherdjerred.capstone.common.lobby.LobbySettings;
 import com.shepherdjerred.capstone.common.lobby.LobbySettings.LobbyType;
 import com.shepherdjerred.capstone.engine.engine.events.scene.SceneTransitionEvent;
@@ -19,7 +17,7 @@ import com.shepherdjerred.capstone.engine.game.objects.background.parallax.Paral
 import com.shepherdjerred.capstone.engine.game.objects.button.Button.Type;
 import com.shepherdjerred.capstone.engine.game.objects.text.Text;
 import com.shepherdjerred.capstone.engine.game.objects.textbutton.TextButton;
-import com.shepherdjerred.capstone.engine.game.scenes.game.GameScene;
+import com.shepherdjerred.capstone.engine.game.scenes.lobby.details.LobbyDetailsScene;
 import com.shepherdjerred.capstone.engine.game.scenes.mainmenu.MainMenuScene;
 import com.shepherdjerred.capstone.events.Event;
 import com.shepherdjerred.capstone.events.EventBus;
@@ -102,7 +100,7 @@ public class HostLobbyScene extends InteractableScene {
         new SceneObjectDimensions(100, 50),
         Type.GENERIC,
         () -> {
-          var scene = new GameScene(resourceManager, eventBus, GRASS, windowSize);
+          var scene = new LobbyDetailsScene(eventBus, resourceManager, windowSize);
           eventBus.dispatch(new SceneTransitionEvent(scene));
         });
 

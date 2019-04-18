@@ -3,7 +3,7 @@ package com.shepherdjerred.capstone.engine.game.network.discovery.netty;
 
 import com.shepherdjerred.capstone.common.Constants;
 import com.shepherdjerred.capstone.engine.game.network.discovery.ServerDiscoverer;
-import com.shepherdjerred.capstone.engine.game.network.events.network.NetworkEvent;
+import com.shepherdjerred.capstone.engine.game.network.event.NetworkEvent;
 import com.shepherdjerred.capstone.events.Event;
 import java.net.InetSocketAddress;
 import java.util.Optional;

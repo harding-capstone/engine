@@ -2,7 +2,7 @@ package com.shepherdjerred.capstone.engine.game.network.discovery.netty;
 
 import com.shepherdjerred.capstone.engine.game.network.discovery.ServerInformation;
 import com.shepherdjerred.capstone.engine.game.network.discovery.event.ServerDiscoveredEvent;
-import com.shepherdjerred.capstone.engine.game.network.events.network.NetworkEvent;
+import com.shepherdjerred.capstone.engine.game.network.event.NetworkEvent;
 import com.shepherdjerred.capstone.network.packet.packets.Packet;
 import com.shepherdjerred.capstone.network.packet.packets.ServerBroadcastPacket;
 import io.netty.channel.ChannelHandlerContext;

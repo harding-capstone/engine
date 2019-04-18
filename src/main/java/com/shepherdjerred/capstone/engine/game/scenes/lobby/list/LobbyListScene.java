@@ -18,9 +18,9 @@ import com.shepherdjerred.capstone.engine.engine.scene.position.WindowRelativeSc
 import com.shepherdjerred.capstone.engine.engine.scene.position.WindowRelativeScenePositioner.HorizontalPosition;
 import com.shepherdjerred.capstone.engine.engine.scene.position.WindowRelativeScenePositioner.VerticalPosition;
 import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
-import com.shepherdjerred.capstone.engine.game.handlers.MouseDownClickableHandler;
-import com.shepherdjerred.capstone.engine.game.handlers.MouseMoveHoverableEventHandler;
-import com.shepherdjerred.capstone.engine.game.handlers.MouseUpClickableHandler;
+import com.shepherdjerred.capstone.engine.game.event.handlers.MouseDownClickableHandler;
+import com.shepherdjerred.capstone.engine.game.event.handlers.MouseMoveHoverableEventHandler;
+import com.shepherdjerred.capstone.engine.game.event.handlers.MouseUpClickableHandler;
 import com.shepherdjerred.capstone.engine.game.network.discovery.MockDiscoverer;
 import com.shepherdjerred.capstone.engine.game.network.discovery.ServerDiscoverer;
 import com.shepherdjerred.capstone.engine.game.network.discovery.ServerInformation;

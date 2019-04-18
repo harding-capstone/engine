@@ -5,9 +5,9 @@ import com.shepherdjerred.capstone.engine.engine.events.input.MouseButtonUpEvent
 import com.shepherdjerred.capstone.engine.engine.events.input.MouseMoveEvent;
 import com.shepherdjerred.capstone.engine.engine.resource.ResourceManager;
 import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
-import com.shepherdjerred.capstone.engine.game.handlers.MouseDownClickableHandler;
-import com.shepherdjerred.capstone.engine.game.handlers.MouseMoveHoverableEventHandler;
-import com.shepherdjerred.capstone.engine.game.handlers.MouseUpClickableHandler;
+import com.shepherdjerred.capstone.engine.game.event.handlers.MouseDownClickableHandler;
+import com.shepherdjerred.capstone.engine.game.event.handlers.MouseMoveHoverableEventHandler;
+import com.shepherdjerred.capstone.engine.game.event.handlers.MouseUpClickableHandler;
 import com.shepherdjerred.capstone.events.Event;
 import com.shepherdjerred.capstone.events.EventBus;
 import com.shepherdjerred.capstone.events.handlers.EventHandlerFrame;

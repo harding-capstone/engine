@@ -1,4 +1,4 @@
-package com.shepherdjerred.capstone.engine.game.network.events.network;
+package com.shepherdjerred.capstone.engine.game.network.event;
 
 import com.shepherdjerred.capstone.events.Event;
 
