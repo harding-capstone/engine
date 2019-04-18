@@ -1,6 +1,6 @@
 package com.shepherdjerred.capstone.engine.game.scenes.mainmenu;
 
-import static com.shepherdjerred.capstone.engine.game.objects.button.Button.Type.HOME;
+import static com.shepherdjerred.capstone.engine.game.objects.button.Button.Type.GENERIC;
 
 import com.shepherdjerred.capstone.engine.engine.events.input.MouseButtonDownEvent;
 import com.shepherdjerred.capstone.engine.engine.events.input.MouseButtonUpEvent;
@@ -24,11 +24,8 @@ import com.shepherdjerred.capstone.engine.game.handlers.MouseMoveHoverableEventH
 import com.shepherdjerred.capstone.engine.game.handlers.MouseUpClickableHandler;
 import com.shepherdjerred.capstone.engine.game.objects.background.parallax.ParallaxBackground;
 import com.shepherdjerred.capstone.engine.game.objects.background.parallax.ParallaxBackground.Type;
-import com.shepherdjerred.capstone.engine.game.objects.background.parallax.ParallaxBackgroundRenderer;
 import com.shepherdjerred.capstone.engine.game.objects.logo.Logo;
-import com.shepherdjerred.capstone.engine.game.objects.logo.LogoRenderer;
 import com.shepherdjerred.capstone.engine.game.objects.text.Text;
-import com.shepherdjerred.capstone.engine.game.objects.text.TextRenderer;
 import com.shepherdjerred.capstone.engine.game.objects.textbutton.TextButton;
 import com.shepherdjerred.capstone.engine.game.scenes.lobby.list.LobbyListScene;
 import com.shepherdjerred.capstone.events.Event;
@@ -50,6 +47,7 @@ public class MainMenuScene implements Scene {
   private final SceneRenderer<MainMenuScene> renderer;
   private final MainMenuAudio sceneAudio;
   private final EventHandlerFrame<Event> handlerFrame;
+  private ParallaxBackground background;
 
   public MainMenuScene(SceneRenderer<MainMenuScene> renderer,
       ResourceManager resourceManager,
@@ -67,8 +65,7 @@ public class MainMenuScene implements Scene {
   }
 
   private void createGameObjects() {
-    var logo = new Logo(
-        new LogoRenderer(resourceManager),
+    var logo = new Logo(resourceManager,
         new WindowRelativeScenePositioner(HorizontalPosition.CENTER,
             VerticalPosition.TOP,
             new SceneCoordinateOffset(0, 50),
@@ -77,12 +74,10 @@ public class MainMenuScene implements Scene {
         200,
         Logo.Type.GAME);
 
-    var background = new ParallaxBackground(new ParallaxBackgroundRenderer(resourceManager,
-        windowSize),
+    background = new ParallaxBackground(resourceManager, windowSize,
         Type.random());
 
-    var text = new Text(
-        new TextRenderer(resourceManager),
+    var text = new Text(resourceManager,
         "Castle Casters - Development Build",
         FontName.M5X7,
         Color.white(),
@@ -90,21 +85,22 @@ public class MainMenuScene implements Scene {
         new WindowRelativeScenePositioner(HorizontalPosition.RIGHT,
             VerticalPosition.BOTTOM,
             new SceneCoordinateOffset(-10, -10),
-            0)
+            1)
     );
 
     var buttonSize = new SceneObjectDimensions(100, 50);
 
-    var singlePlayerButton = new TextButton(resourceManager,
+    var playButton = new TextButton(resourceManager,
         windowSize,
-        new ObjectRelativeScenePositioner(logo, new SceneCoordinateOffset(0, 0), 1),
-        "Single Player",
+        new ObjectRelativeScenePositioner(logo, new SceneCoordinateOffset(0, 200), 1),
+        "Play",
         FontName.M5X7,
         Color.white(),
         12,
         buttonSize,
-        HOME,
+        GENERIC,
         () -> {
+          background.setCleanupDisabled(true);
           var scene = new LobbyListScene(background,
               eventBus,
               resourceManager,
@@ -112,7 +108,20 @@ public class MainMenuScene implements Scene {
           eventBus.dispatch(new SceneTransitionEvent(scene));
         });
 
-    gameObjects.add(singlePlayerButton);
+    var helpButton = new TextButton(resourceManager,
+        windowSize,
+        new ObjectRelativeScenePositioner(playButton, new SceneCoordinateOffset(0, 75), 1),
+        "Help",
+        FontName.M5X7,
+        Color.white(),
+        12,
+        buttonSize,
+        GENERIC,
+        () -> {
+        });
+
+    gameObjects.add(playButton);
+    gameObjects.add(helpButton);
     gameObjects.add(logo);
     gameObjects.add(text);
     gameObjects.add(background);

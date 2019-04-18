@@ -1,42 +1,32 @@
 package com.shepherdjerred.capstone.engine.game.objects.background.parallax;
 
-import com.shepherdjerred.capstone.engine.engine.object.GameObject;
-import com.shepherdjerred.capstone.engine.engine.object.GameObjectRenderer;
 import com.shepherdjerred.capstone.engine.engine.object.SceneObjectDimensions;
-import com.shepherdjerred.capstone.engine.engine.scene.SceneCoordinate;
-import com.shepherdjerred.capstone.engine.engine.scene.position.AbsoluteScenePositioner;
-import com.shepherdjerred.capstone.engine.engine.scene.position.SceneCoordinateOffset;
-import com.shepherdjerred.capstone.engine.engine.scene.position.ScenePositioner;
+import com.shepherdjerred.capstone.engine.engine.resource.ResourceManager;
+import com.shepherdjerred.capstone.engine.engine.scene.AbstractSceneBackground;
 import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
 import java.util.Random;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import lombok.Getter;
-import lombok.Setter;
 import lombok.ToString;
 
 /**
  * A background spanning the entire window.
  */
-@Getter
 @ToString
-public class ParallaxBackground implements GameObject {
+public class ParallaxBackground extends AbstractSceneBackground {
 
-  private final GameObjectRenderer<ParallaxBackground> renderer;
-  @Setter
-  private ScenePositioner position;
+  @Getter
   private final Type type;
+  @Getter
   private SortedMap<Integer, SortedMap<Integer, Float>> instances;
-  private final ParallaxTexturesMapper texturesMapper;
   private final ParallaxBackgroundData parallaxBackgroundData;
 
-  public ParallaxBackground(GameObjectRenderer<ParallaxBackground> renderer, Type type) {
-    this.renderer = renderer;
-    this.position = new AbsoluteScenePositioner(new SceneCoordinate(0, 0, 0),
-        new SceneCoordinateOffset(0, 0));
+  public ParallaxBackground(ResourceManager resourceManager, WindowSize windowSize, Type type) {
+    super(new ParallaxBackgroundRenderer(resourceManager, windowSize), windowSize);
     this.type = type;
     this.instances = new TreeMap<>();
-    this.texturesMapper = new ParallaxTexturesMapper();
+    var texturesMapper = new ParallaxTexturesMapper();
 
     instances.put(1, new TreeMap<>());
     instances.put(2, new TreeMap<>());
@@ -68,30 +58,15 @@ public class ParallaxBackground implements GameObject {
   }
 
   @Override
-  public void initialize() throws Exception {
-    renderer.initialize(this);
-  }
-
-  @Override
-  public void cleanup() {
-    renderer.cleanup();
-  }
-
-  @Override
   public SceneObjectDimensions getSceneObjectDimensions() {
     return new SceneObjectDimensions(0, 0);
-  }
-
-  @Override
-  public void render(WindowSize windowSize) {
-    renderer.render(windowSize, this);
   }
 
   @Override
   public void update(float interval) {
     var spread = 4;
     var minifier = .000001;
-    getInstances().forEach((instance, layers) -> layers.forEach((layer, pos) -> {
+    instances.forEach((instance, layers) -> layers.forEach((layer, pos) -> {
       if (!parallaxBackgroundData.getLayerData(layer).isStatic()) {
         moveLayer(instance, layer, (float) (pos - ((Math.pow(layer, spread)) * minifier)));
       }

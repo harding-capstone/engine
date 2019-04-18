@@ -1,6 +1,8 @@
 package com.shepherdjerred.capstone.engine.game.objects.button;
 
 import static com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName.GENERIC_BUTTON;
+import static com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName.GENERIC_BUTTON_CLICKED;
+import static com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName.GENERIC_BUTTON_HOVERED;
 import static com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName.MAIN_MENU_BUTTON;
 import static com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName.MAIN_MENU_BUTTON_CLICKED;
 import static com.shepherdjerred.capstone.engine.engine.graphics.texture.TextureName.MAIN_MENU_BUTTON_HOVERED;
@@ -24,7 +26,7 @@ public class ButtonTextureMapper {
 
   private void initializeMap() {
     typeTextureMap.put(GENERIC,
-        new ClickableTextureSet(GENERIC_BUTTON, GENERIC_BUTTON, GENERIC_BUTTON));
+        new ClickableTextureSet(GENERIC_BUTTON, GENERIC_BUTTON_HOVERED, GENERIC_BUTTON_CLICKED));
     typeTextureMap.put(HOME,
         new ClickableTextureSet(MAIN_MENU_BUTTON,
             MAIN_MENU_BUTTON_HOVERED,

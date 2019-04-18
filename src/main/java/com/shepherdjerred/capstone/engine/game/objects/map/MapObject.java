@@ -15,6 +15,8 @@ import lombok.Setter;
 
 public class MapObject implements GameObject {
 
+  @Getter
+  private boolean isInitialized;
   private final ResourceManager resourceManager;
   private final MapRenderer mapRenderer;
   private final GameMapName gameMapName;
@@ -38,10 +40,12 @@ public class MapObject implements GameObject {
   public void initialize() throws Exception {
     mapLayers = resourceManager.get(gameMapName);
     mapRenderer.initialize(this);
+    isInitialized = true;
   }
 
   @Override
   public void cleanup() {
+    isInitialized = false;
     mapRenderer.cleanup();
     resourceManager.free(gameMapName);
   }
@@ -62,6 +66,9 @@ public class MapObject implements GameObject {
 
   @Override
   public void render(WindowSize windowSize) {
+    if (!isInitialized) {
+      throw new IllegalStateException("Object not initialized");
+    }
     mapRenderer.render(windowSize, this);
   }
 

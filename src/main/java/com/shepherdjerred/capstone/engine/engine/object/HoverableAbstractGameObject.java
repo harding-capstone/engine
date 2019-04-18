@@ -4,10 +4,12 @@ import com.shepherdjerred.capstone.engine.engine.collision.CollisionDetector;
 import com.shepherdjerred.capstone.engine.engine.scene.SceneCoordinate;
 import com.shepherdjerred.capstone.engine.engine.scene.attributes.Collidable;
 import com.shepherdjerred.capstone.engine.engine.scene.attributes.Hoverable;
+import com.shepherdjerred.capstone.engine.engine.scene.position.ScenePositioner;
 import lombok.Getter;
 import lombok.Setter;
 
-public abstract class HoverableGameObject implements GameObject, Hoverable, Collidable {
+public abstract class HoverableAbstractGameObject extends AbstractGameObject implements Hoverable,
+    Collidable {
 
   @Setter
   private CollisionDetector collisionDetector;
@@ -16,21 +18,33 @@ public abstract class HoverableGameObject implements GameObject, Hoverable, Coll
   @Getter
   private boolean isHovered;
 
-  public HoverableGameObject(CollisionDetector collisionDetector,
+  public HoverableAbstractGameObject(GameObjectRenderer renderer,
+      SceneObjectDimensions objectDimensions,
+      ScenePositioner positioner,
+      CollisionDetector collisionDetector,
       Runnable onHover,
       Runnable onUnhover) {
+    super(renderer, objectDimensions, positioner);
     this.collisionDetector = collisionDetector;
     this.onHover = onHover;
     this.onUnhover = onUnhover;
   }
 
-  public HoverableGameObject(CollisionDetector collisionDetector, Runnable onHover) {
+  public HoverableAbstractGameObject(GameObjectRenderer renderer,
+      SceneObjectDimensions objectDimensions,
+      ScenePositioner positioner,
+      CollisionDetector collisionDetector, Runnable onHover) {
+    super(renderer, objectDimensions, positioner);
     this.collisionDetector = collisionDetector;
     this.onHover = onHover;
     this.onUnhover = null;
   }
 
-  public HoverableGameObject(CollisionDetector collisionDetector) {
+  public HoverableAbstractGameObject(GameObjectRenderer renderer,
+      SceneObjectDimensions objectDimensions,
+      ScenePositioner positioner,
+      CollisionDetector collisionDetector) {
+    super(renderer, objectDimensions, positioner);
     this.collisionDetector = collisionDetector;
     this.onHover = null;
     this.onUnhover = null;

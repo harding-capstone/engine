@@ -2,8 +2,8 @@ package com.shepherdjerred.capstone.engine.game.objects.textbutton;
 
 import com.shepherdjerred.capstone.engine.engine.graphics.Color;
 import com.shepherdjerred.capstone.engine.engine.graphics.font.FontName;
-import com.shepherdjerred.capstone.engine.engine.object.SceneObjectDimensions;
 import com.shepherdjerred.capstone.engine.engine.object.GameObject;
+import com.shepherdjerred.capstone.engine.engine.object.SceneObjectDimensions;
 import com.shepherdjerred.capstone.engine.engine.resource.ResourceManager;
 import com.shepherdjerred.capstone.engine.engine.scene.SceneCoordinate;
 import com.shepherdjerred.capstone.engine.engine.scene.attributes.Clickable;
@@ -15,10 +15,12 @@ import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
 import com.shepherdjerred.capstone.engine.game.objects.button.Button;
 import com.shepherdjerred.capstone.engine.game.objects.button.Button.Type;
 import com.shepherdjerred.capstone.engine.game.objects.text.Text;
-import com.shepherdjerred.capstone.engine.game.objects.text.TextRenderer;
+import lombok.Getter;
 
 public class TextButton implements GameObject, Clickable, Hoverable {
 
+  @Getter
+  private boolean isInitialized;
   private final Text text;
   private final Button button;
 
@@ -38,7 +40,7 @@ public class TextButton implements GameObject, Clickable, Hoverable {
         dimensions,
         type,
         onClick);
-    this.text = new Text(new TextRenderer(resourceManager),
+    this.text = new Text(resourceManager,
         text,
         fontName,
         color,
@@ -52,10 +54,12 @@ public class TextButton implements GameObject, Clickable, Hoverable {
   public void initialize() throws Exception {
     text.initialize();
     button.initialize();
+    isInitialized = true;
   }
 
   @Override
   public void cleanup() {
+    isInitialized = false;
     text.cleanup();
     button.cleanup();
   }
@@ -78,6 +82,9 @@ public class TextButton implements GameObject, Clickable, Hoverable {
 
   @Override
   public void render(WindowSize windowSize) {
+    if (!isInitialized) {
+      throw new IllegalStateException("Object not initialized");
+    }
     text.render(windowSize);
     button.render(windowSize);
   }

@@ -11,6 +11,8 @@ import lombok.Setter;
 public class Wall implements GameObject {
 
   @Getter
+  private boolean isInitialized;
+  @Getter
   private final SceneObjectDimensions sceneObjectDimensions;
   @Getter
   @Setter
@@ -30,17 +32,19 @@ public class Wall implements GameObject {
 
   @Override
   public void initialize() throws Exception {
-
+    isInitialized = true;
   }
 
   @Override
   public void cleanup() {
-
+    isInitialized = false;
   }
 
   @Override
   public void render(WindowSize windowSize) {
-
+    if (!isInitialized) {
+      throw new IllegalStateException("Object not initialized");
+    }
   }
 
   @Override

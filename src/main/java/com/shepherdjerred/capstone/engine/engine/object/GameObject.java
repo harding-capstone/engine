@@ -18,4 +18,6 @@ public interface GameObject {
   void render(WindowSize windowSize);
 
   void update(float interval);
+
+  boolean isInitialized();
 }

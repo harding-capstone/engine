@@ -17,7 +17,6 @@ import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
 import com.shepherdjerred.capstone.engine.game.network.NetworkClient;
 import com.shepherdjerred.capstone.engine.game.objects.background.parallax.ParallaxBackground;
 import com.shepherdjerred.capstone.engine.game.objects.text.Text;
-import com.shepherdjerred.capstone.engine.game.objects.text.TextRenderer;
 import com.shepherdjerred.capstone.events.Event;
 import com.shepherdjerred.capstone.events.EventBus;
 import com.shepherdjerred.capstone.logic.board.BoardSettings;
@@ -92,7 +91,7 @@ public class LobbyScene implements Scene {
   }
 
   private void createGameObjects() throws Exception {
-    var text = new Text(new TextRenderer(resourceManager),
+    var text = new Text(resourceManager,
         "Lobby Setup",
         FontName.M5X7,
         Color.white(),

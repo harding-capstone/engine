@@ -36,7 +36,7 @@ public class MainMenuAudio implements SceneAudio {
     var sa = new SourcedAudio(resourceManager.get(THEME_MUSIC), sourcePointer);
     audio.put(THEME_MUSIC, sa);
     initializeHandlerFrame();
-    eventBus.removeHandlerFrame(handlerFrame);
+    eventBus.registerHandlerFrame(handlerFrame);
   }
 
   private void initializeHandlerFrame() {

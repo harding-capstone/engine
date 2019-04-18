@@ -11,7 +11,6 @@ import com.shepherdjerred.capstone.engine.engine.scene.position.WindowRelativeSc
 import com.shepherdjerred.capstone.engine.engine.scene.position.WindowRelativeScenePositioner.VerticalPosition;
 import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
 import com.shepherdjerred.capstone.engine.game.objects.logo.Logo;
-import com.shepherdjerred.capstone.engine.game.objects.logo.LogoRenderer;
 import com.shepherdjerred.capstone.engine.game.scenes.mainmenu.MainMenuAudio;
 import com.shepherdjerred.capstone.engine.game.scenes.mainmenu.MainMenuRenderer;
 import com.shepherdjerred.capstone.engine.game.scenes.mainmenu.MainMenuScene;
@@ -47,8 +46,7 @@ public class TeamIntroScene implements Scene {
   }
 
   private void createGameObjects() {
-    var logo = new Logo(
-        new LogoRenderer(resourceManager),
+    var logo = new Logo(resourceManager,
         new WindowRelativeScenePositioner(HorizontalPosition.CENTER,
             VerticalPosition.CENTER,
             new SceneCoordinateOffset(0, 0),

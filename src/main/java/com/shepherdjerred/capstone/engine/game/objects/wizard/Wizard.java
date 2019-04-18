@@ -15,6 +15,8 @@ import lombok.ToString;
 
 public class Wizard implements GameObject {
 
+  @Getter
+  private boolean isInitialized;
   private final GameObjectRenderer<Wizard> renderer;
   @Getter
   private final Element element;
@@ -45,15 +47,20 @@ public class Wizard implements GameObject {
   @Override
   public void initialize() throws Exception {
     renderer.initialize(this);
+    isInitialized = true;
   }
 
   @Override
   public void cleanup() {
+    isInitialized = false;
     renderer.cleanup();
   }
 
   @Override
   public void render(WindowSize windowSize) {
+    if (!isInitialized) {
+      throw new IllegalStateException("Object not initialized");
+    }
     renderer.render(windowSize, this);
   }
 

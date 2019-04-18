@@ -51,6 +51,7 @@ public class MainMenuRenderer implements SceneRenderer<MainMenuScene> {
     createShaderProgram();
     OpenGlHelper.setClearColor(Color.black());
     OpenGlHelper.enableDepthBuffer();
+    OpenGlHelper.enableTransparency();
 
     for (GameObject gameObject : scene.getGameObjects()) {
       gameObject.initialize();

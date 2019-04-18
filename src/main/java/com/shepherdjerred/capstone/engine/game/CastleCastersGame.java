@@ -25,7 +25,6 @@ import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
 import com.shepherdjerred.capstone.engine.game.network.Connection;
 import com.shepherdjerred.capstone.engine.game.objects.background.parallax.ParallaxBackground;
 import com.shepherdjerred.capstone.engine.game.objects.background.parallax.ParallaxBackground.Type;
-import com.shepherdjerred.capstone.engine.game.objects.background.parallax.ParallaxBackgroundRenderer;
 import com.shepherdjerred.capstone.engine.game.scenes.game.GameRenderer;
 import com.shepherdjerred.capstone.engine.game.scenes.game.GameScene;
 import com.shepherdjerred.capstone.engine.game.scenes.lobby.details.LobbyRenderer;
@@ -125,14 +124,16 @@ public class CastleCastersGame implements GameLogic {
   }
 
   private Scene getLobbyListScene(WindowSize windowSize) {
-    return new LobbyListScene(new ParallaxBackground(new ParallaxBackgroundRenderer(resourceManager,
-        windowSize), Type.PURPLE_MOUNTAINS), eventBus, resourceManager, windowSize);
+    return new LobbyListScene(new ParallaxBackground(resourceManager,
+        windowSize,
+        Type.PURPLE_MOUNTAINS), eventBus, resourceManager, windowSize);
   }
 
   private Scene getLobbyScene(WindowSize windowSize) {
     var renderer = new LobbyRenderer(resourceManager, eventBus, windowSize);
-    return new LobbyScene(new ParallaxBackground(new ParallaxBackgroundRenderer(resourceManager,
-        windowSize), Type.PURPLE_MOUNTAINS), eventBus, resourceManager, renderer);
+    return new LobbyScene(new ParallaxBackground(resourceManager,
+        windowSize,
+        Type.PURPLE_MOUNTAINS), eventBus, resourceManager, renderer);
   }
 
   @Override

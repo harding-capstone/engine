@@ -11,7 +11,7 @@ import com.shepherdjerred.capstone.engine.engine.graphics.texture.Texture;
 import com.shepherdjerred.capstone.engine.engine.object.GameObjectRenderer;
 import com.shepherdjerred.capstone.engine.engine.resource.ResourceManager;
 import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
-import com.shepherdjerred.capstone.engine.engine.object.ClickableGameObject.State;
+import com.shepherdjerred.capstone.engine.engine.object.ClickableAbstractGameObject.State;
 
 public class ButtonRenderer implements GameObjectRenderer<Button> {
 

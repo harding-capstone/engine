@@ -1,19 +1,20 @@
 package com.shepherdjerred.capstone.engine.game.objects.logo;
 
-import com.shepherdjerred.capstone.engine.engine.object.SceneObjectDimensions;
 import com.shepherdjerred.capstone.engine.engine.object.GameObject;
 import com.shepherdjerred.capstone.engine.engine.object.GameObjectRenderer;
+import com.shepherdjerred.capstone.engine.engine.object.SceneObjectDimensions;
+import com.shepherdjerred.capstone.engine.engine.resource.ResourceManager;
 import com.shepherdjerred.capstone.engine.engine.scene.position.ScenePositioner;
 import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
 @ToString
-@AllArgsConstructor
 public class Logo implements GameObject {
 
+  @Getter
+  private boolean isInitialized;
   private final GameObjectRenderer<Logo> renderer;
   @Setter
   @Getter
@@ -23,13 +24,27 @@ public class Logo implements GameObject {
   @Getter
   private final Type type;
 
+  public Logo(ResourceManager resourceManager,
+      ScenePositioner position,
+      double aspectRatio,
+      int height,
+      Type type) {
+    this.renderer = new LogoRenderer(resourceManager);
+    this.position = position;
+    this.aspectRatio = aspectRatio;
+    this.height = height;
+    this.type = type;
+  }
+
   @Override
   public void initialize() throws Exception {
     renderer.initialize(this);
+    isInitialized = true;
   }
 
   @Override
   public void cleanup() {
+    isInitialized = false;
     renderer.cleanup();
   }
 
@@ -40,6 +55,9 @@ public class Logo implements GameObject {
 
   @Override
   public void render(WindowSize windowSize) {
+    if (!isInitialized) {
+      throw new IllegalStateException("Object not initialized");
+    }
     renderer.render(windowSize, this);
   }
 

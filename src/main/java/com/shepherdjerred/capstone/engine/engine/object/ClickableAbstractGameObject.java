@@ -2,35 +2,46 @@ package com.shepherdjerred.capstone.engine.engine.object;
 
 import com.shepherdjerred.capstone.engine.engine.collision.CollisionDetector;
 import com.shepherdjerred.capstone.engine.engine.scene.attributes.Clickable;
+import com.shepherdjerred.capstone.engine.engine.scene.position.ScenePositioner;
 import lombok.Getter;
 
-public abstract class ClickableGameObject extends HoverableGameObject implements Clickable {
+public abstract class ClickableAbstractGameObject extends HoverableAbstractGameObject implements
+    Clickable {
 
   private final Runnable onClick;
   private final Runnable onUnclick;
   @Getter
   private boolean isClicked;
 
-  public ClickableGameObject(CollisionDetector collisionDetector,
+  public ClickableAbstractGameObject(GameObjectRenderer renderer,
+      SceneObjectDimensions objectDimensions,
+      ScenePositioner positioner,
+      CollisionDetector collisionDetector,
       Runnable onHover,
       Runnable onUnhover,
       Runnable onClick,
       Runnable onUnclick) {
-    super(collisionDetector, onHover, onUnhover);
+    super(renderer, objectDimensions, positioner, collisionDetector, onHover, onUnhover);
     this.onClick = onClick;
     this.onUnclick = onUnclick;
   }
 
-  public ClickableGameObject(CollisionDetector collisionDetector,
+  public ClickableAbstractGameObject(GameObjectRenderer renderer,
+      SceneObjectDimensions objectDimensions,
+      ScenePositioner positioner,
+      CollisionDetector collisionDetector,
       Runnable onHover,
       Runnable onClick) {
-    super(collisionDetector, onHover);
+    super(renderer, objectDimensions, positioner, collisionDetector, onHover);
     this.onClick = onClick;
     this.onUnclick = null;
   }
 
-  public ClickableGameObject(CollisionDetector collisionDetector, Runnable onClick) {
-    super(collisionDetector);
+  public ClickableAbstractGameObject(GameObjectRenderer renderer,
+      SceneObjectDimensions objectDimensions,
+      ScenePositioner positioner,
+      CollisionDetector collisionDetector, Runnable onClick) {
+    super(renderer, objectDimensions, positioner, collisionDetector);
     this.onClick = onClick;
     this.onUnclick = null;
   }
