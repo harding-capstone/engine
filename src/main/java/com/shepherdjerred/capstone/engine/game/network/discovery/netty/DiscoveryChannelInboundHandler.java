@@ -25,7 +25,7 @@ public class DiscoveryChannelInboundHandler extends ChannelInboundHandlerAdapter
       var serverBroadcastPacket = (ServerBroadcastPacket) packet;
       var remote = context.channel().remoteAddress();
 
-      var serverInformation = new ServerInformation(remote, serverBroadcastPacket.lobbySettings);
+      var serverInformation = new ServerInformation(remote, serverBroadcastPacket.getLobby());
       var serverDiscoveredEvent = new ServerDiscoveredEvent(serverInformation);
 
       eventQueue.add(serverDiscoveredEvent);

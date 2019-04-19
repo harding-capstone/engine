@@ -21,10 +21,10 @@ import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
 import com.shepherdjerred.capstone.engine.game.event.handlers.MouseDownClickableHandler;
 import com.shepherdjerred.capstone.engine.game.event.handlers.MouseMoveHoverableEventHandler;
 import com.shepherdjerred.capstone.engine.game.event.handlers.MouseUpClickableHandler;
-import com.shepherdjerred.capstone.engine.game.network.discovery.MockDiscoverer;
 import com.shepherdjerred.capstone.engine.game.network.discovery.ServerDiscoverer;
 import com.shepherdjerred.capstone.engine.game.network.discovery.ServerInformation;
 import com.shepherdjerred.capstone.engine.game.network.discovery.event.ServerDiscoveredEvent;
+import com.shepherdjerred.capstone.engine.game.network.discovery.netty.NettyServerDiscoverer;
 import com.shepherdjerred.capstone.engine.game.objects.background.parallax.ParallaxBackground;
 import com.shepherdjerred.capstone.engine.game.objects.button.Button.Type;
 import com.shepherdjerred.capstone.engine.game.objects.text.Text;
@@ -38,7 +38,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 
@@ -66,7 +65,7 @@ public class LobbyListScene implements Scene {
     this.resourceManager = resourceManager;
     sceneRenderer = new LobbyListRenderer(resourceManager, eventBus, windowSize);
     gameObjects = new ArrayList<>();
-    discoverer = new MockDiscoverer(new ConcurrentLinkedQueue<>());
+    discoverer = new NettyServerDiscoverer();
     discovererThread = new Thread(discoverer, "DISCOVERER");
     eventHandlerFrame = new EventHandlerFrame<>();
     serverInfoMap = new HashMap<>();
@@ -80,9 +79,12 @@ public class LobbyListScene implements Scene {
     eventHandlerFrame.registerHandler(ServerDiscoveredEvent.class,
         event -> {
           var info = event.getServerInformation();
-          var settings = info.getLobbySettings();
+          var lobby = info.getLobby();
           // TODO load player count
-          var string = String.format("Name: %s | Players: %s/%s", settings.getName(), 1, 2);
+          var string = String.format("Name: %s | Players: %s/%s",
+              lobby.getLobbySettings().getName(),
+              1,
+              2);
           var text = new TextButton(resourceManager,
               windowSize,
               new WindowRelativeScenePositioner(HorizontalPosition.CENTER,

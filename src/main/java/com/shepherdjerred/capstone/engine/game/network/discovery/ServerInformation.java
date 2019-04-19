@@ -1,6 +1,6 @@
 package com.shepherdjerred.capstone.engine.game.network.discovery;
 
-import com.shepherdjerred.capstone.common.lobby.LobbySettings;
+import com.shepherdjerred.capstone.common.lobby.Lobby;
 import java.net.SocketAddress;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,5 +15,5 @@ import lombok.ToString;
 public class ServerInformation {
 
   private final SocketAddress address;
-  private final LobbySettings lobbySettings;
+  private final Lobby lobby;
 }

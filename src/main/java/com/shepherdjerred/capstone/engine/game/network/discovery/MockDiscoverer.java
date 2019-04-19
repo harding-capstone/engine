@@ -1,9 +1,6 @@
 package com.shepherdjerred.capstone.engine.game.network.discovery;
 
-import com.shepherdjerred.capstone.common.lobby.LobbySettings;
-import com.shepherdjerred.capstone.engine.game.network.discovery.event.ServerDiscoveredEvent;
 import com.shepherdjerred.capstone.events.Event;
-import java.net.InetSocketAddress;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import lombok.AllArgsConstructor;
@@ -15,14 +12,6 @@ public class MockDiscoverer implements ServerDiscoverer {
 
   @Override
   public void discoverServers() {
-    eventQueue.add(new ServerDiscoveredEvent(new ServerInformation(new InetSocketAddress(9999),
-        new LobbySettings("Play Quoridor", null, null, null, false))));
-    eventQueue.add(new ServerDiscoveredEvent(new ServerInformation(new InetSocketAddress(9999),
-        new LobbySettings("Hey there!", null, null, null, false))));
-    eventQueue.add(new ServerDiscoveredEvent(new ServerInformation(new InetSocketAddress(9999),
-        new LobbySettings("Some Lobby", null, null, null, false))));
-    eventQueue.add(new ServerDiscoveredEvent(new ServerInformation(new InetSocketAddress(9999),
-        new LobbySettings("Lorem Ipsum", null, null, null, false))));
   }
 
   @Override

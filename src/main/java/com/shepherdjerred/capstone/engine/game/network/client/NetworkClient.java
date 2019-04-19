@@ -5,6 +5,7 @@ import com.shepherdjerred.capstone.engine.game.network.client.state.Disconnected
 import com.shepherdjerred.capstone.engine.game.network.client.state.NetworkClientState;
 import com.shepherdjerred.capstone.events.Event;
 import com.shepherdjerred.capstone.events.EventBus;
+import com.shepherdjerred.capstone.network.packet.packets.Packet;
 import java.net.SocketAddress;
 
 /**
@@ -19,7 +20,12 @@ public class NetworkClient {
   public NetworkClient(EventBus<Event> eventBus) {
     this.eventBus = eventBus;
     this.bootstrap = new NettyClientBootstrap();
-    clientState = new DisconnectedClientState(eventBus);
+    clientState = new DisconnectedClientState(eventBus, this);
+    clientState.enable();
+  }
+
+  public void sendPacket(Packet packet) {
+    bootstrap.send(packet);
   }
 
   public void connect(SocketAddress socketAddress) {

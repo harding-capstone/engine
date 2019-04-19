@@ -24,6 +24,7 @@ import com.shepherdjerred.capstone.engine.engine.resource.ResourceManager;
 import com.shepherdjerred.capstone.engine.engine.scene.Scene;
 import com.shepherdjerred.capstone.engine.engine.scene.SceneTransitioner;
 import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
+import com.shepherdjerred.capstone.engine.game.network.NetworkManager;
 import com.shepherdjerred.capstone.engine.game.objects.background.parallax.ParallaxBackground;
 import com.shepherdjerred.capstone.engine.game.objects.background.parallax.ParallaxBackground.Type;
 import com.shepherdjerred.capstone.engine.game.scenes.game.GameScene;
@@ -41,6 +42,7 @@ public class CastleCastersGame implements GameLogic {
   private final EventBus<Event> eventBus;
   private final ResourceManager resourceManager;
   private final SceneTransitioner sceneTransitioner;
+  private final NetworkManager networkManager;
   private final AudioPlayer audioPlayer;
   private WindowSize windowSize;
 
@@ -49,6 +51,7 @@ public class CastleCastersGame implements GameLogic {
     this.resourceManager = new ResourceManager();
     this.audioPlayer = new AudioPlayer(eventBus);
     this.sceneTransitioner = new SceneTransitioner(eventBus);
+    this.networkManager = new NetworkManager();
     registerLoaders();
   }
 
