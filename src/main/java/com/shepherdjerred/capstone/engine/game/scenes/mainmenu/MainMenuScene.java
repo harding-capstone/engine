@@ -6,6 +6,7 @@ import com.shepherdjerred.capstone.engine.engine.events.CloseApplicationEvent;
 import com.shepherdjerred.capstone.engine.engine.events.scene.SceneTransitionEvent;
 import com.shepherdjerred.capstone.engine.engine.graphics.Color;
 import com.shepherdjerred.capstone.engine.engine.graphics.font.FontName;
+import com.shepherdjerred.capstone.engine.engine.object.GameObject;
 import com.shepherdjerred.capstone.engine.engine.object.SceneObjectDimensions;
 import com.shepherdjerred.capstone.engine.engine.resource.ResourceManager;
 import com.shepherdjerred.capstone.engine.engine.scene.InteractableUIScene;
@@ -26,6 +27,8 @@ import com.shepherdjerred.capstone.engine.game.scenes.lobby.host.SimpleSceneRend
 import com.shepherdjerred.capstone.engine.game.scenes.lobby.list.LobbyListScene;
 import com.shepherdjerred.capstone.events.Event;
 import com.shepherdjerred.capstone.events.EventBus;
+import java.util.HashSet;
+import java.util.Set;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
@@ -45,10 +48,11 @@ public class MainMenuScene extends InteractableUIScene {
     this.resourceManager = resourceManager;
     this.windowSize = windowSize;
     this.sceneAudio = new MainMenuAudio(eventBus, resourceManager);
-    createGameObjects();
   }
 
-  private void createGameObjects() {
+  protected Set<GameObject> createGameObjects() {
+    Set<GameObject> gameObjects = new HashSet<>();
+
     var logo = new Logo(resourceManager,
         new WindowRelativeScenePositioner(HorizontalPosition.CENTER,
             VerticalPosition.TOP,
@@ -138,6 +142,8 @@ public class MainMenuScene extends InteractableUIScene {
     gameObjects.add(exitButton);
     gameObjects.add(logo);
     gameObjects.add(text);
+
+    return gameObjects;
   }
 
   @Override

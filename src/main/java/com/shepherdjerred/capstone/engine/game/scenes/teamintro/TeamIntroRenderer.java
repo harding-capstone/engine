@@ -10,24 +10,19 @@ import com.shepherdjerred.capstone.engine.engine.object.GameObject;
 import com.shepherdjerred.capstone.engine.engine.resource.ResourceManager;
 import com.shepherdjerred.capstone.engine.engine.scene.SceneRenderer;
 import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
-import com.shepherdjerred.capstone.events.Event;
-import com.shepherdjerred.capstone.events.EventBus;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 public class TeamIntroRenderer implements SceneRenderer<TeamIntroScene> {
 
   private final ResourceManager resourceManager;
-  private final EventBus<Event> eventBus;
   private WindowSize windowSize;
   private ProjectionMatrix projectionMatrix;
   private ShaderProgram defaultShaderProgram;
 
   public TeamIntroRenderer(ResourceManager resourceManager,
-      EventBus<Event> eventBus,
       WindowSize windowSize) {
     this.resourceManager = resourceManager;
-    this.eventBus = eventBus;
     this.windowSize = windowSize;
   }
 

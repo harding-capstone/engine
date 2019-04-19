@@ -21,7 +21,6 @@ public class NettyClientHandler extends ChannelDuplexHandler {
   @Override
   public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise)
       throws Exception {
-    log.info("Writing packet!!! " + msg);
     log.info("Source " + ctx.channel().localAddress());
     log.info("Destination " + ctx.channel().remoteAddress());
     super.write(ctx, msg, promise);
@@ -43,6 +42,7 @@ public class NettyClientHandler extends ChannelDuplexHandler {
   public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
     super.channelRead(ctx, msg);
     var packet = (Packet) msg;
+    log.info("Received a packet: " + packet);
     eventQueue.add(new PacketReceivedEvent(packet));
   }
 }

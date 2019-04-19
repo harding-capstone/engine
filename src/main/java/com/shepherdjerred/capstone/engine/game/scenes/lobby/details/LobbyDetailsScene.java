@@ -1,10 +1,10 @@
 package com.shepherdjerred.capstone.engine.game.scenes.lobby.details;
 
-import com.shepherdjerred.capstone.common.player.PlayerInformation;
 import com.shepherdjerred.capstone.engine.engine.events.scene.SceneTransitionEvent;
 import com.shepherdjerred.capstone.engine.engine.graphics.Color;
 import com.shepherdjerred.capstone.engine.engine.graphics.font.FontName;
 import com.shepherdjerred.capstone.engine.engine.map.GameMapName;
+import com.shepherdjerred.capstone.engine.engine.object.GameObject;
 import com.shepherdjerred.capstone.engine.engine.object.SceneObjectDimensions;
 import com.shepherdjerred.capstone.engine.engine.resource.ResourceManager;
 import com.shepherdjerred.capstone.engine.engine.scene.InteractableUIScene;
@@ -13,7 +13,6 @@ import com.shepherdjerred.capstone.engine.engine.scene.position.WindowRelativeSc
 import com.shepherdjerred.capstone.engine.engine.scene.position.WindowRelativeScenePositioner.HorizontalPosition;
 import com.shepherdjerred.capstone.engine.engine.scene.position.WindowRelativeScenePositioner.VerticalPosition;
 import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
-import com.shepherdjerred.capstone.engine.game.event.events.IdentifyPlayerEvent;
 import com.shepherdjerred.capstone.engine.game.network.event.ServerConnectedEvent;
 import com.shepherdjerred.capstone.engine.game.objects.background.parallax.ParallaxBackground;
 import com.shepherdjerred.capstone.engine.game.objects.button.Button.Type;
@@ -24,7 +23,8 @@ import com.shepherdjerred.capstone.engine.game.scenes.lobby.host.SimpleSceneRend
 import com.shepherdjerred.capstone.events.Event;
 import com.shepherdjerred.capstone.events.EventBus;
 import com.shepherdjerred.capstone.events.handlers.EventHandlerFrame;
-import java.util.UUID;
+import java.util.HashSet;
+import java.util.Set;
 
 public class LobbyDetailsScene extends InteractableUIScene {
 
@@ -46,12 +46,11 @@ public class LobbyDetailsScene extends InteractableUIScene {
 
   private void createEventHandlerFrame() {
     eventHandlerFrame.registerHandler(ServerConnectedEvent.class, event -> {
-      eventBus.dispatch(new IdentifyPlayerEvent(new PlayerInformation(UUID.randomUUID(),
-          "Jerred")));
     });
   }
 
-  private void createGameObjects() {
+  protected Set<GameObject> createGameObjects() {
+    Set<GameObject> gameObjects = new HashSet<>();
     var text = new Text(resourceManager,
         "Lobby",
         FontName.M5X7,
@@ -83,6 +82,7 @@ public class LobbyDetailsScene extends InteractableUIScene {
 
     gameObjects.add(text);
     gameObjects.add(nextButton);
+    return gameObjects;
   }
 
   @Override

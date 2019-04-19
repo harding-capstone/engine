@@ -84,7 +84,7 @@ public class TextButton implements GameObject, Clickable, Hoverable {
   @Override
   public void render(WindowSize windowSize) {
     if (!isInitialized) {
-      throw new IllegalStateException("Object not initialized");
+      throw new IllegalStateException("Object not initialized " + this);
     }
     text.render(windowSize);
     button.render(windowSize);

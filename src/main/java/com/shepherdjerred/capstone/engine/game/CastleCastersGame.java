@@ -28,7 +28,6 @@ import com.shepherdjerred.capstone.engine.game.network.manager.NetworkManager;
 import com.shepherdjerred.capstone.engine.game.scenes.game.GameScene;
 import com.shepherdjerred.capstone.engine.game.scenes.lobby.list.LobbyListScene;
 import com.shepherdjerred.capstone.engine.game.scenes.mainmenu.MainMenuScene;
-import com.shepherdjerred.capstone.engine.game.scenes.teamintro.TeamIntroRenderer;
 import com.shepherdjerred.capstone.engine.game.scenes.teamintro.TeamIntroScene;
 import com.shepherdjerred.capstone.events.Event;
 import com.shepherdjerred.capstone.events.EventBus;
@@ -99,9 +98,7 @@ public class CastleCastersGame implements GameLogic {
   }
 
   private Scene getTeamScene(WindowSize windowSize) {
-    var sceneRenderer = new TeamIntroRenderer(resourceManager, eventBus, windowSize);
-    return new TeamIntroScene(sceneRenderer,
-        resourceManager,
+    return new TeamIntroScene(resourceManager,
         eventBus,
         windowSize);
   }
@@ -129,6 +126,7 @@ public class CastleCastersGame implements GameLogic {
 
   @Override
   public void cleanup() {
+    networkManager.shutdown();
     sceneTransitioner.cleanup();
 
     if (resourceManager.hasAllocatedResources()) {

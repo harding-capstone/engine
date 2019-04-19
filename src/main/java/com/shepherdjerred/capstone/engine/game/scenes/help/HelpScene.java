@@ -3,6 +3,7 @@ package com.shepherdjerred.capstone.engine.game.scenes.help;
 import com.shepherdjerred.capstone.engine.engine.events.scene.SceneTransitionEvent;
 import com.shepherdjerred.capstone.engine.engine.graphics.Color;
 import com.shepherdjerred.capstone.engine.engine.graphics.font.FontName;
+import com.shepherdjerred.capstone.engine.engine.object.GameObject;
 import com.shepherdjerred.capstone.engine.engine.object.SceneObjectDimensions;
 import com.shepherdjerred.capstone.engine.engine.resource.ResourceManager;
 import com.shepherdjerred.capstone.engine.engine.scene.InteractableUIScene;
@@ -19,10 +20,12 @@ import com.shepherdjerred.capstone.engine.game.scenes.lobby.host.SimpleSceneRend
 import com.shepherdjerred.capstone.engine.game.scenes.mainmenu.MainMenuScene;
 import com.shepherdjerred.capstone.events.Event;
 import com.shepherdjerred.capstone.events.EventBus;
+import java.util.HashSet;
+import java.util.Set;
 
 public class HelpScene extends InteractableUIScene {
 
-  private final EventBus eventBus;
+  private final EventBus<Event> eventBus;
 
   public HelpScene(ResourceManager resourceManager,
       WindowSize windowSize,
@@ -32,10 +35,11 @@ public class HelpScene extends InteractableUIScene {
         new SimpleSceneRenderer(resourceManager, windowSize),
         eventBus);
     this.eventBus = eventBus;
-    createGameObjects();
   }
 
-  private void createGameObjects() {
+  protected Set<GameObject> createGameObjects() {
+    Set<GameObject> gameObjects = new HashSet<>();
+
     var text = new Text(resourceManager,
         "Castle Casters is a board game where the goal is to get your witch or wizard to the "
             + "other side.\nWhat makes Castle Casters special is your ability to cast magical walls!\n\n"
@@ -82,5 +86,7 @@ public class HelpScene extends InteractableUIScene {
 
     gameObjects.add(text);
     gameObjects.add(backButton);
+
+    return gameObjects;
   }
 }

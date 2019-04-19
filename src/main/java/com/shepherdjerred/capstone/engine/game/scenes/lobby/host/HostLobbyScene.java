@@ -1,10 +1,10 @@
 package com.shepherdjerred.capstone.engine.game.scenes.lobby.host;
 
-import com.shepherdjerred.capstone.common.lobby.LobbySettings;
 import com.shepherdjerred.capstone.common.lobby.LobbySettings.LobbyType;
 import com.shepherdjerred.capstone.engine.engine.events.scene.SceneTransitionEvent;
 import com.shepherdjerred.capstone.engine.engine.graphics.Color;
 import com.shepherdjerred.capstone.engine.engine.graphics.font.FontName;
+import com.shepherdjerred.capstone.engine.engine.object.GameObject;
 import com.shepherdjerred.capstone.engine.engine.object.SceneObjectDimensions;
 import com.shepherdjerred.capstone.engine.engine.resource.ResourceManager;
 import com.shepherdjerred.capstone.engine.engine.scene.InteractableUIScene;
@@ -21,42 +21,28 @@ import com.shepherdjerred.capstone.engine.game.scenes.lobby.details.LobbyDetails
 import com.shepherdjerred.capstone.engine.game.scenes.mainmenu.MainMenuScene;
 import com.shepherdjerred.capstone.events.Event;
 import com.shepherdjerred.capstone.events.EventBus;
-import com.shepherdjerred.capstone.logic.board.BoardSettings;
-import com.shepherdjerred.capstone.logic.match.MatchSettings;
-import com.shepherdjerred.capstone.logic.player.PlayerCount;
-import com.shepherdjerred.capstone.logic.player.QuoridorPlayer;
+import java.util.HashSet;
+import java.util.Set;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 public class HostLobbyScene extends InteractableUIScene {
 
-  private static final LobbySettings defaultLobbySettings = new LobbySettings("My Lobby",
-      new MatchSettings(10, QuoridorPlayer.ONE, PlayerCount.TWO),
-      new BoardSettings(9, PlayerCount.TWO),
-      LobbyType.LOCAL,
-      false);
-
-  private final LobbySettings lobbySettings;
-
   public HostLobbyScene(EventBus<Event> eventBus,
       ResourceManager resourceManager,
-      WindowSize windowSize) {
+      WindowSize windowSize,
+      LobbyType lobbyType) {
     super(windowSize,
         resourceManager,
         new com.shepherdjerred.capstone.engine.game.scenes.lobby.host.SimpleSceneRenderer(
             resourceManager,
             windowSize),
         eventBus);
-    lobbySettings = defaultLobbySettings;
   }
 
-  @Override
-  public void initialize() throws Exception {
-    createGameObjects();
-    super.initialize();
-  }
+  protected Set<GameObject> createGameObjects() {
+    Set<GameObject> gameObjects = new HashSet<>();
 
-  private void createGameObjects() throws Exception {
     var text = new Text(resourceManager,
         "Lobby Setup",
         FontName.M5X7,
@@ -112,5 +98,6 @@ public class HostLobbyScene extends InteractableUIScene {
     gameObjects.add(text);
     gameObjects.add(backButton);
     gameObjects.add(nextButton);
+    return gameObjects;
   }
 }

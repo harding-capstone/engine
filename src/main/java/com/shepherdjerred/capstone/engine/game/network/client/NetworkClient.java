@@ -11,13 +11,13 @@ import java.net.SocketAddress;
 /**
  * Hooks into an EventBus and sends/receives events over a network.
  */
-public class GameClient {
+public class NetworkClient {
 
   private NetworkClientState clientState;
   private final EventBus<Event> eventBus;
   private NettyClientBootstrap bootstrap;
 
-  public GameClient(EventBus<Event> eventBus) {
+  public NetworkClient(EventBus<Event> eventBus) {
     this.eventBus = eventBus;
     this.bootstrap = new NettyClientBootstrap();
     clientState = new DisconnectedClientState(eventBus, this);

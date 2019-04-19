@@ -21,8 +21,8 @@ public abstract class AbstractUIScene implements UIScene {
     this.resourceManager = resourceManager;
     this.windowSize = windowSize;
     this.sceneRenderer = sceneRenderer;
+    this.gameObjects = new HashSet<>();
     background = null;
-    gameObjects = new HashSet<>();
   }
 
   public Set<GameObject> getGameObjects() {
@@ -33,8 +33,11 @@ public abstract class AbstractUIScene implements UIScene {
     return objects;
   }
 
+  protected abstract Set<GameObject> createGameObjects();
+
   @Override
   public void initialize() throws Exception {
+    gameObjects.addAll(createGameObjects());
     sceneRenderer.initialize(this);
     for (GameObject gameObject : getGameObjects()) {
       gameObject.initialize();
