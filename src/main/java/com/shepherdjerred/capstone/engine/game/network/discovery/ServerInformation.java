@@ -3,6 +3,7 @@ package com.shepherdjerred.capstone.engine.game.network.discovery;
 import com.shepherdjerred.capstone.common.lobby.Lobby;
 import java.net.SocketAddress;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
@@ -11,6 +12,7 @@ import lombok.ToString;
  */
 @Getter
 @ToString
+@EqualsAndHashCode
 @AllArgsConstructor
 public class ServerInformation {
 

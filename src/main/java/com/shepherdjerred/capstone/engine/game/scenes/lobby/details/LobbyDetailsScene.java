@@ -1,8 +1,5 @@
 package com.shepherdjerred.capstone.engine.game.scenes.lobby.details;
 
-import static com.shepherdjerred.capstone.common.Constants.DISCOVERY_PORT;
-import static com.shepherdjerred.capstone.common.Constants.GAME_PORT;
-
 import com.shepherdjerred.capstone.common.player.PlayerInformation;
 import com.shepherdjerred.capstone.engine.engine.events.scene.SceneTransitionEvent;
 import com.shepherdjerred.capstone.engine.engine.graphics.Color;
@@ -17,7 +14,7 @@ import com.shepherdjerred.capstone.engine.engine.scene.position.WindowRelativeSc
 import com.shepherdjerred.capstone.engine.engine.scene.position.WindowRelativeScenePositioner.VerticalPosition;
 import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
 import com.shepherdjerred.capstone.engine.game.event.events.IdentifyPlayerEvent;
-import com.shepherdjerred.capstone.engine.game.network.client.NetworkClient;
+import com.shepherdjerred.capstone.engine.game.network.NetworkManager;
 import com.shepherdjerred.capstone.engine.game.network.event.ServerConnectedEvent;
 import com.shepherdjerred.capstone.engine.game.objects.button.Button.Type;
 import com.shepherdjerred.capstone.engine.game.objects.text.Text;
@@ -27,29 +24,25 @@ import com.shepherdjerred.capstone.engine.game.scenes.lobby.host.SimpleSceneRend
 import com.shepherdjerred.capstone.events.Event;
 import com.shepherdjerred.capstone.events.EventBus;
 import com.shepherdjerred.capstone.events.handlers.EventHandlerFrame;
-import com.shepherdjerred.capstone.server.GameServer;
-import java.net.InetSocketAddress;
 import java.util.UUID;
 
 public class LobbyDetailsScene extends InteractableScene {
 
   private final EventBus<Event> eventBus;
-  private NetworkClient client;
-  private GameServer server;
   private final EventHandlerFrame<Event> eventHandlerFrame;
+  private final NetworkManager networkManager;
 
   public LobbyDetailsScene(EventBus<Event> eventBus, ResourceManager resourceManager,
-      WindowSize windowSize) {
+      WindowSize windowSize, NetworkManager networkManager) {
     super(windowSize,
         resourceManager,
         new SimpleSceneRenderer(resourceManager, windowSize),
         eventBus);
     this.eventBus = eventBus;
     this.eventHandlerFrame = new EventHandlerFrame<>();
+    this.networkManager = networkManager;
     createEventHandlerFrame();
     createGameObjects();
-    createServer();
-    createClient();
   }
 
   private void createEventHandlerFrame() {
@@ -89,22 +82,10 @@ public class LobbyDetailsScene extends InteractableScene {
     gameObjects.add(nextButton);
   }
 
-  private void createServer() {
-    server = new GameServer(new InetSocketAddress(GAME_PORT),
-        new InetSocketAddress(DISCOVERY_PORT));
-    new Thread(server, "SERVER_THREAD").start();
-  }
-
-  private void createClient() {
-    client = new NetworkClient(eventBus);
-    new Thread(() -> client.connect(new InetSocketAddress("127.0.0.1", GAME_PORT)),
-        "NETWORK_CLIENT_THREAD").start();
-  }
-
   @Override
   public void updateState(float interval) {
     super.updateState(interval);
-    client.update();
+    networkManager.updateClient();
   }
 
   @Override

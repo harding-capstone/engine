@@ -1,5 +1,6 @@
 package com.shepherdjerred.capstone.engine.game.scenes.lobby.list;
 
+import com.shepherdjerred.capstone.common.Constants;
 import com.shepherdjerred.capstone.common.lobby.LobbySettings.LobbyType;
 import com.shepherdjerred.capstone.engine.engine.events.input.MouseButtonDownEvent;
 import com.shepherdjerred.capstone.engine.engine.events.input.MouseButtonUpEvent;
@@ -21,6 +22,7 @@ import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
 import com.shepherdjerred.capstone.engine.game.event.handlers.MouseDownClickableHandler;
 import com.shepherdjerred.capstone.engine.game.event.handlers.MouseMoveHoverableEventHandler;
 import com.shepherdjerred.capstone.engine.game.event.handlers.MouseUpClickableHandler;
+import com.shepherdjerred.capstone.engine.game.network.NetworkManager;
 import com.shepherdjerred.capstone.engine.game.network.discovery.ServerDiscoverer;
 import com.shepherdjerred.capstone.engine.game.network.discovery.ServerInformation;
 import com.shepherdjerred.capstone.engine.game.network.discovery.event.ServerDiscoveredEvent;
@@ -29,11 +31,13 @@ import com.shepherdjerred.capstone.engine.game.objects.background.parallax.Paral
 import com.shepherdjerred.capstone.engine.game.objects.button.Button.Type;
 import com.shepherdjerred.capstone.engine.game.objects.text.Text;
 import com.shepherdjerred.capstone.engine.game.objects.textbutton.TextButton;
+import com.shepherdjerred.capstone.engine.game.scenes.lobby.details.LobbyDetailsScene;
 import com.shepherdjerred.capstone.engine.game.scenes.lobby.host.HostLobbyScene;
 import com.shepherdjerred.capstone.engine.game.scenes.mainmenu.MainMenuScene;
 import com.shepherdjerred.capstone.events.Event;
 import com.shepherdjerred.capstone.events.EventBus;
 import com.shepherdjerred.capstone.events.handlers.EventHandlerFrame;
+import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -55,14 +59,17 @@ public class LobbyListScene implements Scene {
   private final Map<ServerInformation, GameObject> serverInfoMap;
   private final WindowSize windowSize;
   private final ParallaxBackground background;
+  private final NetworkManager networkManager;
 
   public LobbyListScene(ParallaxBackground background,
       EventBus<Event> eventBus,
       ResourceManager resourceManager,
-      WindowSize windowSize) {
+      WindowSize windowSize,
+      NetworkManager networkManager) {
     this.eventBus = eventBus;
     this.windowSize = windowSize;
     this.resourceManager = resourceManager;
+    this.networkManager = networkManager;
     sceneRenderer = new LobbyListRenderer(resourceManager, eventBus, windowSize);
     gameObjects = new ArrayList<>();
     discoverer = new NettyServerDiscoverer();
@@ -78,35 +85,49 @@ public class LobbyListScene implements Scene {
   private void createEventHandler() {
     eventHandlerFrame.registerHandler(ServerDiscoveredEvent.class,
         event -> {
-          var info = event.getServerInformation();
-          var lobby = info.getLobby();
-          // TODO load player count
+          var eventServerInfo = event.getServerInformation();
+
+          for (ServerInformation info : serverInfoMap.keySet()) {
+            if (eventServerInfo.getLobby().getUuid().equals(info.getLobby().getUuid())) {
+              return;
+            }
+          }
+
+          var lobby = eventServerInfo.getLobby();
+
           var string = String.format("Name: %s | Players: %s/%s",
               lobby.getLobbySettings().getName(),
-              1,
-              2);
+              lobby.getTakenSlots(),
+              lobby.getMaxSlots());
           var text = new TextButton(resourceManager,
               windowSize,
               new WindowRelativeScenePositioner(HorizontalPosition.CENTER,
                   VerticalPosition.TOP,
-                  new SceneCoordinateOffset(0, serverInfoMap.size() * 60 + 60 + 100),
+                  new SceneCoordinateOffset(0, serverInfoMap.size() * 60 + 60 + 150),
                   0),
               string,
               FontName.M5X7,
               Color.white(),
               12,
-              new SceneObjectDimensions(350, 50),
+              new SceneObjectDimensions(400, 50),
               Type.GENERIC,
               () -> {
-                log.info(info);
-                // TODO transition to lobby scene
+                networkManager.createClient();
+                var address = (InetSocketAddress) eventServerInfo.getAddress();
+                networkManager.connectClient(new InetSocketAddress(address.getHostName(),
+                    Constants.GAME_PORT));
+                var scene = new LobbyDetailsScene(eventBus,
+                    resourceManager,
+                    windowSize,
+                    networkManager);
+                eventBus.dispatch(new SceneTransitionEvent(scene));
               });
           try {
             text.initialize();
           } catch (Exception e) {
             e.printStackTrace();
           }
-          serverInfoMap.put(info, text);
+          serverInfoMap.put(eventServerInfo, text);
           gameObjects.add(text);
         });
 
@@ -136,7 +157,7 @@ public class LobbyListScene implements Scene {
   }
 
   private void createGameObjects() {
-    var text = new Text(resourceManager,
+    var title = new Text(resourceManager,
         "Lobby List",
         FontName.M5X7,
         Color.white(),
@@ -144,6 +165,16 @@ public class LobbyListScene implements Scene {
         new WindowRelativeScenePositioner(HorizontalPosition.CENTER,
             VerticalPosition.TOP,
             new SceneCoordinateOffset(0, 100),
+            0));
+
+    var searching = new Text(resourceManager,
+        "Searching for lobbies...",
+        FontName.M5X7,
+        Color.white(),
+        24,
+        new WindowRelativeScenePositioner(HorizontalPosition.CENTER,
+            VerticalPosition.TOP,
+            new SceneCoordinateOffset(0, 150),
             0));
 
     var backButton = new TextButton(resourceManager,
@@ -184,7 +215,8 @@ public class LobbyListScene implements Scene {
           eventBus.dispatch(new SceneTransitionEvent(scene));
         });
 
-    gameObjects.add(text);
+    gameObjects.add(title);
+    gameObjects.add(searching);
     gameObjects.add(backButton);
     gameObjects.add(hostButton);
   }

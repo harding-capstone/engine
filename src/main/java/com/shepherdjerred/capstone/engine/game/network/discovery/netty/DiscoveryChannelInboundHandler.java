@@ -3,8 +3,6 @@ package com.shepherdjerred.capstone.engine.game.network.discovery.netty;
 import com.shepherdjerred.capstone.engine.game.network.discovery.ServerInformation;
 import com.shepherdjerred.capstone.engine.game.network.discovery.event.ServerDiscoveredEvent;
 import com.shepherdjerred.capstone.engine.game.network.event.NetworkEvent;
-import com.shepherdjerred.capstone.network.packet.packets.Packet;
-import com.shepherdjerred.capstone.network.packet.packets.ServerBroadcastPacket;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -19,16 +17,13 @@ public class DiscoveryChannelInboundHandler extends ChannelInboundHandlerAdapter
 
   @Override
   public void channelRead(ChannelHandlerContext context, Object message) {
-    log.info(message);
-    var packet = (Packet) message;
-    if (packet instanceof ServerBroadcastPacket) {
-      var serverBroadcastPacket = (ServerBroadcastPacket) packet;
-      var remote = context.channel().remoteAddress();
-
-      var serverInformation = new ServerInformation(remote, serverBroadcastPacket.getLobby());
+    if (message instanceof ServerInformation) {
+      var serverInformation = (ServerInformation) message;
       var serverDiscoveredEvent = new ServerDiscoveredEvent(serverInformation);
 
       eventQueue.add(serverDiscoveredEvent);
+    } else {
+      log.info("Received unknown data.");
     }
   }
 }

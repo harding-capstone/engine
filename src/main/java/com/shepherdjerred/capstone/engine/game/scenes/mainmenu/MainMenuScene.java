@@ -16,6 +16,7 @@ import com.shepherdjerred.capstone.engine.engine.scene.position.WindowRelativeSc
 import com.shepherdjerred.capstone.engine.engine.scene.position.WindowRelativeScenePositioner.HorizontalPosition;
 import com.shepherdjerred.capstone.engine.engine.scene.position.WindowRelativeScenePositioner.VerticalPosition;
 import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
+import com.shepherdjerred.capstone.engine.game.network.NetworkManager;
 import com.shepherdjerred.capstone.engine.game.objects.background.parallax.ParallaxBackground;
 import com.shepherdjerred.capstone.engine.game.objects.background.parallax.ParallaxBackground.Type;
 import com.shepherdjerred.capstone.engine.game.objects.logo.Logo;
@@ -109,7 +110,8 @@ public class MainMenuScene extends InteractableScene {
           var scene = new LobbyListScene(background,
               eventBus,
               resourceManager,
-              windowSize);
+              windowSize,
+              new NetworkManager(eventBus));
           eventBus.dispatch(new SceneTransitionEvent(scene));
         });
 

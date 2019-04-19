@@ -13,6 +13,7 @@ import com.shepherdjerred.capstone.engine.engine.scene.position.WindowRelativeSc
 import com.shepherdjerred.capstone.engine.engine.scene.position.WindowRelativeScenePositioner.HorizontalPosition;
 import com.shepherdjerred.capstone.engine.engine.scene.position.WindowRelativeScenePositioner.VerticalPosition;
 import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
+import com.shepherdjerred.capstone.engine.game.network.NetworkManager;
 import com.shepherdjerred.capstone.engine.game.objects.background.parallax.ParallaxBackground;
 import com.shepherdjerred.capstone.engine.game.objects.button.Button.Type;
 import com.shepherdjerred.capstone.engine.game.objects.text.Text;
@@ -100,7 +101,10 @@ public class HostLobbyScene extends InteractableScene {
         new SceneObjectDimensions(100, 50),
         Type.GENERIC,
         () -> {
-          var scene = new LobbyDetailsScene(eventBus, resourceManager, windowSize);
+          var scene = new LobbyDetailsScene(eventBus,
+              resourceManager,
+              windowSize,
+              new NetworkManager(eventBus));
           eventBus.dispatch(new SceneTransitionEvent(scene));
         });
 

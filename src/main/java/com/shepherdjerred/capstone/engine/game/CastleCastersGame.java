@@ -51,7 +51,7 @@ public class CastleCastersGame implements GameLogic {
     this.resourceManager = new ResourceManager();
     this.audioPlayer = new AudioPlayer(eventBus);
     this.sceneTransitioner = new SceneTransitioner(eventBus);
-    this.networkManager = new NetworkManager();
+    this.networkManager = new NetworkManager(eventBus);
     registerLoaders();
   }
 
@@ -116,7 +116,7 @@ public class CastleCastersGame implements GameLogic {
   private Scene getLobbyListScene(WindowSize windowSize) {
     return new LobbyListScene(new ParallaxBackground(resourceManager,
         windowSize,
-        Type.PURPLE_MOUNTAINS), eventBus, resourceManager, windowSize);
+        Type.PURPLE_MOUNTAINS), eventBus, resourceManager, windowSize, networkManager);
   }
 
   @Override
