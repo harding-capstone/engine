@@ -26,10 +26,8 @@ import com.shepherdjerred.capstone.events.Event;
 import com.shepherdjerred.capstone.events.EventBus;
 import com.shepherdjerred.capstone.events.handlers.EventHandler;
 import com.shepherdjerred.capstone.events.handlers.EventHandlerFrame;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import lombok.Getter;
@@ -42,7 +40,7 @@ public class GameScene implements Scene {
   private final EventBus<Event> eventBus;
   private final GameRenderer gameRenderer;
   @Getter
-  private final List<GameObject> gameObjects;
+  private final Set<GameObject> gameObjects;
   private final WindowSize windowSize;
   private final GameMapName gameMapName;
   private MapObject mapObject;
@@ -58,7 +56,7 @@ public class GameScene implements Scene {
     this.resourceManager = resourceManager;
     this.eventBus = eventBus;
     this.gameRenderer = new GameRenderer(resourceManager, eventBus, windowSize);
-    this.gameObjects = new ArrayList<>();
+    this.gameObjects = new HashSet<>();
     this.windowSize = windowSize;
     this.gameMapName = gameMapName;
     this.eventHandlerFrame = new EventHandlerFrame<>();

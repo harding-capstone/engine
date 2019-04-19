@@ -2,14 +2,13 @@ package com.shepherdjerred.capstone.engine.game.scenes.mainmenu;
 
 import static com.shepherdjerred.capstone.engine.game.objects.button.Button.Type.GENERIC;
 
-import com.shepherdjerred.capstone.common.lobby.LobbySettings.LobbyType;
 import com.shepherdjerred.capstone.engine.engine.events.CloseApplicationEvent;
 import com.shepherdjerred.capstone.engine.engine.events.scene.SceneTransitionEvent;
 import com.shepherdjerred.capstone.engine.engine.graphics.Color;
 import com.shepherdjerred.capstone.engine.engine.graphics.font.FontName;
 import com.shepherdjerred.capstone.engine.engine.object.SceneObjectDimensions;
 import com.shepherdjerred.capstone.engine.engine.resource.ResourceManager;
-import com.shepherdjerred.capstone.engine.engine.scene.InteractableScene;
+import com.shepherdjerred.capstone.engine.engine.scene.InteractableUIScene;
 import com.shepherdjerred.capstone.engine.engine.scene.position.ObjectRelativeScenePositioner;
 import com.shepherdjerred.capstone.engine.engine.scene.position.SceneCoordinateOffset;
 import com.shepherdjerred.capstone.engine.engine.scene.position.WindowRelativeScenePositioner;
@@ -30,12 +29,11 @@ import com.shepherdjerred.capstone.events.EventBus;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-public class MainMenuScene extends InteractableScene {
+public class MainMenuScene extends InteractableUIScene {
 
   private final ResourceManager resourceManager;
   private final WindowSize windowSize;
   private final MainMenuAudio sceneAudio;
-  private ParallaxBackground background;
 
   public MainMenuScene(ResourceManager resourceManager,
       EventBus<Event> eventBus,
@@ -68,6 +66,7 @@ public class MainMenuScene extends InteractableScene {
         FontName.M5X7,
         Color.white(),
         12,
+        400,
         new WindowRelativeScenePositioner(HorizontalPosition.RIGHT,
             VerticalPosition.BOTTOM,
             new SceneCoordinateOffset(-10, -10),
@@ -78,7 +77,7 @@ public class MainMenuScene extends InteractableScene {
 
     var singleplayerButton = new TextButton(resourceManager,
         windowSize,
-        new ObjectRelativeScenePositioner(logo, new SceneCoordinateOffset(0, 300), 1),
+        new ObjectRelativeScenePositioner(logo, new SceneCoordinateOffset(0, 300), 10),
         "Single Player",
         FontName.M5X7,
         Color.white(),
@@ -86,18 +85,15 @@ public class MainMenuScene extends InteractableScene {
         buttonSize,
         GENERIC,
         () -> {
-          background.setCleanupDisabled(true);
-          var scene = new HostLobbyScene(background,
-              eventBus,
+          var scene = new HostLobbyScene(eventBus,
               resourceManager,
-              windowSize,
-              LobbyType.LOCAL);
+              windowSize);
           eventBus.dispatch(new SceneTransitionEvent(scene));
         });
 
     var multiplayerButton = new TextButton(resourceManager,
         windowSize,
-        new ObjectRelativeScenePositioner(singleplayerButton, new SceneCoordinateOffset(0, 75), 1),
+        new ObjectRelativeScenePositioner(singleplayerButton, new SceneCoordinateOffset(0, 75), 10),
         "Multiplayer",
         FontName.M5X7,
         Color.white(),
@@ -105,9 +101,7 @@ public class MainMenuScene extends InteractableScene {
         buttonSize,
         GENERIC,
         () -> {
-          background.setCleanupDisabled(true);
-          var scene = new LobbyListScene(background,
-              eventBus,
+          var scene = new LobbyListScene(eventBus,
               resourceManager,
               windowSize);
           eventBus.dispatch(new SceneTransitionEvent(scene));
@@ -115,7 +109,7 @@ public class MainMenuScene extends InteractableScene {
 
     var helpButton = new TextButton(resourceManager,
         windowSize,
-        new ObjectRelativeScenePositioner(multiplayerButton, new SceneCoordinateOffset(0, 75), 1),
+        new ObjectRelativeScenePositioner(multiplayerButton, new SceneCoordinateOffset(0, 75), 10),
         "Help",
         FontName.M5X7,
         Color.white(),
@@ -129,7 +123,7 @@ public class MainMenuScene extends InteractableScene {
 
     var exitButton = new TextButton(resourceManager,
         windowSize,
-        new ObjectRelativeScenePositioner(helpButton, new SceneCoordinateOffset(0, 75), 1),
+        new ObjectRelativeScenePositioner(helpButton, new SceneCoordinateOffset(0, 75), 10),
         "Exit",
         FontName.M5X7,
         Color.white(),
@@ -144,7 +138,6 @@ public class MainMenuScene extends InteractableScene {
     gameObjects.add(exitButton);
     gameObjects.add(logo);
     gameObjects.add(text);
-    gameObjects.add(background);
   }
 
   @Override

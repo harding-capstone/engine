@@ -5,7 +5,7 @@ import com.shepherdjerred.capstone.engine.engine.graphics.Color;
 import com.shepherdjerred.capstone.engine.engine.graphics.font.FontName;
 import com.shepherdjerred.capstone.engine.engine.object.SceneObjectDimensions;
 import com.shepherdjerred.capstone.engine.engine.resource.ResourceManager;
-import com.shepherdjerred.capstone.engine.engine.scene.InteractableScene;
+import com.shepherdjerred.capstone.engine.engine.scene.InteractableUIScene;
 import com.shepherdjerred.capstone.engine.engine.scene.position.SceneCoordinateOffset;
 import com.shepherdjerred.capstone.engine.engine.scene.position.WindowRelativeScenePositioner;
 import com.shepherdjerred.capstone.engine.engine.scene.position.WindowRelativeScenePositioner.HorizontalPosition;
@@ -20,7 +20,7 @@ import com.shepherdjerred.capstone.engine.game.scenes.mainmenu.MainMenuScene;
 import com.shepherdjerred.capstone.events.Event;
 import com.shepherdjerred.capstone.events.EventBus;
 
-public class HelpScene extends InteractableScene {
+public class HelpScene extends InteractableUIScene {
 
   private final EventBus eventBus;
 
@@ -52,9 +52,10 @@ public class HelpScene extends InteractableScene {
         FontName.M5X7,
         Color.white(),
         12,
-        new WindowRelativeScenePositioner(HorizontalPosition.LEFT,
-            VerticalPosition.TOP,
-            new SceneCoordinateOffset(25, 25),
+        500,
+        new WindowRelativeScenePositioner(HorizontalPosition.CENTER,
+            VerticalPosition.CENTER,
+            new SceneCoordinateOffset(0, 0),
             0));
 
     var backButton = new TextButton(resourceManager,
@@ -76,10 +77,9 @@ public class HelpScene extends InteractableScene {
           eventBus.dispatch(new SceneTransitionEvent(scene));
         });
 
-    var background = new ParallaxBackground(resourceManager, windowSize,
+    background = new ParallaxBackground(resourceManager, windowSize,
         ParallaxBackground.Type.random());
 
-    gameObjects.add(background);
     gameObjects.add(text);
     gameObjects.add(backButton);
   }

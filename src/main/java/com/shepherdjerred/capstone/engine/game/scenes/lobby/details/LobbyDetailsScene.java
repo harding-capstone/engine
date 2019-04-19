@@ -7,7 +7,7 @@ import com.shepherdjerred.capstone.engine.engine.graphics.font.FontName;
 import com.shepherdjerred.capstone.engine.engine.map.GameMapName;
 import com.shepherdjerred.capstone.engine.engine.object.SceneObjectDimensions;
 import com.shepherdjerred.capstone.engine.engine.resource.ResourceManager;
-import com.shepherdjerred.capstone.engine.engine.scene.InteractableScene;
+import com.shepherdjerred.capstone.engine.engine.scene.InteractableUIScene;
 import com.shepherdjerred.capstone.engine.engine.scene.position.SceneCoordinateOffset;
 import com.shepherdjerred.capstone.engine.engine.scene.position.WindowRelativeScenePositioner;
 import com.shepherdjerred.capstone.engine.engine.scene.position.WindowRelativeScenePositioner.HorizontalPosition;
@@ -15,6 +15,7 @@ import com.shepherdjerred.capstone.engine.engine.scene.position.WindowRelativeSc
 import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
 import com.shepherdjerred.capstone.engine.game.event.events.IdentifyPlayerEvent;
 import com.shepherdjerred.capstone.engine.game.network.event.ServerConnectedEvent;
+import com.shepherdjerred.capstone.engine.game.objects.background.parallax.ParallaxBackground;
 import com.shepherdjerred.capstone.engine.game.objects.button.Button.Type;
 import com.shepherdjerred.capstone.engine.game.objects.text.Text;
 import com.shepherdjerred.capstone.engine.game.objects.textbutton.TextButton;
@@ -25,7 +26,7 @@ import com.shepherdjerred.capstone.events.EventBus;
 import com.shepherdjerred.capstone.events.handlers.EventHandlerFrame;
 import java.util.UUID;
 
-public class LobbyDetailsScene extends InteractableScene {
+public class LobbyDetailsScene extends InteractableUIScene {
 
   private final EventBus<Event> eventBus;
   private final EventHandlerFrame<Event> eventHandlerFrame;
@@ -56,6 +57,7 @@ public class LobbyDetailsScene extends InteractableScene {
         FontName.M5X7,
         Color.white(),
         24,
+        100,
         new WindowRelativeScenePositioner(
             HorizontalPosition.CENTER, VerticalPosition.TOP, new SceneCoordinateOffset(0, 100), 1));
 
@@ -75,6 +77,9 @@ public class LobbyDetailsScene extends InteractableScene {
           var scene = new GameScene(resourceManager, eventBus, GameMapName.GRASS, windowSize);
           eventBus.dispatch(new SceneTransitionEvent(scene));
         });
+
+    background = new ParallaxBackground(resourceManager, windowSize,
+        ParallaxBackground.Type.random());
 
     gameObjects.add(text);
     gameObjects.add(nextButton);

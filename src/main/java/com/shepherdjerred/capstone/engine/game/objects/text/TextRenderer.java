@@ -33,14 +33,20 @@ public class TextRenderer implements GameObjectRenderer<Text> {
   }
 
   @Override
-  public void initialize(Text gameObject) throws Exception {
-    font = resourceManager.get(gameObject.getFontName());
+  public void initialize(Text text) throws Exception {
+    font = resourceManager.get(text.getFontName());
     textShaderProgram = resourceManager.get(ShaderProgramName.TEXT);
-    var chars = gameObject.getText().toCharArray();
+    var chars = text.getText().toCharArray();
+    var maxWidth = text.getMaxWidth();
 
     var currentX = 0;
     var currentY = 24;
     for (int i = 0; i < chars.length; i++) {
+      if (currentX > maxWidth) {
+        currentY += 24;
+        currentX = 0;
+      }
+
       char character = chars[i];
 
       if (character == '\n') {

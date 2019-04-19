@@ -25,8 +25,6 @@ import com.shepherdjerred.capstone.engine.engine.scene.Scene;
 import com.shepherdjerred.capstone.engine.engine.scene.SceneTransitioner;
 import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
 import com.shepherdjerred.capstone.engine.game.network.manager.NetworkManager;
-import com.shepherdjerred.capstone.engine.game.objects.background.parallax.ParallaxBackground;
-import com.shepherdjerred.capstone.engine.game.objects.background.parallax.ParallaxBackground.Type;
 import com.shepherdjerred.capstone.engine.game.scenes.game.GameScene;
 import com.shepherdjerred.capstone.engine.game.scenes.lobby.list.LobbyListScene;
 import com.shepherdjerred.capstone.engine.game.scenes.mainmenu.MainMenuScene;
@@ -115,9 +113,7 @@ public class CastleCastersGame implements GameLogic {
   }
 
   private Scene getLobbyListScene(WindowSize windowSize) {
-    return new LobbyListScene(new ParallaxBackground(resourceManager,
-        windowSize,
-        Type.PURPLE_MOUNTAINS), eventBus, resourceManager, windowSize);
+    return new LobbyListScene(eventBus, resourceManager, windowSize);
   }
 
   @Override
@@ -137,7 +133,7 @@ public class CastleCastersGame implements GameLogic {
 
     if (resourceManager.hasAllocatedResources()) {
       var references = resourceManager.getReferenceCounter();
-      log.warn("Resource leak(s) detected. " + references);
+      log.warn("Resource leak(s) detected: " + references);
     } else {
       log.info("No resource leaks detected :)");
     }

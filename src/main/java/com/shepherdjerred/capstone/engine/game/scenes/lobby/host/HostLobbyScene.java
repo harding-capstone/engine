@@ -7,7 +7,7 @@ import com.shepherdjerred.capstone.engine.engine.graphics.Color;
 import com.shepherdjerred.capstone.engine.engine.graphics.font.FontName;
 import com.shepherdjerred.capstone.engine.engine.object.SceneObjectDimensions;
 import com.shepherdjerred.capstone.engine.engine.resource.ResourceManager;
-import com.shepherdjerred.capstone.engine.engine.scene.InteractableScene;
+import com.shepherdjerred.capstone.engine.engine.scene.InteractableUIScene;
 import com.shepherdjerred.capstone.engine.engine.scene.position.SceneCoordinateOffset;
 import com.shepherdjerred.capstone.engine.engine.scene.position.WindowRelativeScenePositioner;
 import com.shepherdjerred.capstone.engine.engine.scene.position.WindowRelativeScenePositioner.HorizontalPosition;
@@ -28,7 +28,7 @@ import com.shepherdjerred.capstone.logic.player.QuoridorPlayer;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-public class HostLobbyScene extends InteractableScene {
+public class HostLobbyScene extends InteractableUIScene {
 
   private static final LobbySettings defaultLobbySettings = new LobbySettings("My Lobby",
       new MatchSettings(10, QuoridorPlayer.ONE, PlayerCount.TWO),
@@ -38,17 +38,16 @@ public class HostLobbyScene extends InteractableScene {
 
   private final LobbySettings lobbySettings;
 
-  public HostLobbyScene(ParallaxBackground background,
-      EventBus<Event> eventBus,
+  public HostLobbyScene(EventBus<Event> eventBus,
       ResourceManager resourceManager,
-      WindowSize windowSize,
-      LobbySettings.LobbyType type) {
+      WindowSize windowSize) {
     super(windowSize,
         resourceManager,
-        new HostLobbyRenderer(resourceManager, eventBus, windowSize),
+        new com.shepherdjerred.capstone.engine.game.scenes.lobby.host.SimpleSceneRenderer(
+            resourceManager,
+            windowSize),
         eventBus);
     lobbySettings = defaultLobbySettings;
-    gameObjects.add(background);
   }
 
   @Override
@@ -63,6 +62,7 @@ public class HostLobbyScene extends InteractableScene {
         FontName.M5X7,
         Color.white(),
         12,
+        200,
         new WindowRelativeScenePositioner(HorizontalPosition.CENTER,
             VerticalPosition.TOP,
             new SceneCoordinateOffset(0, 100),
@@ -105,6 +105,9 @@ public class HostLobbyScene extends InteractableScene {
               windowSize);
           eventBus.dispatch(new SceneTransitionEvent(scene));
         });
+
+    background = new ParallaxBackground(resourceManager, windowSize,
+        ParallaxBackground.Type.random());
 
     gameObjects.add(text);
     gameObjects.add(backButton);

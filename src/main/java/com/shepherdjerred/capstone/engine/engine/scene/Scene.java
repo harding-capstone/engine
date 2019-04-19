@@ -2,7 +2,7 @@ package com.shepherdjerred.capstone.engine.engine.scene;
 
 import com.shepherdjerred.capstone.engine.engine.object.GameObject;
 import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
-import java.util.List;
+import java.util.Set;
 
 public interface Scene {
 
@@ -12,7 +12,7 @@ public interface Scene {
 
   void updateState(float interval);
 
-  List<GameObject> getGameObjects();
+  Set<GameObject> getGameObjects();
 
   void render(WindowSize windowSize);
 

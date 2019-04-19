@@ -1,10 +1,6 @@
 package com.shepherdjerred.capstone.engine.game.scenes.lobby.list;
 
 import com.shepherdjerred.capstone.common.Constants;
-import com.shepherdjerred.capstone.common.lobby.LobbySettings.LobbyType;
-import com.shepherdjerred.capstone.engine.engine.events.input.MouseButtonDownEvent;
-import com.shepherdjerred.capstone.engine.engine.events.input.MouseButtonUpEvent;
-import com.shepherdjerred.capstone.engine.engine.events.input.MouseMoveEvent;
 import com.shepherdjerred.capstone.engine.engine.events.scene.SceneActiveEvent;
 import com.shepherdjerred.capstone.engine.engine.events.scene.SceneTransitionEvent;
 import com.shepherdjerred.capstone.engine.engine.graphics.Color;
@@ -12,18 +8,15 @@ import com.shepherdjerred.capstone.engine.engine.graphics.font.FontName;
 import com.shepherdjerred.capstone.engine.engine.object.GameObject;
 import com.shepherdjerred.capstone.engine.engine.object.SceneObjectDimensions;
 import com.shepherdjerred.capstone.engine.engine.resource.ResourceManager;
-import com.shepherdjerred.capstone.engine.engine.scene.Scene;
-import com.shepherdjerred.capstone.engine.engine.scene.SceneRenderer;
+import com.shepherdjerred.capstone.engine.engine.scene.InteractableUIScene;
 import com.shepherdjerred.capstone.engine.engine.scene.position.SceneCoordinateOffset;
 import com.shepherdjerred.capstone.engine.engine.scene.position.WindowRelativeScenePositioner;
 import com.shepherdjerred.capstone.engine.engine.scene.position.WindowRelativeScenePositioner.HorizontalPosition;
 import com.shepherdjerred.capstone.engine.engine.scene.position.WindowRelativeScenePositioner.VerticalPosition;
 import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
-import com.shepherdjerred.capstone.engine.game.event.handlers.MouseDownClickableHandler;
-import com.shepherdjerred.capstone.engine.game.event.handlers.MouseMoveHoverableEventHandler;
-import com.shepherdjerred.capstone.engine.game.event.handlers.MouseUpClickableHandler;
 import com.shepherdjerred.capstone.engine.game.network.discovery.ServerInformation;
 import com.shepherdjerred.capstone.engine.game.network.discovery.event.ServerDiscoveredEvent;
+import com.shepherdjerred.capstone.engine.game.network.event.ServerConnectedEvent;
 import com.shepherdjerred.capstone.engine.game.network.manager.event.ConnectServerEvent;
 import com.shepherdjerred.capstone.engine.game.network.manager.event.StartClientEvent;
 import com.shepherdjerred.capstone.engine.game.network.manager.event.StartDiscoveryEvent;
@@ -34,46 +27,42 @@ import com.shepherdjerred.capstone.engine.game.objects.text.Text;
 import com.shepherdjerred.capstone.engine.game.objects.textbutton.TextButton;
 import com.shepherdjerred.capstone.engine.game.scenes.lobby.details.LobbyDetailsScene;
 import com.shepherdjerred.capstone.engine.game.scenes.lobby.host.HostLobbyScene;
+import com.shepherdjerred.capstone.engine.game.scenes.lobby.host.SimpleSceneRenderer;
 import com.shepherdjerred.capstone.engine.game.scenes.mainmenu.MainMenuScene;
 import com.shepherdjerred.capstone.events.Event;
 import com.shepherdjerred.capstone.events.EventBus;
 import com.shepherdjerred.capstone.events.handlers.EventHandlerFrame;
 import java.net.InetSocketAddress;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-public class LobbyListScene implements Scene {
+public class LobbyListScene extends InteractableUIScene {
 
-  private final EventBus<Event> eventBus;
-  private final ResourceManager resourceManager;
-  private final SceneRenderer<LobbyListScene> sceneRenderer;
-  @Getter
-  private final List<GameObject> gameObjects;
   private final EventHandlerFrame<Event> eventHandlerFrame;
+  private final EventHandlerFrame<Event> connectingEventHandlerFrame;
   private final Map<ServerInformation, GameObject> serverInfoMap;
-  private final WindowSize windowSize;
-  private final ParallaxBackground background;
 
-  public LobbyListScene(ParallaxBackground background,
-      EventBus<Event> eventBus,
+  public LobbyListScene(EventBus<Event> eventBus,
       ResourceManager resourceManager,
       WindowSize windowSize) {
-    this.eventBus = eventBus;
-    this.windowSize = windowSize;
-    this.resourceManager = resourceManager;
-    sceneRenderer = new LobbyListRenderer(resourceManager, eventBus, windowSize);
-    gameObjects = new ArrayList<>();
+    super(windowSize,
+        resourceManager,
+        new SimpleSceneRenderer(resourceManager, windowSize),
+        eventBus);
     eventHandlerFrame = new EventHandlerFrame<>();
+    connectingEventHandlerFrame = new EventHandlerFrame<>();
     serverInfoMap = new HashMap<>();
-    this.background = background;
-    gameObjects.add(background);
     createEventHandler();
     eventBus.registerHandlerFrame(eventHandlerFrame);
+    createGameObjects();
+  }
+
+  private void createConnectingEventHandler() {
+    connectingEventHandlerFrame.registerHandler(ServerConnectedEvent.class, (event) -> {
+      // TODO go to next screen
+    });
   }
 
   private void createEventHandler() {
@@ -127,24 +116,6 @@ public class LobbyListScene implements Scene {
 
     eventHandlerFrame.registerHandler(SceneActiveEvent.class,
         event -> eventBus.dispatch(new StartDiscoveryEvent()));
-
-    var mouseDownClickable = new MouseDownClickableHandler(this);
-    var mouseUpClickable = new MouseUpClickableHandler(this);
-    var mouseMoveHoverable = new MouseMoveHoverableEventHandler(this);
-
-    eventHandlerFrame.registerHandler(MouseButtonDownEvent.class, mouseDownClickable);
-    eventHandlerFrame.registerHandler(MouseButtonUpEvent.class, mouseUpClickable);
-    eventHandlerFrame.registerHandler(MouseMoveEvent.class, mouseMoveHoverable);
-  }
-
-  @Override
-  public void initialize() throws Exception {
-    createGameObjects();
-    sceneRenderer.initialize(this);
-
-    for (GameObject gameObject : gameObjects) {
-      gameObject.initialize();
-    }
   }
 
   private void createGameObjects() {
@@ -153,6 +124,7 @@ public class LobbyListScene implements Scene {
         FontName.M5X7,
         Color.white(),
         24,
+        100,
         new WindowRelativeScenePositioner(HorizontalPosition.CENTER,
             VerticalPosition.TOP,
             new SceneCoordinateOffset(0, 100),
@@ -163,6 +135,7 @@ public class LobbyListScene implements Scene {
         FontName.M5X7,
         Color.white(),
         24,
+        200,
         new WindowRelativeScenePositioner(HorizontalPosition.CENTER,
             VerticalPosition.TOP,
             new SceneCoordinateOffset(0, 150),
@@ -200,11 +173,13 @@ public class LobbyListScene implements Scene {
         new SceneObjectDimensions(100, 50),
         Type.GENERIC,
         () -> {
-          var scene = new HostLobbyScene(background,
-              eventBus,
-              resourceManager, windowSize, LobbyType.NETWORK);
+          var scene = new HostLobbyScene(eventBus,
+              resourceManager, windowSize);
           eventBus.dispatch(new SceneTransitionEvent(scene));
         });
+
+    background = new ParallaxBackground(resourceManager, windowSize,
+        ParallaxBackground.Type.random());
 
     gameObjects.add(title);
     gameObjects.add(searching);
@@ -214,19 +189,8 @@ public class LobbyListScene implements Scene {
 
   @Override
   public void cleanup() {
-    gameObjects.forEach(GameObject::cleanup);
-    sceneRenderer.cleanup();
+    super.cleanup();
     eventBus.removeHandlerFrame(eventHandlerFrame);
     eventBus.dispatch(new StopDiscoveryEvent());
-  }
-
-  @Override
-  public void updateState(float interval) {
-    gameObjects.forEach(gameObject -> gameObject.update(interval));
-  }
-
-  @Override
-  public void render(WindowSize windowSize) {
-    sceneRenderer.render(this);
   }
 }

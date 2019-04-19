@@ -22,6 +22,7 @@ public class Text implements GameObject {
   private final FontName fontName;
   private final Color color;
   private final int size;
+  private final int maxWidth;
   @Setter
   private ScenePositioner position;
 
@@ -30,11 +31,13 @@ public class Text implements GameObject {
       FontName fontName,
       Color color,
       int size,
+      int maxWidth,
       ScenePositioner position) {
     this.text = text;
     this.fontName = fontName;
     this.color = color;
     this.size = size;
+    this.maxWidth = maxWidth;
     this.position = position;
     renderer = new TextRenderer(resourceManager);
   }

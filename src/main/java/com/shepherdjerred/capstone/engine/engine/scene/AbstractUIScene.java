@@ -3,31 +3,40 @@ package com.shepherdjerred.capstone.engine.engine.scene;
 import com.shepherdjerred.capstone.engine.engine.object.GameObject;
 import com.shepherdjerred.capstone.engine.engine.resource.ResourceManager;
 import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
-import java.util.ArrayList;
-import java.util.List;
-import lombok.Getter;
+import com.shepherdjerred.capstone.engine.game.objects.background.parallax.ParallaxBackground;
+import java.util.HashSet;
+import java.util.Set;
 
-public abstract class AbstractScene implements Scene {
+public abstract class AbstractUIScene implements UIScene {
 
   protected final ResourceManager resourceManager;
   protected final WindowSize windowSize;
   private final SceneRenderer sceneRenderer;
-  @Getter
-  protected final List<GameObject> gameObjects;
+  protected final Set<GameObject> gameObjects;
+  protected ParallaxBackground background;
 
-  public AbstractScene(ResourceManager resourceManager,
+  public AbstractUIScene(ResourceManager resourceManager,
       WindowSize windowSize,
       SceneRenderer sceneRenderer) {
     this.resourceManager = resourceManager;
     this.windowSize = windowSize;
     this.sceneRenderer = sceneRenderer;
-    gameObjects = new ArrayList<>();
+    background = null;
+    gameObjects = new HashSet<>();
+  }
+
+  public Set<GameObject> getGameObjects() {
+    var objects = new HashSet<>(gameObjects);
+    if (background != null) {
+      objects.add(background);
+    }
+    return objects;
   }
 
   @Override
   public void initialize() throws Exception {
     sceneRenderer.initialize(this);
-    for (GameObject gameObject : gameObjects) {
+    for (GameObject gameObject : getGameObjects()) {
       gameObject.initialize();
     }
   }
@@ -39,13 +48,13 @@ public abstract class AbstractScene implements Scene {
 
   @Override
   public void cleanup() {
-    gameObjects.forEach(GameObject::cleanup);
+    getGameObjects().forEach(GameObject::cleanup);
     sceneRenderer.cleanup();
   }
 
   @Override
   public void updateState(float interval) {
-    gameObjects.forEach(gameObject -> gameObject.update(interval));
+    getGameObjects().forEach(gameObject -> gameObject.update(interval));
   }
 
 }

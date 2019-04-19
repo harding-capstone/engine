@@ -45,6 +45,7 @@ public class TextButton implements GameObject, Clickable, Hoverable {
         fontName,
         color,
         fontSize,
+        dimensions.getWidth(),
         new ObjectRelativeScenePositioner(button,
             new SceneCoordinateOffset(0, 0),
             (int) positioner.getSceneCoordinate(windowSize, dimensions).getZ() + 1));

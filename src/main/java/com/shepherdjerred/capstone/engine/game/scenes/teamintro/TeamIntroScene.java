@@ -1,9 +1,8 @@
 package com.shepherdjerred.capstone.engine.game.scenes.teamintro;
 
 import com.shepherdjerred.capstone.engine.engine.events.scene.SceneTransitionEvent;
-import com.shepherdjerred.capstone.engine.engine.object.GameObject;
 import com.shepherdjerred.capstone.engine.engine.resource.ResourceManager;
-import com.shepherdjerred.capstone.engine.engine.scene.Scene;
+import com.shepherdjerred.capstone.engine.engine.scene.AbstractUIScene;
 import com.shepherdjerred.capstone.engine.engine.scene.SceneRenderer;
 import com.shepherdjerred.capstone.engine.engine.scene.position.SceneCoordinateOffset;
 import com.shepherdjerred.capstone.engine.engine.scene.position.WindowRelativeScenePositioner;
@@ -14,20 +13,12 @@ import com.shepherdjerred.capstone.engine.game.objects.logo.Logo;
 import com.shepherdjerred.capstone.engine.game.scenes.mainmenu.MainMenuScene;
 import com.shepherdjerred.capstone.events.Event;
 import com.shepherdjerred.capstone.events.EventBus;
-import java.util.ArrayList;
-import java.util.List;
-import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-public class TeamIntroScene implements Scene {
+public class TeamIntroScene extends AbstractUIScene {
 
-  private final ResourceManager resourceManager;
   private final EventBus<Event> eventBus;
-  @Getter
-  private final List<GameObject> gameObjects;
-  private final WindowSize windowSize;
-  private final SceneRenderer<TeamIntroScene> renderer;
   private float time = 0;
   private boolean hasTransitioned = false;
 
@@ -35,11 +26,10 @@ public class TeamIntroScene implements Scene {
       ResourceManager resourceManager,
       EventBus<Event> eventBus,
       WindowSize windowSize) {
-    this.renderer = renderer;
-    this.resourceManager = resourceManager;
+    super(resourceManager,
+        windowSize,
+        new TeamIntroRenderer(resourceManager, eventBus, windowSize));
     this.eventBus = eventBus;
-    this.windowSize = windowSize;
-    gameObjects = new ArrayList<>();
     createGameObjects();
   }
 
@@ -57,18 +47,8 @@ public class TeamIntroScene implements Scene {
   }
 
   @Override
-  public void initialize() throws Exception {
-    renderer.initialize(this);
-  }
-
-  @Override
-  public void cleanup() {
-    gameObjects.forEach(GameObject::cleanup);
-    renderer.cleanup();
-  }
-
-  @Override
   public void updateState(float interval) {
+    super.updateState(interval);
     time += interval;
     if (time > 5 && !hasTransitioned) {
       eventBus.dispatch(new SceneTransitionEvent(new MainMenuScene(
@@ -77,10 +57,5 @@ public class TeamIntroScene implements Scene {
           windowSize)));
       hasTransitioned = true;
     }
-  }
-
-  @Override
-  public void render(WindowSize windowSize) {
-    renderer.render(this);
   }
 }

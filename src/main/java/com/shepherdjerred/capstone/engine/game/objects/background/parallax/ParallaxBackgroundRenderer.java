@@ -78,7 +78,7 @@ public class ParallaxBackgroundRenderer implements
 
     gameObject.getInstances().forEach((instance, layers) -> layers.forEach((layer, position) -> {
       var xpos = position * windowSize.getWidth();
-      var model = new ModelMatrix(new RendererCoordinate(xpos, 0, -900),
+      var model = new ModelMatrix(new RendererCoordinate(xpos, 0, -1000 + layer),
           0,
           1).getMatrix();
       shaderProgram.setUniform(ShaderUniform.MODEL_MATRIX, model);

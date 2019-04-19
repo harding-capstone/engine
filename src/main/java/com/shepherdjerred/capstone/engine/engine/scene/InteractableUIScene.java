@@ -12,12 +12,12 @@ import com.shepherdjerred.capstone.events.Event;
 import com.shepherdjerred.capstone.events.EventBus;
 import com.shepherdjerred.capstone.events.handlers.EventHandlerFrame;
 
-public abstract class InteractableScene extends AbstractScene {
+public abstract class InteractableUIScene extends AbstractUIScene {
 
   private final EventHandlerFrame<Event> interactableHandlerFrame;
   protected final EventBus<Event> eventBus;
 
-  public InteractableScene(WindowSize windowSize,
+  public InteractableUIScene(WindowSize windowSize,
       ResourceManager resourceManager,
       SceneRenderer renderer,
       EventBus<Event> eventBus) {
