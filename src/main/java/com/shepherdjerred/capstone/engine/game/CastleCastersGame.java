@@ -24,7 +24,7 @@ import com.shepherdjerred.capstone.engine.engine.resource.ResourceManager;
 import com.shepherdjerred.capstone.engine.engine.scene.Scene;
 import com.shepherdjerred.capstone.engine.engine.scene.SceneTransitioner;
 import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
-import com.shepherdjerred.capstone.engine.game.network.NetworkManager;
+import com.shepherdjerred.capstone.engine.game.network.manager.NetworkManager;
 import com.shepherdjerred.capstone.engine.game.objects.background.parallax.ParallaxBackground;
 import com.shepherdjerred.capstone.engine.game.objects.background.parallax.ParallaxBackground.Type;
 import com.shepherdjerred.capstone.engine.game.scenes.game.GameScene;
@@ -87,6 +87,7 @@ public class CastleCastersGame implements GameLogic {
     var scene = getTeamScene(windowSize);
     sceneTransitioner.initialize(scene);
     audioPlayer.initialize();
+    networkManager.initialize();
     registerEventHandlers();
   }
 
@@ -116,11 +117,12 @@ public class CastleCastersGame implements GameLogic {
   private Scene getLobbyListScene(WindowSize windowSize) {
     return new LobbyListScene(new ParallaxBackground(resourceManager,
         windowSize,
-        Type.PURPLE_MOUNTAINS), eventBus, resourceManager, windowSize, networkManager);
+        Type.PURPLE_MOUNTAINS), eventBus, resourceManager, windowSize);
   }
 
   @Override
   public void updateGameState(float interval) {
+    networkManager.update();
     sceneTransitioner.getScene().updateState(interval);
   }
 

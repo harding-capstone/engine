@@ -14,7 +14,6 @@ import com.shepherdjerred.capstone.engine.engine.scene.position.WindowRelativeSc
 import com.shepherdjerred.capstone.engine.engine.scene.position.WindowRelativeScenePositioner.VerticalPosition;
 import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
 import com.shepherdjerred.capstone.engine.game.event.events.IdentifyPlayerEvent;
-import com.shepherdjerred.capstone.engine.game.network.NetworkManager;
 import com.shepherdjerred.capstone.engine.game.network.event.ServerConnectedEvent;
 import com.shepherdjerred.capstone.engine.game.objects.button.Button.Type;
 import com.shepherdjerred.capstone.engine.game.objects.text.Text;
@@ -30,17 +29,16 @@ public class LobbyDetailsScene extends InteractableScene {
 
   private final EventBus<Event> eventBus;
   private final EventHandlerFrame<Event> eventHandlerFrame;
-  private final NetworkManager networkManager;
 
-  public LobbyDetailsScene(EventBus<Event> eventBus, ResourceManager resourceManager,
-      WindowSize windowSize, NetworkManager networkManager) {
+  public LobbyDetailsScene(EventBus<Event> eventBus,
+      ResourceManager resourceManager,
+      WindowSize windowSize) {
     super(windowSize,
         resourceManager,
         new SimpleSceneRenderer(resourceManager, windowSize),
         eventBus);
     this.eventBus = eventBus;
     this.eventHandlerFrame = new EventHandlerFrame<>();
-    this.networkManager = networkManager;
     createEventHandlerFrame();
     createGameObjects();
   }
@@ -85,7 +83,6 @@ public class LobbyDetailsScene extends InteractableScene {
   @Override
   public void updateState(float interval) {
     super.updateState(interval);
-    networkManager.updateClient();
   }
 
   @Override

@@ -22,11 +22,12 @@ import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
 import com.shepherdjerred.capstone.engine.game.event.handlers.MouseDownClickableHandler;
 import com.shepherdjerred.capstone.engine.game.event.handlers.MouseMoveHoverableEventHandler;
 import com.shepherdjerred.capstone.engine.game.event.handlers.MouseUpClickableHandler;
-import com.shepherdjerred.capstone.engine.game.network.NetworkManager;
-import com.shepherdjerred.capstone.engine.game.network.discovery.ServerDiscoverer;
 import com.shepherdjerred.capstone.engine.game.network.discovery.ServerInformation;
 import com.shepherdjerred.capstone.engine.game.network.discovery.event.ServerDiscoveredEvent;
-import com.shepherdjerred.capstone.engine.game.network.discovery.netty.NettyServerDiscoverer;
+import com.shepherdjerred.capstone.engine.game.network.manager.event.ConnectServerEvent;
+import com.shepherdjerred.capstone.engine.game.network.manager.event.StartClientEvent;
+import com.shepherdjerred.capstone.engine.game.network.manager.event.StartDiscoveryEvent;
+import com.shepherdjerred.capstone.engine.game.network.manager.event.StopDiscoveryEvent;
 import com.shepherdjerred.capstone.engine.game.objects.background.parallax.ParallaxBackground;
 import com.shepherdjerred.capstone.engine.game.objects.button.Button.Type;
 import com.shepherdjerred.capstone.engine.game.objects.text.Text;
@@ -53,27 +54,20 @@ public class LobbyListScene implements Scene {
   private final SceneRenderer<LobbyListScene> sceneRenderer;
   @Getter
   private final List<GameObject> gameObjects;
-  private final ServerDiscoverer discoverer;
-  private final Thread discovererThread;
   private final EventHandlerFrame<Event> eventHandlerFrame;
   private final Map<ServerInformation, GameObject> serverInfoMap;
   private final WindowSize windowSize;
   private final ParallaxBackground background;
-  private final NetworkManager networkManager;
 
   public LobbyListScene(ParallaxBackground background,
       EventBus<Event> eventBus,
       ResourceManager resourceManager,
-      WindowSize windowSize,
-      NetworkManager networkManager) {
+      WindowSize windowSize) {
     this.eventBus = eventBus;
     this.windowSize = windowSize;
     this.resourceManager = resourceManager;
-    this.networkManager = networkManager;
     sceneRenderer = new LobbyListRenderer(resourceManager, eventBus, windowSize);
     gameObjects = new ArrayList<>();
-    discoverer = new NettyServerDiscoverer();
-    discovererThread = new Thread(discoverer, "DISCOVERER");
     eventHandlerFrame = new EventHandlerFrame<>();
     serverInfoMap = new HashMap<>();
     this.background = background;
@@ -112,14 +106,14 @@ public class LobbyListScene implements Scene {
               new SceneObjectDimensions(400, 50),
               Type.GENERIC,
               () -> {
-                networkManager.createClient();
-                var address = (InetSocketAddress) eventServerInfo.getAddress();
-                networkManager.connectClient(new InetSocketAddress(address.getHostName(),
-                    Constants.GAME_PORT));
+                eventBus.dispatch(new StartClientEvent());
+                var discoveryAddress = (InetSocketAddress) eventServerInfo.getAddress();
+                var gameAddress = new InetSocketAddress(discoveryAddress.getHostName(),
+                    Constants.GAME_PORT);
+                eventBus.dispatch(new ConnectServerEvent(gameAddress));
                 var scene = new LobbyDetailsScene(eventBus,
                     resourceManager,
-                    windowSize,
-                    networkManager);
+                    windowSize);
                 eventBus.dispatch(new SceneTransitionEvent(scene));
               });
           try {
@@ -131,7 +125,8 @@ public class LobbyListScene implements Scene {
           gameObjects.add(text);
         });
 
-    eventHandlerFrame.registerHandler(SceneActiveEvent.class, event -> startDiscovery());
+    eventHandlerFrame.registerHandler(SceneActiveEvent.class,
+        event -> eventBus.dispatch(new StartDiscoveryEvent()));
 
     var mouseDownClickable = new MouseDownClickableHandler(this);
     var mouseUpClickable = new MouseUpClickableHandler(this);
@@ -140,10 +135,6 @@ public class LobbyListScene implements Scene {
     eventHandlerFrame.registerHandler(MouseButtonDownEvent.class, mouseDownClickable);
     eventHandlerFrame.registerHandler(MouseButtonUpEvent.class, mouseUpClickable);
     eventHandlerFrame.registerHandler(MouseMoveEvent.class, mouseMoveHoverable);
-  }
-
-  private void startDiscovery() {
-    discovererThread.start();
   }
 
   @Override
@@ -225,14 +216,12 @@ public class LobbyListScene implements Scene {
   public void cleanup() {
     gameObjects.forEach(GameObject::cleanup);
     sceneRenderer.cleanup();
-    discoverer.stop();
     eventBus.removeHandlerFrame(eventHandlerFrame);
+    eventBus.dispatch(new StopDiscoveryEvent());
   }
 
   @Override
   public void updateState(float interval) {
-    var event = discoverer.getEvent();
-    event.ifPresent(eventBus::dispatch);
     gameObjects.forEach(gameObject -> gameObject.update(interval));
   }
 

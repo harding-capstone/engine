@@ -1,7 +1,7 @@
 package com.shepherdjerred.capstone.engine.game.network.client.state;
 
 import com.shepherdjerred.capstone.engine.game.event.events.IdentifyPlayerEvent;
-import com.shepherdjerred.capstone.engine.game.network.client.NetworkClient;
+import com.shepherdjerred.capstone.engine.game.network.client.GameClient;
 import com.shepherdjerred.capstone.events.Event;
 import com.shepherdjerred.capstone.events.EventBus;
 import com.shepherdjerred.capstone.events.handlers.EventHandlerFrame;
@@ -14,21 +14,21 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class DisconnectedClientState implements NetworkClientState {
 
-  private final NetworkClient networkClient;
+  private final GameClient gameClient;
   private final EventBus<Event> eventBus;
   private final EventHandlerFrame<Event> eventHandlerFrame;
 
-  public DisconnectedClientState(EventBus<Event> eventBus, NetworkClient networkClient) {
+  public DisconnectedClientState(EventBus<Event> eventBus, GameClient gameClient) {
     this.eventBus = eventBus;
     this.eventHandlerFrame = new EventHandlerFrame<>();
-    this.networkClient = networkClient;
+    this.gameClient = gameClient;
     createEventHandlerFrame();
   }
 
   private void createEventHandlerFrame() {
     eventHandlerFrame.registerHandler(IdentifyPlayerEvent.class,
         (event) -> {
-          networkClient.sendPacket(new PlayerDescriptionPacket(event.getPlayerInformation()));
+          gameClient.sendPacket(new PlayerDescriptionPacket(event.getPlayerInformation()));
         });
   }
 
