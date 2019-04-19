@@ -24,6 +24,8 @@ public class TextRenderer implements GameObjectRenderer<Text> {
   private Map<Integer, Mesh> characterMeshMap;
   @Getter
   private int width = 0;
+  @Getter
+  private int height = 24;
 
   public TextRenderer(ResourceManager resourceManager) {
     this.resourceManager = resourceManager;
@@ -40,6 +42,12 @@ public class TextRenderer implements GameObjectRenderer<Text> {
     var currentY = 24;
     for (int i = 0; i < chars.length; i++) {
       char character = chars[i];
+
+      if (character == '\n') {
+        currentY += 24;
+        currentX = 0;
+        continue;
+      }
 
       var fontCharacter = font.getFontCharacter(character, currentX, currentY);
       var vertices = fontCharacter.getCoordinates().toFloatArray();
@@ -60,6 +68,7 @@ public class TextRenderer implements GameObjectRenderer<Text> {
       }
     }
     width = currentX;
+    height = currentY;
   }
 
   @Override
@@ -79,6 +88,9 @@ public class TextRenderer implements GameObjectRenderer<Text> {
 
     char[] textCharacters = sceneElement.getText().toCharArray();
     for (int i = 0; i < textCharacters.length; i++) {
+      if (textCharacters[i] == '\n') {
+        continue;
+      }
       var mesh = characterMeshMap.get(i);
       mesh.render();
     }

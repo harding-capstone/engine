@@ -26,14 +26,8 @@ public class ObjectRelativeScenePositioner implements ScenePositioner {
       SceneObjectDimensions dimensions) {
     var x = getXCoordinate(windowSize, dimensions);
     var y = getYCoordinate(windowSize, dimensions);
-    var coord = new SceneCoordinate(x, y, z);
 
-    return coord;
-  }
-
-  @Override
-  public void setOffset(SceneCoordinateOffset offset) {
-    this.offset = offset;
+    return new SceneCoordinate(x, y, z);
   }
 
   private float getXCoordinate(WindowSize windowSize, SceneObjectDimensions dimensions) {
@@ -43,7 +37,7 @@ public class ObjectRelativeScenePositioner implements ScenePositioner {
 
     var diff = Math.abs(anchorWidth - objectWidth);
 
-    return (anchorPosition + diff / 2) - objectWidth + offset.getXOffset();
+    return (anchorPosition) + offset.getXOffset();
   }
 
   private float getYCoordinate(WindowSize windowSize, SceneObjectDimensions dimensions) {
@@ -53,6 +47,6 @@ public class ObjectRelativeScenePositioner implements ScenePositioner {
 
     var diff = Math.abs(anchorHeight - objectHeight);
 
-    return (anchorPosition + diff / 2) + offset.getYOffset();
+    return (anchorPosition)  + offset.getYOffset();
   }
 }

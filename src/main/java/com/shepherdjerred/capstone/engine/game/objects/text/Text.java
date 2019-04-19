@@ -40,7 +40,7 @@ public class Text implements GameObject {
   }
 
   public SceneObjectDimensions getSceneObjectDimensions() {
-    return new SceneObjectDimensions(renderer.getWidth(), 24);
+    return new SceneObjectDimensions(renderer.getWidth(), renderer.getHeight());
   }
 
   @Override

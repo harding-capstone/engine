@@ -24,6 +24,7 @@ import org.lwjgl.openal.ALCCapabilities;
 @RequiredArgsConstructor
 public class AudioPlayer {
 
+  private SourcedAudio currentAudio = null;
   private final EventBus<Event> eventBus;
   private long device;
   private long context;
@@ -43,9 +44,18 @@ public class AudioPlayer {
   }
 
   private void play(SourcedAudio sourcedAudio) {
-    log.info("Playing music");
-    alSourcei(sourcedAudio.getAlSourceName(), AL_BUFFER, sourcedAudio.getAudio().getAlBufferName());
-    alSourcePlay(sourcedAudio.getAlSourceName());
+    // TODO this could be better.
+    if (currentAudio == null || sourcedAudio.getAudio().getAudioName() != currentAudio.getAudio()
+        .getAudioName()) {
+      currentAudio = sourcedAudio;
+      log.info("Playing music");
+      alSourcei(sourcedAudio.getAlSourceName(),
+          AL_BUFFER,
+          sourcedAudio.getAudio().getAlBufferName());
+      alSourcePlay(sourcedAudio.getAlSourceName());
+    } else {
+      log.info("Skipping music since it's already playing.");
+    }
   }
 
   private void setupListener() {

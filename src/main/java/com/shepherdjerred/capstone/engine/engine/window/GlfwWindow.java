@@ -78,6 +78,7 @@ public class GlfwWindow implements Window {
   private final EventBus<Event> eventBus;
   private final MouseTracker mouseTracker;
   private Callback errorCallback;
+  private boolean shouldClose;
 
   public GlfwWindow(WindowSettings windowSettings,
       MouseTracker mouseTracker,
@@ -87,6 +88,7 @@ public class GlfwWindow implements Window {
     this.mouseCodeConverter = new GlfwMouseCodeConverter();
     this.eventBus = eventBus;
     this.mouseTracker = mouseTracker;
+    eventBus.registerHandler(CloseApplicationEvent.class, event -> shouldClose = true);
   }
 
   @Override
@@ -111,7 +113,7 @@ public class GlfwWindow implements Window {
 
   @Override
   public boolean shouldClose() {
-    return glfwWindowShouldClose(windowHandle);
+    return glfwWindowShouldClose(windowHandle) || shouldClose;
   }
 
   @Override

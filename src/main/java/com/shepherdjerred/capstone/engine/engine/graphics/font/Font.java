@@ -15,10 +15,12 @@ import com.shepherdjerred.capstone.engine.engine.resource.Resource;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
+import lombok.extern.log4j.Log4j2;
 import org.lwjgl.stb.STBTTAlignedQuad;
 import org.lwjgl.stb.STBTTBakedChar;
 import org.lwjgl.system.MemoryStack;
 
+@Log4j2
 @Getter
 @ToString
 @AllArgsConstructor
