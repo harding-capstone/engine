@@ -2,8 +2,10 @@ package com.shepherdjerred.capstone.engine.game.network.client.state;
 
 import com.shepherdjerred.capstone.common.player.PlayerInformation;
 import com.shepherdjerred.capstone.engine.game.event.events.IdentifyPlayerEvent;
+import com.shepherdjerred.capstone.engine.game.event.events.PlayerJoinEvent;
 import com.shepherdjerred.capstone.engine.game.network.client.NetworkClient;
 import com.shepherdjerred.capstone.engine.game.network.event.ServerConnectedEvent;
+import com.shepherdjerred.capstone.engine.game.network.event.TransitionClientStateEvent;
 import com.shepherdjerred.capstone.events.Event;
 import com.shepherdjerred.capstone.events.EventBus;
 import com.shepherdjerred.capstone.events.handlers.EventHandlerFrame;
@@ -31,7 +33,11 @@ public class PreLobbyState extends AbstractNetworkClientState {
     frame.registerHandler(ServerConnectedEvent.class, (event) -> {
       eventBus.dispatch(new IdentifyPlayerEvent(new PlayerInformation(UUID.randomUUID(),
           "Jerred")));
-      networkClient.transition(new LobbyClientState(eventBus, networkClient));
+    });
+
+    frame.registerHandler(PlayerJoinEvent.class, (event) -> {
+      eventBus.dispatch(new TransitionClientStateEvent(new LobbyClientState(eventBus,
+          networkClient)));
     });
 
     return frame;
