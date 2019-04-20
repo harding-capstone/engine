@@ -1,7 +1,5 @@
 package com.shepherdjerred.capstone.engine.game;
 
-import static com.shepherdjerred.capstone.engine.engine.map.GameMapName.GRASS;
-
 import com.shepherdjerred.capstone.engine.engine.GameLogic;
 import com.shepherdjerred.capstone.engine.engine.audio.AudioLoader;
 import com.shepherdjerred.capstone.engine.engine.audio.AudioName;
@@ -25,9 +23,6 @@ import com.shepherdjerred.capstone.engine.engine.scene.Scene;
 import com.shepherdjerred.capstone.engine.engine.scene.SceneTransitioner;
 import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
 import com.shepherdjerred.capstone.engine.game.network.manager.NetworkManager;
-import com.shepherdjerred.capstone.engine.game.scenes.game.GameScene;
-import com.shepherdjerred.capstone.engine.game.scenes.lobby.list.LobbyListScene;
-import com.shepherdjerred.capstone.engine.game.scenes.mainmenu.MainMenuScene;
 import com.shepherdjerred.capstone.engine.game.scenes.teamintro.TeamIntroScene;
 import com.shepherdjerred.capstone.events.Event;
 import com.shepherdjerred.capstone.events.EventBus;
@@ -93,24 +88,10 @@ public class CastleCastersGame implements GameLogic {
         new SceneTransitionEventHandler(sceneTransitioner));
   }
 
-  private Scene getGameScene(WindowSize windowSize) {
-    return new GameScene(resourceManager, eventBus, GRASS, windowSize);
-  }
-
   private Scene getTeamScene(WindowSize windowSize) {
     return new TeamIntroScene(resourceManager,
         eventBus,
         windowSize);
-  }
-
-  private Scene getMainMenuScene(WindowSize windowSize) {
-    return new MainMenuScene(resourceManager,
-        eventBus,
-        windowSize);
-  }
-
-  private Scene getLobbyListScene(WindowSize windowSize) {
-    return new LobbyListScene(eventBus, resourceManager, windowSize);
   }
 
   @Override

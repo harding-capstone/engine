@@ -1,7 +1,9 @@
 package com.shepherdjerred.capstone.engine.game.event.events;
 
 import com.shepherdjerred.capstone.events.Event;
+import lombok.ToString;
 
-public class StartGameEvent implements Event {
+@ToString
+public class TryStartGameEvent implements Event {
 
 }

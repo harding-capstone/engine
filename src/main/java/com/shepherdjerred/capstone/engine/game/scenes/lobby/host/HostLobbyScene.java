@@ -1,6 +1,7 @@
 package com.shepherdjerred.capstone.engine.game.scenes.lobby.host;
 
 import com.shepherdjerred.capstone.common.Constants;
+import com.shepherdjerred.capstone.common.GameMap;
 import com.shepherdjerred.capstone.common.GameState;
 import com.shepherdjerred.capstone.common.chat.ChatHistory;
 import com.shepherdjerred.capstone.common.lobby.Lobby;
@@ -14,11 +15,13 @@ import com.shepherdjerred.capstone.engine.engine.object.GameObject;
 import com.shepherdjerred.capstone.engine.engine.object.SceneObjectDimensions;
 import com.shepherdjerred.capstone.engine.engine.resource.ResourceManager;
 import com.shepherdjerred.capstone.engine.engine.scene.InteractableUIScene;
+import com.shepherdjerred.capstone.engine.engine.scene.position.ObjectRelativeScenePositioner;
 import com.shepherdjerred.capstone.engine.engine.scene.position.SceneCoordinateOffset;
 import com.shepherdjerred.capstone.engine.engine.scene.position.WindowRelativeScenePositioner;
 import com.shepherdjerred.capstone.engine.engine.scene.position.WindowRelativeScenePositioner.HorizontalPosition;
 import com.shepherdjerred.capstone.engine.engine.scene.position.WindowRelativeScenePositioner.VerticalPosition;
 import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
+import com.shepherdjerred.capstone.engine.game.event.events.FillSlotsWithAiEvent;
 import com.shepherdjerred.capstone.engine.game.network.event.ServerConnectedEvent;
 import com.shepherdjerred.capstone.engine.game.network.manager.event.ConnectServerEvent;
 import com.shepherdjerred.capstone.engine.game.network.manager.event.ShutdownNetworkEvent;
@@ -32,7 +35,6 @@ import com.shepherdjerred.capstone.engine.game.scenes.lobby.details.LobbyDetails
 import com.shepherdjerred.capstone.engine.game.scenes.mainmenu.MainMenuScene;
 import com.shepherdjerred.capstone.events.Event;
 import com.shepherdjerred.capstone.events.EventBus;
-import com.shepherdjerred.capstone.logic.board.BoardSettings;
 import com.shepherdjerred.capstone.logic.match.MatchSettings;
 import com.shepherdjerred.capstone.logic.player.PlayerCount;
 import com.shepherdjerred.capstone.logic.player.QuoridorPlayer;
@@ -44,12 +46,8 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class HostLobbyScene extends InteractableUIScene {
 
-  private boolean isServerStarting = false;
-  private String lobbyName = "";
-  private LobbyType lobbyType;
-  private int wallsPerPlayer = 10;
-  private QuoridorPlayer startingPlayer = QuoridorPlayer.ONE;
-  private PlayerCount playerCount = PlayerCount.TWO;
+  private boolean isServerStarting;
+  private LobbySettings lobbySettings;
   private GameMapName mapName = GameMapName.GRASS;
 
   public HostLobbyScene(EventBus<Event> eventBus,
@@ -62,7 +60,11 @@ public class HostLobbyScene extends InteractableUIScene {
             resourceManager,
             windowSize),
         eventBus);
-    this.lobbyType = lobbyType;
+    lobbySettings = new LobbySettings("My Lobby",
+        new MatchSettings(10, QuoridorPlayer.ONE, PlayerCount.TWO),
+        lobbyType,
+        false,
+        GameMap.GRASS);
   }
 
   protected Set<GameObject> createGameObjects() {
@@ -78,6 +80,14 @@ public class HostLobbyScene extends InteractableUIScene {
             VerticalPosition.TOP,
             new SceneCoordinateOffset(0, 100),
             0));
+
+    var lobbyDump = new Text(resourceManager,
+        lobbySettings.toString(),
+        FontName.M5X7,
+        Color.white(),
+        12,
+        300,
+        new ObjectRelativeScenePositioner(title, new SceneCoordinateOffset(0, 75), 1));
 
     var backButton = new TextButton(resourceManager,
         windowSize,
@@ -122,9 +132,13 @@ public class HostLobbyScene extends InteractableUIScene {
             eventBus.dispatch(new ConnectServerEvent(new InetSocketAddress(Constants.GAME_PORT)));
 
             eventBus.registerHandler(ServerConnectedEvent.class, (event) -> {
+              eventBus.dispatch(new FillSlotsWithAiEvent());
+
               var scene = new LobbyDetailsScene(eventBus,
                   resourceManager,
-                  windowSize);
+                  windowSize,
+                  Lobby.from(lobbySettings),
+                  true);
               eventBus.dispatch(new SceneTransitionEvent(scene));
             });
           }
@@ -133,6 +147,7 @@ public class HostLobbyScene extends InteractableUIScene {
     background = new ParallaxBackground(resourceManager, windowSize,
         ParallaxBackground.Type.random());
 
+    gameObjects.add(lobbyDump);
     gameObjects.add(title);
     gameObjects.add(backButton);
     gameObjects.add(nextButton);
@@ -140,9 +155,6 @@ public class HostLobbyScene extends InteractableUIScene {
   }
 
   private GameState createGameState() {
-    return new GameState(Lobby.from(new LobbySettings(lobbyName,
-        new MatchSettings(wallsPerPlayer, startingPlayer, playerCount),
-        new BoardSettings(9, playerCount), lobbyType, false)),
-        null, new ChatHistory());
+    return new GameState(Lobby.from(lobbySettings), null, new ChatHistory());
   }
 }

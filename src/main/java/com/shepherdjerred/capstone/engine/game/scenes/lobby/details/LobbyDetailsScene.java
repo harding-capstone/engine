@@ -1,5 +1,6 @@
 package com.shepherdjerred.capstone.engine.game.scenes.lobby.details;
 
+import com.shepherdjerred.capstone.common.lobby.Lobby;
 import com.shepherdjerred.capstone.engine.engine.events.scene.SceneTransitionEvent;
 import com.shepherdjerred.capstone.engine.engine.graphics.Color;
 import com.shepherdjerred.capstone.engine.engine.graphics.font.FontName;
@@ -8,12 +9,14 @@ import com.shepherdjerred.capstone.engine.engine.object.GameObject;
 import com.shepherdjerred.capstone.engine.engine.object.SceneObjectDimensions;
 import com.shepherdjerred.capstone.engine.engine.resource.ResourceManager;
 import com.shepherdjerred.capstone.engine.engine.scene.InteractableUIScene;
+import com.shepherdjerred.capstone.engine.engine.scene.position.ObjectRelativeScenePositioner;
 import com.shepherdjerred.capstone.engine.engine.scene.position.SceneCoordinateOffset;
 import com.shepherdjerred.capstone.engine.engine.scene.position.WindowRelativeScenePositioner;
 import com.shepherdjerred.capstone.engine.engine.scene.position.WindowRelativeScenePositioner.HorizontalPosition;
 import com.shepherdjerred.capstone.engine.engine.scene.position.WindowRelativeScenePositioner.VerticalPosition;
 import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
-import com.shepherdjerred.capstone.engine.game.network.event.ServerConnectedEvent;
+import com.shepherdjerred.capstone.engine.game.event.events.StartGameEvent;
+import com.shepherdjerred.capstone.engine.game.event.events.TryStartGameEvent;
 import com.shepherdjerred.capstone.engine.game.network.manager.event.ShutdownNetworkEvent;
 import com.shepherdjerred.capstone.engine.game.objects.background.parallax.ParallaxBackground;
 import com.shepherdjerred.capstone.engine.game.objects.button.Button.Type;
@@ -25,29 +28,45 @@ import com.shepherdjerred.capstone.engine.game.scenes.mainmenu.MainMenuScene;
 import com.shepherdjerred.capstone.events.Event;
 import com.shepherdjerred.capstone.events.EventBus;
 import com.shepherdjerred.capstone.events.handlers.EventHandlerFrame;
+import com.shepherdjerred.capstone.logic.board.BoardSettings;
+import com.shepherdjerred.capstone.logic.match.Match;
 import java.util.HashSet;
 import java.util.Set;
 
 public class LobbyDetailsScene extends InteractableUIScene {
 
+  private final boolean isHost;
+  private Lobby lobby;
   private final EventBus<Event> eventBus;
   private final EventHandlerFrame<Event> eventHandlerFrame;
 
   public LobbyDetailsScene(EventBus<Event> eventBus,
       ResourceManager resourceManager,
-      WindowSize windowSize) {
+      WindowSize windowSize,
+      Lobby lobby,
+      boolean isHost) {
     super(windowSize,
         resourceManager,
         new SimpleSceneRenderer(resourceManager, windowSize),
         eventBus);
     this.eventBus = eventBus;
     this.eventHandlerFrame = new EventHandlerFrame<>();
+    this.lobby = lobby;
+    this.isHost = isHost;
     createEventHandlerFrame();
     createGameObjects();
   }
 
   private void createEventHandlerFrame() {
-    eventHandlerFrame.registerHandler(ServerConnectedEvent.class, event -> {
+    eventHandlerFrame.registerHandler(StartGameEvent.class, (event) -> {
+      var lobbySettings = lobby.getLobbySettings();
+      var matchSettings = lobbySettings.getMatchSettings();
+      var map = lobbySettings.getGameMap();
+      var boardSettings = new BoardSettings(map.getBoardSize(), matchSettings.getPlayerCount());
+      var match = Match.from(matchSettings, boardSettings);
+
+      var scene = new GameScene(resourceManager, eventBus, GameMapName.GRASS, match, windowSize);
+      eventBus.dispatch(new SceneTransitionEvent(scene));
     });
   }
 
@@ -95,16 +114,36 @@ public class LobbyDetailsScene extends InteractableUIScene {
         new SceneObjectDimensions(100, 50),
         Type.GENERIC,
         () -> {
-          var scene = new GameScene(resourceManager, eventBus, GameMapName.GRASS, windowSize);
-          eventBus.dispatch(new SceneTransitionEvent(scene));
+          eventBus.dispatch(new TryStartGameEvent());
         });
+
+    // TODO handle name updates
+    var lobbyName = new Text(resourceManager,
+        lobby.getLobbySettings().getName(),
+        FontName.M5X7,
+        Color.white(),
+        24,
+        300,
+        new ObjectRelativeScenePositioner(text, new SceneCoordinateOffset(0, 75), 1));
+
+    var lobbyDump = new Text(resourceManager,
+        lobby.toString(),
+        FontName.M5X7,
+        Color.white(),
+        24,
+        300,
+        new ObjectRelativeScenePositioner(lobbyName, new SceneCoordinateOffset(0, 75), 1));
 
     background = new ParallaxBackground(resourceManager, windowSize,
         ParallaxBackground.Type.random());
 
+    gameObjects.add(lobbyName);
+    gameObjects.add(lobbyDump);
     gameObjects.add(text);
     gameObjects.add(backButton);
-    gameObjects.add(nextButton);
+    if (isHost) {
+      gameObjects.add(nextButton);
+    }
     return gameObjects;
   }
 

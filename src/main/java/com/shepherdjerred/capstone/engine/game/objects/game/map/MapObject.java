@@ -1,7 +1,7 @@
 package com.shepherdjerred.capstone.engine.game.objects.game.map;
 
-import com.shepherdjerred.capstone.engine.engine.map.MapLayers;
 import com.shepherdjerred.capstone.engine.engine.map.GameMapName;
+import com.shepherdjerred.capstone.engine.engine.map.MapLayers;
 import com.shepherdjerred.capstone.engine.engine.object.GameObject;
 import com.shepherdjerred.capstone.engine.engine.object.SceneObjectDimensions;
 import com.shepherdjerred.capstone.engine.engine.resource.ResourceManager;
@@ -29,11 +29,16 @@ public class MapObject implements GameObject {
   @Setter
   private int yOffset;
 
-
-  public MapObject(ResourceManager resourceManager, GameMapName gameMapName) {
+  public MapObject(ResourceManager resourceManager,
+      GameMapName gameMapName) {
     this.resourceManager = resourceManager;
     this.gameMapName = gameMapName;
     this.mapRenderer = new MapRenderer(resourceManager);
+    createFrame();
+  }
+
+  private void createFrame() {
+
   }
 
   @Override
@@ -57,7 +62,8 @@ public class MapObject implements GameObject {
 
   @Override
   public ScenePositioner getPosition() {
-    return new AbsoluteScenePositioner(new SceneCoordinate(0, 0, 0), new SceneCoordinateOffset(0, 0));
+    return new AbsoluteScenePositioner(new SceneCoordinate(0, 0, 0),
+        new SceneCoordinateOffset(0, 0));
   }
 
   @Override

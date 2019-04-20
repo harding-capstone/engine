@@ -1,16 +1,20 @@
 package com.shepherdjerred.capstone.engine.game.network.client;
 
+import com.shepherdjerred.capstone.engine.game.network.client.handler.PacketReceivedEventHandler;
 import com.shepherdjerred.capstone.engine.game.network.client.netty.NettyClientBootstrap;
 import com.shepherdjerred.capstone.engine.game.network.client.state.PreLobbyState;
 import com.shepherdjerred.capstone.engine.game.network.client.state.NetworkClientState;
+import com.shepherdjerred.capstone.engine.game.network.event.PacketReceivedEvent;
 import com.shepherdjerred.capstone.events.Event;
 import com.shepherdjerred.capstone.events.EventBus;
 import com.shepherdjerred.capstone.network.packet.packets.Packet;
 import java.net.SocketAddress;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Hooks into an EventBus and sends/receives events over a network.
  */
+@Log4j2
 public class NetworkClient {
 
   private NetworkClientState clientState;
@@ -22,6 +26,7 @@ public class NetworkClient {
     this.bootstrap = new NettyClientBootstrap();
     clientState = new PreLobbyState(eventBus, this);
     clientState.enable();
+    eventBus.register(PacketReceivedEvent.class, new PacketReceivedEventHandler(eventBus));
   }
 
   public void sendPacket(Packet packet) {
@@ -42,6 +47,7 @@ public class NetworkClient {
   }
 
   public void transition(NetworkClientState newState) {
+    log.info("Transitioning to new client state " + newState);
     clientState.disable();
     newState.enable();
     clientState = newState;
