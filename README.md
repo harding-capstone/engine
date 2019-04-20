@@ -21,4 +21,4 @@ This project uses maven to manage dependencies and the build process. When this 
 
 ![Main Menu](https://i.imgur.com/8C4sWcd.png)
 
-![Game Help](https://i.imgur.com/8C4sWcd.png)
+![Game Help](https://i.imgur.com/tMeK3ee.png)
