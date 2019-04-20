@@ -15,34 +15,25 @@ import lombok.extern.log4j.Log4j2;
  * Before the client connects to a server.
  */
 @Log4j2
-public class PreLobbyState implements NetworkClientState {
+public class PreLobbyState extends AbstractNetworkClientState {
 
-  private final NetworkClient networkClient;
-  private final EventBus<Event> eventBus;
-  private final EventHandlerFrame<Event> eventHandlerFrame;
-
-  public PreLobbyState(EventBus<Event> eventBus, NetworkClient networkClient) {
-    this.eventBus = eventBus;
-    this.eventHandlerFrame = new EventHandlerFrame<>();
-    this.networkClient = networkClient;
-    createEventHandlerFrame();
+  public PreLobbyState(EventBus<Event> eventBus,
+      NetworkClient networkClient) {
+    super(eventBus, networkClient);
   }
 
-  private void createEventHandlerFrame() {
-    eventHandlerFrame.registerHandler(IdentifyPlayerEvent.class,
+  protected EventHandlerFrame<Event> createEventHandlerFrame() {
+    EventHandlerFrame<Event> frame = new EventHandlerFrame<>();
+
+    frame.registerHandler(IdentifyPlayerEvent.class,
         (event) -> networkClient.sendPacket(new PlayerDescriptionPacket(event.getPlayerInformation())));
 
-    eventHandlerFrame.registerHandler(ServerConnectedEvent.class, (event) -> {
+    frame.registerHandler(ServerConnectedEvent.class, (event) -> {
       eventBus.dispatch(new IdentifyPlayerEvent(new PlayerInformation(UUID.randomUUID(),
           "Jerred")));
+      networkClient.transition(new LobbyClientState(eventBus, networkClient));
     });
-  }
 
-  public void enable() {
-    eventBus.registerHandlerFrame(eventHandlerFrame);
-  }
-
-  public void disable() {
-    eventBus.removeHandlerFrame(eventHandlerFrame);
+    return frame;
   }
 }

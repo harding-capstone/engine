@@ -14,12 +14,14 @@ import com.shepherdjerred.capstone.engine.engine.scene.position.WindowRelativeSc
 import com.shepherdjerred.capstone.engine.engine.scene.position.WindowRelativeScenePositioner.VerticalPosition;
 import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
 import com.shepherdjerred.capstone.engine.game.network.event.ServerConnectedEvent;
+import com.shepherdjerred.capstone.engine.game.network.manager.event.ShutdownNetworkEvent;
 import com.shepherdjerred.capstone.engine.game.objects.background.parallax.ParallaxBackground;
 import com.shepherdjerred.capstone.engine.game.objects.button.Button.Type;
 import com.shepherdjerred.capstone.engine.game.objects.text.Text;
 import com.shepherdjerred.capstone.engine.game.objects.textbutton.TextButton;
 import com.shepherdjerred.capstone.engine.game.scenes.game.GameScene;
 import com.shepherdjerred.capstone.engine.game.scenes.lobby.host.SimpleSceneRenderer;
+import com.shepherdjerred.capstone.engine.game.scenes.mainmenu.MainMenuScene;
 import com.shepherdjerred.capstone.events.Event;
 import com.shepherdjerred.capstone.events.EventBus;
 import com.shepherdjerred.capstone.events.handlers.EventHandlerFrame;
@@ -60,6 +62,26 @@ public class LobbyDetailsScene extends InteractableUIScene {
         new WindowRelativeScenePositioner(
             HorizontalPosition.CENTER, VerticalPosition.TOP, new SceneCoordinateOffset(0, 100), 1));
 
+    var backButton = new TextButton(resourceManager,
+        windowSize,
+        new WindowRelativeScenePositioner(HorizontalPosition.LEFT,
+            VerticalPosition.BOTTOM,
+            new SceneCoordinateOffset(100, -100),
+            1),
+        "Back",
+        FontName.M5X7,
+        Color.white(),
+        24,
+        new SceneObjectDimensions(100, 50),
+        Type.GENERIC,
+        () -> {
+          var scene = new MainMenuScene(resourceManager,
+              eventBus,
+              windowSize);
+          eventBus.dispatch(new SceneTransitionEvent(scene));
+          eventBus.dispatch(new ShutdownNetworkEvent());
+        });
+
     var nextButton = new TextButton(resourceManager,
         windowSize,
         new WindowRelativeScenePositioner(HorizontalPosition.RIGHT,
@@ -81,6 +103,7 @@ public class LobbyDetailsScene extends InteractableUIScene {
         ParallaxBackground.Type.random());
 
     gameObjects.add(text);
+    gameObjects.add(backButton);
     gameObjects.add(nextButton);
     return gameObjects;
   }

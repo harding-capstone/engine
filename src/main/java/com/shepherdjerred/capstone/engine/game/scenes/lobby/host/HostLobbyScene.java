@@ -21,6 +21,7 @@ import com.shepherdjerred.capstone.engine.engine.scene.position.WindowRelativeSc
 import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
 import com.shepherdjerred.capstone.engine.game.network.event.ServerConnectedEvent;
 import com.shepherdjerred.capstone.engine.game.network.manager.event.ConnectServerEvent;
+import com.shepherdjerred.capstone.engine.game.network.manager.event.ShutdownNetworkEvent;
 import com.shepherdjerred.capstone.engine.game.network.manager.event.StartClientEvent;
 import com.shepherdjerred.capstone.engine.game.network.manager.event.StartServerEvent;
 import com.shepherdjerred.capstone.engine.game.objects.background.parallax.ParallaxBackground;
@@ -94,6 +95,7 @@ public class HostLobbyScene extends InteractableUIScene {
           var scene = new MainMenuScene(resourceManager,
               eventBus,
               windowSize);
+          eventBus.dispatch(new ShutdownNetworkEvent());
           eventBus.dispatch(new SceneTransitionEvent(scene));
         });
 

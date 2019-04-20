@@ -6,6 +6,7 @@ import com.shepherdjerred.capstone.engine.game.network.client.NetworkClient;
 import com.shepherdjerred.capstone.engine.game.network.discovery.ServerDiscoverer;
 import com.shepherdjerred.capstone.engine.game.network.discovery.netty.NettyServerDiscoverer;
 import com.shepherdjerred.capstone.engine.game.network.manager.event.ConnectServerEvent;
+import com.shepherdjerred.capstone.engine.game.network.manager.event.ShutdownNetworkEvent;
 import com.shepherdjerred.capstone.engine.game.network.manager.event.StartDiscoveryEvent;
 import com.shepherdjerred.capstone.engine.game.network.manager.event.StartServerEvent;
 import com.shepherdjerred.capstone.engine.game.network.manager.event.StopClientEvent;
@@ -54,6 +55,9 @@ public class NetworkManager {
     eventHandlerFrame.registerHandler(StopDiscoveryEvent.class, (event) -> {
       stopDiscovery();
     });
+    eventHandlerFrame.registerHandler(ShutdownNetworkEvent.class, (event) -> {
+      shutdown();
+    });
   }
 
   public void initialize() {
@@ -93,18 +97,21 @@ public class NetworkManager {
   private void stopDiscovery() {
     if (discoverer != null) {
       discoverer.stop();
+      discoverer = null;
     }
   }
 
   private void stopServer() {
     if (gameServer != null) {
       gameServer.shutdown();
+      gameServer = null;
     }
   }
 
   private void stopClient() {
     if (networkClient != null) {
       networkClient.shutdown();
+      networkClient = null;
     }
   }
 

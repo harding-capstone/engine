@@ -40,4 +40,10 @@ public class NetworkClient {
     var event = bootstrap.getLatestEvent();
     event.ifPresent(eventBus::dispatch);
   }
+
+  public void transition(NetworkClientState newState) {
+    clientState.disable();
+    newState.enable();
+    clientState = newState;
+  }
 }

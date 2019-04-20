@@ -21,6 +21,7 @@ import com.shepherdjerred.capstone.engine.game.network.discovery.ServerInformati
 import com.shepherdjerred.capstone.engine.game.network.discovery.event.ServerDiscoveredEvent;
 import com.shepherdjerred.capstone.engine.game.network.event.ServerConnectedEvent;
 import com.shepherdjerred.capstone.engine.game.network.manager.event.ConnectServerEvent;
+import com.shepherdjerred.capstone.engine.game.network.manager.event.ShutdownNetworkEvent;
 import com.shepherdjerred.capstone.engine.game.network.manager.event.StartClientEvent;
 import com.shepherdjerred.capstone.engine.game.network.manager.event.StartDiscoveryEvent;
 import com.shepherdjerred.capstone.engine.game.network.manager.event.StopClientEvent;
@@ -186,6 +187,7 @@ public class LobbyListScene extends InteractableUIScene {
           var scene = new MainMenuScene(resourceManager,
               eventBus,
               windowSize);
+          eventBus.dispatch(new ShutdownNetworkEvent());
           eventBus.dispatch(new SceneTransitionEvent(scene));
         });
 
