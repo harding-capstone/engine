@@ -2,6 +2,7 @@ package com.shepherdjerred.capstone.engine.game.scenes.mainmenu;
 
 import static com.shepherdjerred.capstone.engine.game.objects.button.Button.Type.GENERIC;
 
+import com.shepherdjerred.capstone.common.lobby.LobbySettings.LobbyType;
 import com.shepherdjerred.capstone.engine.engine.events.CloseApplicationEvent;
 import com.shepherdjerred.capstone.engine.engine.events.scene.SceneTransitionEvent;
 import com.shepherdjerred.capstone.engine.engine.graphics.Color;
@@ -81,7 +82,7 @@ public class MainMenuScene extends InteractableUIScene {
 
     var singleplayerButton = new TextButton(resourceManager,
         windowSize,
-        new ObjectRelativeScenePositioner(logo, new SceneCoordinateOffset(0, 300), 10),
+        new ObjectRelativeScenePositioner(logo, new SceneCoordinateOffset(0, 200), 10),
         "Single Player",
         FontName.M5X7,
         Color.white(),
@@ -91,7 +92,8 @@ public class MainMenuScene extends InteractableUIScene {
         () -> {
           var scene = new HostLobbyScene(eventBus,
               resourceManager,
-              windowSize);
+              windowSize,
+              LobbyType.LOCAL);
           eventBus.dispatch(new SceneTransitionEvent(scene));
         });
 

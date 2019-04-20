@@ -6,6 +6,7 @@ import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioDatagramChannel;
+import io.netty.util.concurrent.DefaultThreadFactory;
 import java.net.InetSocketAddress;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +22,8 @@ public class NettyDiscoveryBootstrap implements Runnable {
 
   @Override
   public void run() {
-    eventLoopGroup = new NioEventLoopGroup();
+    eventLoopGroup = new NioEventLoopGroup(2,
+        new DefaultThreadFactory("DISCOVERY_THREAD_POOL"));
 
     try {
       var bootstrap = new Bootstrap();

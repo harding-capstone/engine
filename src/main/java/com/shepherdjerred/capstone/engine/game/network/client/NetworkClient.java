@@ -1,7 +1,7 @@
 package com.shepherdjerred.capstone.engine.game.network.client;
 
 import com.shepherdjerred.capstone.engine.game.network.client.netty.NettyClientBootstrap;
-import com.shepherdjerred.capstone.engine.game.network.client.state.DisconnectedClientState;
+import com.shepherdjerred.capstone.engine.game.network.client.state.PreLobbyState;
 import com.shepherdjerred.capstone.engine.game.network.client.state.NetworkClientState;
 import com.shepherdjerred.capstone.events.Event;
 import com.shepherdjerred.capstone.events.EventBus;
@@ -20,7 +20,7 @@ public class NetworkClient {
   public NetworkClient(EventBus<Event> eventBus) {
     this.eventBus = eventBus;
     this.bootstrap = new NettyClientBootstrap();
-    clientState = new DisconnectedClientState(eventBus, this);
+    clientState = new PreLobbyState(eventBus, this);
     clientState.enable();
   }
 

@@ -40,13 +40,10 @@ public class NetworkManager {
       createServer(event.getGameState());
     });
     eventHandlerFrame.registerHandler(StopClientEvent.class, (event) -> {
-      if (networkClient != null) {
-        networkClient.shutdown();
-        clientThread.stop();
-      }
+      stopClient();
     });
     eventHandlerFrame.registerHandler(StopServerEvent.class, (event) -> {
-      serverThread.stop();
+      stopServer();
     });
     eventHandlerFrame.registerHandler(ConnectServerEvent.class, (event) -> {
       connectClient(event.getAddress());

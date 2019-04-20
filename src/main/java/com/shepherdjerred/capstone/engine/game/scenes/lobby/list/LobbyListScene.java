@@ -1,6 +1,7 @@
 package com.shepherdjerred.capstone.engine.game.scenes.lobby.list;
 
 import com.shepherdjerred.capstone.common.Constants;
+import com.shepherdjerred.capstone.common.lobby.LobbySettings.LobbyType;
 import com.shepherdjerred.capstone.common.player.PlayerInformation;
 import com.shepherdjerred.capstone.engine.engine.events.scene.SceneActiveEvent;
 import com.shepherdjerred.capstone.engine.engine.events.scene.SceneTransitionEvent;
@@ -75,12 +76,26 @@ public class LobbyListScene extends InteractableUIScene {
   }
 
   private TextButton createTextObjectForServer(ServerInformation serverInformation) {
-    var lobby = serverInformation.getLobby();
+    String name;
+    int taken;
+    int total;
+
+    if (serverInformation.getLobby() == null) {
+      name = "???";
+      taken = -1;
+      total = -1;
+    } else {
+      var lobby = serverInformation.getLobby();
+      name = lobby.getLobbySettings().getName();
+      taken = lobby.getTakenSlots();
+      total = lobby.getMaxSlots();
+    }
 
     var string = String.format("Name: %s | Players: %s/%s",
-        lobby.getLobbySettings().getName(),
-        lobby.getTakenSlots(),
-        lobby.getMaxSlots());
+        name,
+        taken,
+        total);
+
     return new TextButton(resourceManager,
         windowSize,
         new WindowRelativeScenePositioner(HorizontalPosition.CENTER,
@@ -188,7 +203,7 @@ public class LobbyListScene extends InteractableUIScene {
         Type.GENERIC,
         () -> {
           var scene = new HostLobbyScene(eventBus,
-              resourceManager, windowSize);
+              resourceManager, windowSize, LobbyType.NETWORK);
           eventBus.dispatch(new SceneTransitionEvent(scene));
         });
 

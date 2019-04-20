@@ -12,7 +12,9 @@ import lombok.ToString;
 @AllArgsConstructor
 public class WindowRelativeScenePositioner implements ScenePositioner {
 
+  @Getter
   private final HorizontalPosition horizontalPosition;
+  @Getter
   private final VerticalPosition verticalPosition;
   @Setter
   @Getter

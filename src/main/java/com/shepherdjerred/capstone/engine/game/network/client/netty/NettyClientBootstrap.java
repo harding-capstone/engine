@@ -22,7 +22,7 @@ public class NettyClientBootstrap {
   private ConcurrentLinkedQueue<NetworkEvent> eventQueue = new ConcurrentLinkedQueue<>();
 
   public void connect(SocketAddress address) {
-    eventLoopGroup = new NioEventLoopGroup(0,
+    eventLoopGroup = new NioEventLoopGroup(2,
         new DefaultThreadFactory("CLIENT_NETWORK_THREAD_POOL"));
 
     try {
@@ -30,12 +30,12 @@ public class NettyClientBootstrap {
       bootstrap.group(eventLoopGroup)
           .channel(NioSocketChannel.class)
           .handler(new NettyClientInitializer(eventQueue))
-          .option(ChannelOption.SO_REUSEADDR, true);
+          .option(ChannelOption.SO_REUSEADDR, true)
+          .option(ChannelOption.SO_KEEPALIVE, true);
 
       channel = bootstrap.connect(address).sync().channel();
 
       channel.closeFuture().sync();
-
     } catch (InterruptedException e) {
       log.error(e);
     } finally {
