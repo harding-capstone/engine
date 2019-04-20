@@ -10,7 +10,9 @@ import com.shepherdjerred.capstone.engine.engine.graphics.shader.ShaderUniform;
 import com.shepherdjerred.capstone.engine.engine.resource.ResourceManager;
 import com.shepherdjerred.capstone.engine.engine.object.GameObjectRenderer;
 import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
@@ -42,12 +44,28 @@ public class TextRenderer implements GameObjectRenderer<Text> {
     var currentX = 0;
     var currentY = 24;
     for (int i = 0; i < chars.length; i++) {
-      if (currentX > maxWidth) {
-        currentY += 24;
-        currentX = 0;
-      }
-
       char character = chars[i];
+
+      if (character == ' ') {
+        List<Character> wordChars = new ArrayList<>();
+        var index = i + 1;
+
+        while (index < chars.length && chars[index] != ' ') {
+          wordChars.add(character);
+          index++;
+        }
+
+        var wordSize = 0;
+
+        for (var characterInWord : wordChars) {
+          wordSize += font.getFontCharacter(characterInWord, currentX, currentY).getWidth();
+        }
+
+        if (currentX + wordSize > maxWidth) {
+          currentY += 24;
+          currentX = 0;
+        }
+      }
 
       if (character == '\n') {
         currentY += 24;
@@ -59,7 +77,7 @@ public class TextRenderer implements GameObjectRenderer<Text> {
       var vertices = fontCharacter.getCoordinates().toFloatArray();
       var textureCoordinates = fontCharacter.getTextureCoordinates().toFloatArray();
 
-      var indices = new int[] {
+      var indices = new int[]{
           0, 1, 2,
           3, 1, 2
       };
@@ -68,7 +86,9 @@ public class TextRenderer implements GameObjectRenderer<Text> {
       characterMeshMap.put(i, mesh);
 
       if (character == 32) {
-        currentX += 12;
+        if (currentX != 0) {
+          currentX += 12;
+        }
       } else {
         currentX += fontCharacter.getWidth() + 2;
       }
