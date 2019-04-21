@@ -78,14 +78,14 @@ public class GameScene implements Scene {
   @Override
   public void initialize() throws Exception {
     var players = match.getMatchSettings().getPlayerCount();
-    for (int i = 0; i < players.toInt() + 1; i++) {
+    for (int i = 1; i < players.toInt() + 1; i++) {
       var player = QuoridorPlayer.fromInt(i);
       var boardPos = match.getBoard().getPawnLocation(player);
       var converter = new MapToQuoridorConverter();
       var mapPos = converter.convert(boardPos);
       var wizard = new Wizard(resourceManager,
           new MapCoordinateScenePositioner(new SceneCoordinateOffset(0, 0), mapPos, 10),
-          Element.ICE,
+          Element.FIRE,
           new SceneObjectDimensions(32, 32));
       wizards.put(player, wizard);
     }
