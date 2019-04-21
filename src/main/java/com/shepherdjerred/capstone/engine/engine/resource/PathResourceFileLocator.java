@@ -46,7 +46,6 @@ public class PathResourceFileLocator implements ResourceFileLocator {
     resourcePaths.put(GameMapName.GRASS, "grass.json");
     resourcePaths.put(GameMapName.DESERT, "desert.json");
     resourcePaths.put(GameMapName.WINTER, "winter.json");
-    resourcePaths.put(GameMapName.TEST, "test.json");
   }
 
   private void initializeAudioPaths() {

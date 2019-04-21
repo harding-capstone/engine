@@ -38,6 +38,7 @@ import com.shepherdjerred.capstone.engine.game.scenes.mainmenu.MainMenuScene;
 import com.shepherdjerred.capstone.events.Event;
 import com.shepherdjerred.capstone.events.EventBus;
 import com.shepherdjerred.capstone.events.handlers.EventHandlerFrame;
+import com.shepherdjerred.capstone.logic.player.QuoridorPlayer;
 import java.net.InetSocketAddress;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -127,6 +128,7 @@ public class LobbyListScene extends InteractableUIScene {
               var scene = new LobbyDetailsScene(eventBus,
                   resourceManager,
                   windowSize,
+                  QuoridorPlayer.TWO,
                   serverInformation.getLobby(),
                   true);
               eventBus.dispatch(new SceneTransitionEvent(scene));

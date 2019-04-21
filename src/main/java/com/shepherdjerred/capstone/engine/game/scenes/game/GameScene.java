@@ -31,6 +31,8 @@ import com.shepherdjerred.capstone.logic.board.Coordinate;
 import com.shepherdjerred.capstone.logic.board.WallLocation;
 import com.shepherdjerred.capstone.logic.match.Match;
 import com.shepherdjerred.capstone.logic.player.QuoridorPlayer;
+import com.shepherdjerred.capstone.logic.turn.JumpPawnDiagonalTurn;
+import com.shepherdjerred.capstone.logic.turn.JumpPawnStraightTurn;
 import com.shepherdjerred.capstone.logic.turn.MovePawnTurn;
 import com.shepherdjerred.capstone.logic.turn.NormalMovePawnTurn;
 import com.shepherdjerred.capstone.logic.turn.PlaceWallTurn;
@@ -38,6 +40,7 @@ import com.shepherdjerred.capstone.logic.turn.Turn;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
@@ -53,6 +56,7 @@ public class GameScene implements Scene {
   private final WindowSize windowSize;
   private final GameMapName gameMapName;
   private MapObject mapObject;
+  private final QuoridorPlayer player;
   private Match match;
   private final EventHandlerFrame<Event> eventHandlerFrame;
   private final Map<Key, Boolean> pressedKeys;
@@ -62,6 +66,7 @@ public class GameScene implements Scene {
       EventBus<Event> eventBus,
       GameMapName gameMapName,
       Match match,
+      QuoridorPlayer player,
       WindowSize windowSize) {
     this.resourceManager = resourceManager;
     this.eventBus = eventBus;
@@ -70,6 +75,7 @@ public class GameScene implements Scene {
     this.windowSize = windowSize;
     this.gameMapName = gameMapName;
     this.eventHandlerFrame = new EventHandlerFrame<>();
+    this.player = player;
     this.match = match;
     this.wizards = new HashMap<>();
     pressedKeys = new HashMap<>();
@@ -103,14 +109,6 @@ public class GameScene implements Scene {
   }
 
   private void createEventHandlerFrame() {
-    var inspectTileEventHandler = new EventHandler<MouseButtonDownEvent>() {
-
-      @Override
-      public void handle(MouseButtonDownEvent mouseButtonDownEvent) {
-
-      }
-    };
-
     var turnHandler = new EventHandler<DoTurnEvent>() {
       @Override
       public void handle(DoTurnEvent event) {
@@ -174,50 +172,148 @@ public class GameScene implements Scene {
     };
 
     eventHandlerFrame.registerHandler(DoTurnEvent.class, turnHandler);
-    eventHandlerFrame.registerHandler(MouseButtonDownEvent.class, inspectTileEventHandler);
     eventHandlerFrame.registerHandler(KeyPressedEvent.class, keyDownHandler);
     eventHandlerFrame.registerHandler(KeyReleasedEvent.class, keyUpHandler);
     eventHandlerFrame.registerHandler(MouseButtonDownEvent.class, (event) -> {
-      var converter = new MapToQuoridorConverter();
-
-      var tileSize = RENDER_TILE_RESOLUTION;
-      var x = (event.getMouseCoordinate().getX() / tileSize);
-      var y = (event.getMouseCoordinate().getY() / tileSize);
-
-      var pos = converter.convert(new MapCoordinate(x, y));
-
-      if (pos == null) {
+      var activePlayer = match.getActivePlayerId();
+      log.info(player);
+      log.info(match.getActivePlayerId());
+      if (activePlayer != player) {
         return;
       }
 
-      var player = match.getActivePlayerId();
-      var source = match.getBoard().getPawnLocation(player);
-      Turn turn;
+      var converter = new MapToQuoridorConverter();
+
+      var tileSize = RENDER_TILE_RESOLUTION;
+      var mapX = (event.getMouseCoordinate().getX() / tileSize);
+      var mapY = (event.getMouseCoordinate().getY() / tileSize);
+
+      var destination = converter.convert(new MapCoordinate(mapX, mapY));
+
+      log.info(destination);
+
+      if (destination == null) {
+        return;
+      }
 
       if (event.getButton() == MouseButton.LEFT) {
-        turn = new NormalMovePawnTurn(player, source, pos);
+        var turn = getMovePawnTurn(match, destination);
+        turn.ifPresent(value -> eventBus.dispatch(new TryDoTurnEvent(value)));
       } else if (event.getButton() == MouseButton.RIGHT) {
+        Turn turn;
         if (pressedKeys.getOrDefault(Key.V, false)) {
-          var posX = pos.getX();
-          var posY = pos.getY();
-          turn = new PlaceWallTurn(player,
+          var posX = destination.getX();
+          var posY = destination.getY();
+          turn = new PlaceWallTurn(activePlayer,
               new WallLocation(new Coordinate(posX, posY),
                   new Coordinate(posX, posY + 1),
                   new Coordinate(posX, posY + 2)));
         } else {
-          var posX = pos.getX();
-          var posY = pos.getY();
-          turn = new PlaceWallTurn(player,
+          var posX = destination.getX();
+          var posY = destination.getY();
+          turn = new PlaceWallTurn(activePlayer,
               new WallLocation(new Coordinate(posX, posY),
                   new Coordinate(posX + 1, posY),
                   new Coordinate(posX + 2, posY)));
         }
+        eventBus.dispatch(new TryDoTurnEvent(turn));
       } else {
         return;
       }
 
-      eventBus.dispatch(new TryDoTurnEvent(turn));
+
     });
+  }
+
+  private Optional<Turn> getMovePawnTurn(Match match, Coordinate destination) {
+    var board = match.getBoard();
+    var source = board.getPawnLocation(player);
+
+    if (source.getManhattanDistanceTo(destination) == 4) {
+      var sourceX = source.getX();
+      var sourceY = source.getY();
+      var destX = destination.getX();
+      var destY = destination.getY();
+      if (source.isCardinalTo(destination)) {
+        Coordinate pivot;
+        if (destX > sourceX) {
+          // right
+          pivot = source.toRight(2);
+        } else if (destX < sourceX) {
+          // left
+          pivot = source.toLeft(2);
+        } else if (destY > sourceY) {
+          // up
+          pivot = source.above(2);
+        } else if (destY < sourceY) {
+          // down
+          pivot = source.below(2);
+        } else {
+          return Optional.empty();
+        }
+
+        var jumpStraightTurn = new JumpPawnStraightTurn(player,
+            source,
+            destination,
+            pivot);
+        return Optional.of(jumpStraightTurn);
+      } else {
+        if (destY > sourceY) {
+          // Going up
+          if (destX > sourceX) {
+            // Going right
+            var abovePivot = source.above(2);
+            var rightPivot = source.toRight(2);
+            if (board.hasPiece(abovePivot)) {
+              var turn = new JumpPawnDiagonalTurn(player, source, destination, abovePivot);
+              return Optional.of(turn);
+            } else if (board.hasPiece(rightPivot)) {
+              var turn = new JumpPawnDiagonalTurn(player, source, destination, rightPivot);
+              return Optional.of(turn);
+            }
+          } else {
+            // Going left
+            var abovePivot = source.above(2);
+            var leftPivot = source.toLeft(2);
+            if (board.hasPiece(abovePivot)) {
+              var turn = new JumpPawnDiagonalTurn(player, source, destination, abovePivot);
+              return Optional.of(turn);
+            } else if (board.hasPiece(leftPivot)) {
+              var turn = new JumpPawnDiagonalTurn(player, source, destination, leftPivot);
+              return Optional.of(turn);
+            }
+          }
+        } else {
+          // Going down
+          var belowPivot = source.below(2);
+          if (destX > sourceX) {
+            // Going right
+            var rightPivot = source.toRight(2);
+            if (board.hasPiece(belowPivot)) {
+              var turn = new JumpPawnDiagonalTurn(player, source, destination, belowPivot);
+              return Optional.of(turn);
+            } else if (board.hasPiece(rightPivot)) {
+              var turn = new JumpPawnDiagonalTurn(player, source, destination, rightPivot);
+              return Optional.of(turn);
+            }
+          } else {
+            // Going left
+            var leftPivot = source.toLeft(2);
+            if (board.hasPiece(belowPivot)) {
+              var turn = new JumpPawnDiagonalTurn(player, source, destination, belowPivot);
+              return Optional.of(turn);
+            } else if (board.hasPiece(leftPivot)) {
+              var turn = new JumpPawnDiagonalTurn(player, source, destination, leftPivot);
+              return Optional.of(turn);
+            }
+          }
+        }
+      }
+    } else {
+      var turn = new NormalMovePawnTurn(player, source, destination);
+      return Optional.of(turn);
+    }
+    return Optional.empty();
   }
 
   private void createGameObjects() {

@@ -30,12 +30,14 @@ import com.shepherdjerred.capstone.events.EventBus;
 import com.shepherdjerred.capstone.events.handlers.EventHandlerFrame;
 import com.shepherdjerred.capstone.logic.board.BoardSettings;
 import com.shepherdjerred.capstone.logic.match.Match;
+import com.shepherdjerred.capstone.logic.player.QuoridorPlayer;
 import java.util.HashSet;
 import java.util.Set;
 
 public class LobbyDetailsScene extends InteractableUIScene {
 
   private final boolean isHost;
+  private QuoridorPlayer player;
   private Lobby lobby;
   private final EventBus<Event> eventBus;
   private final EventHandlerFrame<Event> eventHandlerFrame;
@@ -43,6 +45,7 @@ public class LobbyDetailsScene extends InteractableUIScene {
   public LobbyDetailsScene(EventBus<Event> eventBus,
       ResourceManager resourceManager,
       WindowSize windowSize,
+      QuoridorPlayer player,
       Lobby lobby,
       boolean isHost) {
     super(windowSize,
@@ -53,6 +56,7 @@ public class LobbyDetailsScene extends InteractableUIScene {
     this.eventHandlerFrame = new EventHandlerFrame<>();
     this.lobby = lobby;
     this.isHost = isHost;
+    this.player = player;
     createEventHandlerFrame();
     createGameObjects();
   }
@@ -65,7 +69,12 @@ public class LobbyDetailsScene extends InteractableUIScene {
       var boardSettings = new BoardSettings(map.getBoardSize(), matchSettings.getPlayerCount());
       var match = Match.from(matchSettings, boardSettings);
 
-      var scene = new GameScene(resourceManager, eventBus, GameMapName.GRASS, match, windowSize);
+      var scene = new GameScene(resourceManager,
+          eventBus,
+          GameMapName.random(),
+          match,
+          player,
+          windowSize);
       eventBus.dispatch(new SceneTransitionEvent(scene));
     });
   }

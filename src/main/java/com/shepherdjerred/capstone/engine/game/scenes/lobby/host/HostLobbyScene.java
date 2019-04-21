@@ -139,6 +139,7 @@ public class HostLobbyScene extends InteractableUIScene {
               var scene = new LobbyDetailsScene(eventBus,
                   resourceManager,
                   windowSize,
+                  QuoridorPlayer.ONE,
                   Lobby.from(lobbySettings),
                   true);
               eventBus.dispatch(new SceneTransitionEvent(scene));
