@@ -13,11 +13,13 @@ public class MapToQuoridorConverter {
   }
 
   private void createMap() {
-    var baseX = 21;
-    var baseY = 14;
+    var mapStartX = 21;
+    var mapStartY = 14;
     for (int x = 0; x <= 17; x++) {
-      for (int y = 0; y < 17; y++) {
-        coordinates.put(new Coordinate(x, y), new MapCoordinate(baseX + x, baseY + y));
+      for (int y = 0; y <= 17; y++) {
+        var quoridorCoordinate = new Coordinate(x, y);
+        var mapCoordinate = new MapCoordinate(mapStartX + x, mapStartY + 16 - y);
+        coordinates.put(quoridorCoordinate, mapCoordinate);
       }
     }
   }

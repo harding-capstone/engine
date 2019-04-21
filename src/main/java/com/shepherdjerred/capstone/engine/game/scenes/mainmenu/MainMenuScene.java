@@ -67,7 +67,7 @@ public class MainMenuScene extends InteractableUIScene {
         Type.random());
 
     var text = new Text(resourceManager,
-        "Castle Casters - Development Build",
+        "Castle Casters",
         FontName.M5X7,
         Color.white(),
         12,

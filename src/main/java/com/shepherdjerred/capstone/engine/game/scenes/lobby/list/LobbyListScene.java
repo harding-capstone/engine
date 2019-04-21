@@ -16,6 +16,7 @@ import com.shepherdjerred.capstone.engine.engine.scene.position.WindowRelativeSc
 import com.shepherdjerred.capstone.engine.engine.scene.position.WindowRelativeScenePositioner.HorizontalPosition;
 import com.shepherdjerred.capstone.engine.engine.scene.position.WindowRelativeScenePositioner.VerticalPosition;
 import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
+import com.shepherdjerred.capstone.engine.game.event.events.FillSlotsWithAiEvent;
 import com.shepherdjerred.capstone.engine.game.event.events.IdentifyPlayerEvent;
 import com.shepherdjerred.capstone.engine.game.network.discovery.ServerInformation;
 import com.shepherdjerred.capstone.engine.game.network.discovery.event.ServerDiscoveredEvent;
@@ -30,6 +31,7 @@ import com.shepherdjerred.capstone.engine.game.objects.background.parallax.Paral
 import com.shepherdjerred.capstone.engine.game.objects.button.Button.Type;
 import com.shepherdjerred.capstone.engine.game.objects.text.Text;
 import com.shepherdjerred.capstone.engine.game.objects.textbutton.TextButton;
+import com.shepherdjerred.capstone.engine.game.scenes.lobby.details.LobbyDetailsScene;
 import com.shepherdjerred.capstone.engine.game.scenes.lobby.host.HostLobbyScene;
 import com.shepherdjerred.capstone.engine.game.scenes.lobby.host.SimpleSceneRenderer;
 import com.shepherdjerred.capstone.engine.game.scenes.mainmenu.MainMenuScene;
@@ -72,7 +74,7 @@ public class LobbyListScene extends InteractableUIScene {
     connectingEventHandlerFrame.registerHandler(ServerConnectedEvent.class, (event) -> {
       log.info("Lobby list: server connected.");
       eventBus.dispatch(new IdentifyPlayerEvent(new PlayerInformation(UUID.randomUUID(),
-          "Jerred")));
+          UUID.randomUUID().toString())));
     });
   }
 
@@ -110,14 +112,27 @@ public class LobbyListScene extends InteractableUIScene {
         new SceneObjectDimensions(400, 50),
         Type.GENERIC,
         () -> {
-          isConnecting = true;
-          eventBus.registerHandlerFrame(connectingEventHandlerFrame);
-          eventBus.dispatch(new StartClientEvent());
-          var discoveryAddress = (InetSocketAddress) serverInformation.getAddress();
-          var gameAddress = new InetSocketAddress(discoveryAddress.getHostName(),
-              Constants.GAME_PORT);
-          eventBus.dispatch(new ConnectServerEvent(gameAddress));
-          isConnecting = false;
+          if (!isConnecting) {
+            isConnecting = true;
+            eventBus.registerHandlerFrame(connectingEventHandlerFrame);
+            eventBus.dispatch(new StartClientEvent());
+            var discoveryAddress = (InetSocketAddress) serverInformation.getAddress();
+            var gameAddress = new InetSocketAddress(discoveryAddress.getHostName(),
+                Constants.GAME_PORT);
+            eventBus.dispatch(new ConnectServerEvent(gameAddress));
+
+            eventBus.registerHandler(ServerConnectedEvent.class, (event) -> {
+              eventBus.dispatch(new FillSlotsWithAiEvent());
+
+              var scene = new LobbyDetailsScene(eventBus,
+                  resourceManager,
+                  windowSize,
+                  serverInformation.getLobby(),
+                  true);
+              eventBus.dispatch(new SceneTransitionEvent(scene));
+            });
+          }
+
           // TODO detect connection failures
         });
   }

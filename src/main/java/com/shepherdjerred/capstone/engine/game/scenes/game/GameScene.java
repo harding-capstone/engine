@@ -21,6 +21,7 @@ import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
 import com.shepherdjerred.capstone.engine.game.event.events.DoTurnEvent;
 import com.shepherdjerred.capstone.engine.game.event.events.TryDoTurnEvent;
 import com.shepherdjerred.capstone.engine.game.objects.game.map.MapObject;
+import com.shepherdjerred.capstone.engine.game.objects.game.wall.Wall;
 import com.shepherdjerred.capstone.engine.game.objects.game.wizard.Wizard;
 import com.shepherdjerred.capstone.events.Event;
 import com.shepherdjerred.capstone.events.EventBus;
@@ -117,9 +118,10 @@ public class GameScene implements Scene {
         var player = match.getActivePlayerId();
         match = match.doTurn(turn);
 
+        var converter = new MapToQuoridorConverter();
+
         if (turn instanceof MovePawnTurn) {
           var boardPos = match.getBoard().getPawnLocation(player);
-          var converter = new MapToQuoridorConverter();
           var mapPos = converter.convert(boardPos);
           var wizard = wizards.get(player);
           wizard.setPosition(new MapCoordinateScenePositioner(new SceneCoordinateOffset(0, 0),
@@ -128,6 +130,31 @@ public class GameScene implements Scene {
         }
         if (turn instanceof PlaceWallTurn) {
           // TO create wall and position it
+          var pos = ((PlaceWallTurn) turn).getLocation();
+          var coord1 = pos.getFirstCoordinate();
+          var coord2 = pos.getSecondCoordinate();
+          var coord3 = pos.getVertex();
+          var mapCoord1 = converter.convert(coord1);
+          var mapCoord2 = converter.convert(coord2);
+          var mapCoord3 = converter.convert(coord3);
+          var wall1 = new Wall(resourceManager, new SceneObjectDimensions(24, 24),
+              new MapCoordinateScenePositioner(new SceneCoordinateOffset(0, 0), mapCoord1, 10));
+          var wall2 = new Wall(resourceManager, new SceneObjectDimensions(24, 24),
+              new MapCoordinateScenePositioner(new SceneCoordinateOffset(0, 0), mapCoord2, 10));
+          var wall3 = new Wall(resourceManager, new SceneObjectDimensions(24, 24),
+              new MapCoordinateScenePositioner(new SceneCoordinateOffset(0, 0), mapCoord3, 10));
+
+          try {
+            wall1.initialize();
+            wall2.initialize();
+            wall3.initialize();
+          } catch (Exception e) {
+            e.printStackTrace();
+          }
+
+          gameObjects.add(wall1);
+          gameObjects.add(wall2);
+          gameObjects.add(wall3);
         }
       }
     };
@@ -170,10 +197,21 @@ public class GameScene implements Scene {
       if (event.getButton() == MouseButton.LEFT) {
         turn = new NormalMovePawnTurn(player, source, pos);
       } else if (event.getButton() == MouseButton.RIGHT) {
-        turn = new PlaceWallTurn(player,
-            new WallLocation(new Coordinate(x, y),
-                new Coordinate(x, y + 1),
-                new Coordinate(x, y + 2)));
+        if (pressedKeys.getOrDefault(Key.V, false)) {
+          var posX = pos.getX();
+          var posY = pos.getY();
+          turn = new PlaceWallTurn(player,
+              new WallLocation(new Coordinate(posX, posY),
+                  new Coordinate(posX, posY + 1),
+                  new Coordinate(posX, posY + 2)));
+        } else {
+          var posX = pos.getX();
+          var posY = pos.getY();
+          turn = new PlaceWallTurn(player,
+              new WallLocation(new Coordinate(posX, posY),
+                  new Coordinate(posX + 1, posY),
+                  new Coordinate(posX + 2, posY)));
+        }
       } else {
         return;
       }

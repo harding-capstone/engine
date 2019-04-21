@@ -132,7 +132,9 @@ public class HostLobbyScene extends InteractableUIScene {
             eventBus.dispatch(new ConnectServerEvent(new InetSocketAddress(Constants.GAME_PORT)));
 
             eventBus.registerHandler(ServerConnectedEvent.class, (event) -> {
-              eventBus.dispatch(new FillSlotsWithAiEvent());
+              if (lobbySettings.getLobbyType().equals(LobbyType.LOCAL)) {
+                eventBus.dispatch(new FillSlotsWithAiEvent());
+              }
 
               var scene = new LobbyDetailsScene(eventBus,
                   resourceManager,
