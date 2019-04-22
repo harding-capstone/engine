@@ -33,7 +33,7 @@ public class PreLobbyState extends AbstractNetworkClientState {
 
     frame.registerHandler(ServerConnectedEvent.class, (event) -> {
       eventBus.dispatch(new IdentifyPlayerEvent(new PlayerInformation(UUID.randomUUID(),
-          "Jerred")));
+          UUID.randomUUID().toString())));
     });
 
     frame.registerHandler(PlayerJoinEvent.class, (event) -> {

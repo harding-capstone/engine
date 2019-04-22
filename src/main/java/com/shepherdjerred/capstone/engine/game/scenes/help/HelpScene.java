@@ -42,17 +42,17 @@ public class HelpScene extends InteractableUIScene {
 
     var text = new Text(resourceManager,
         "Castle Casters is a board game where the goal is to get your witch or wizard to the "
-            + "other side.\nWhat makes Castle Casters special is your ability to cast magical walls!\n\n"
-            + "Making a Turn: On any turn, a player may either cast a wall or move their wizard.\n"
+            + "other side. What makes Castle Casters special is your ability to cast magical walls!\n\n"
+            + "Making a Turn: On any turn, a player may either cast a wall or move their wizard.\n\n"
             + "Placing a Wall: Walls are two spaces across and can be used to block the opposing "
-            + "wizard.\nYou cannot block any wizard from reaching the goal completely, but you may "
-            + "use walls to make their route much longer.\nEach player has 10 walls.\nTo cast a wall, "
-            + "click and drag from the start of the wall to the end.\n\n"
-            + "Moving the Wizard: Wizards can be moved up, down, left, or right.\nThey cannot be "
+            + "wizard. You cannot block any wizard from reaching the goal completely, but you may "
+            + "use walls to make their route much longer. Each player has 10 walls."
+            + " Right click the mouse to place a horizontal wall. Right click and hold V to place a vertical wall.\n\n"
+            + "Moving the Wizard: Wizards can be moved up, down, left, or right. They cannot be "
             + "moved diagonally unless they are jumping.\n\n"
-            + "Jumping Rules: When you find yourself face to face with an opponent, you may jump them.\n"
+            + "Jumping Rules: When you find yourself face to face with an opponent, you may jump them. "
             + "If there is a wall or other obstruction behind your opponent, you may jump "
-            + "diagonally to the left or right of the opponent's wizard.\n",
+            + "diagonally to the left or right of the opponent's wizard.",
         FontName.M5X7,
         Color.white(),
         12,

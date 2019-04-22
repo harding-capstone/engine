@@ -16,7 +16,6 @@ import com.shepherdjerred.capstone.engine.engine.scene.position.WindowRelativeSc
 import com.shepherdjerred.capstone.engine.engine.scene.position.WindowRelativeScenePositioner.HorizontalPosition;
 import com.shepherdjerred.capstone.engine.engine.scene.position.WindowRelativeScenePositioner.VerticalPosition;
 import com.shepherdjerred.capstone.engine.engine.window.WindowSize;
-import com.shepherdjerred.capstone.engine.game.event.events.FillSlotsWithAiEvent;
 import com.shepherdjerred.capstone.engine.game.event.events.IdentifyPlayerEvent;
 import com.shepherdjerred.capstone.engine.game.network.discovery.ServerInformation;
 import com.shepherdjerred.capstone.engine.game.network.discovery.event.ServerDiscoveredEvent;
@@ -25,8 +24,6 @@ import com.shepherdjerred.capstone.engine.game.network.manager.event.ConnectServ
 import com.shepherdjerred.capstone.engine.game.network.manager.event.ShutdownNetworkEvent;
 import com.shepherdjerred.capstone.engine.game.network.manager.event.StartClientEvent;
 import com.shepherdjerred.capstone.engine.game.network.manager.event.StartDiscoveryEvent;
-import com.shepherdjerred.capstone.engine.game.network.manager.event.StopClientEvent;
-import com.shepherdjerred.capstone.engine.game.network.manager.event.StopDiscoveryEvent;
 import com.shepherdjerred.capstone.engine.game.objects.background.parallax.ParallaxBackground;
 import com.shepherdjerred.capstone.engine.game.objects.button.Button.Type;
 import com.shepherdjerred.capstone.engine.game.objects.text.Text;
@@ -123,8 +120,6 @@ public class LobbyListScene extends InteractableUIScene {
             eventBus.dispatch(new ConnectServerEvent(gameAddress));
 
             eventBus.registerHandler(ServerConnectedEvent.class, (event) -> {
-              eventBus.dispatch(new FillSlotsWithAiEvent());
-
               var scene = new LobbyDetailsScene(eventBus,
                   resourceManager,
                   windowSize,
@@ -249,7 +244,5 @@ public class LobbyListScene extends InteractableUIScene {
     super.cleanup();
     eventBus.removeHandlerFrame(eventHandlerFrame);
     eventBus.removeHandlerFrame(connectingEventHandlerFrame);
-    eventBus.dispatch(new StopDiscoveryEvent());
-    eventBus.dispatch(new StopClientEvent());
   }
 }
