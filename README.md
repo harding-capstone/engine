@@ -19,8 +19,8 @@ The game of Quoridor with a medevial fantasy theme. Created for the Harding Univ
 # Building
 This project uses maven to manage dependencies and the build process. When this project was actively developed there was a dedicated maven repository that served the dependencies written for this project, but it is now down. You must compile all of these projects yourself before compiling the engine. The source for these projects are located in this organization.
 
-![Main Menu](https://i.imgur.com/8C4sWcd.png)
+![Main Menu](https://i.imgur.com/1UupO6R.png)
 
-![Game Help](https://i.imgur.com/tMeK3ee.png)
+![Game Screen - Desert](https://i.imgur.com/c0heRpI.png)
 
-![Game Screen](https://i.imgur.com/xLbDBcI.png)
+![Game Screen - Grass](https://i.imgur.com/xLbDBcI.png)
