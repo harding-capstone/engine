@@ -28,7 +28,6 @@
     <stayAlive>true</stayAlive>
     <maven.javadoc.skip>true</maven.javadoc.skip>
     <lwjgl.version>3.2.1</lwjgl.version>
-    <native.target>natives-windows</native.target>
   </properties>
 
   <repositories>
@@ -53,39 +52,6 @@
         <!--suppress UnresolvedMavenProperty -->
         <sentryDsn>${env.SENTRY_DSN}</sentryDsn>
         <stayAlive>false</stayAlive>
-      </properties>
-    </profile>
-    <profile>
-      <id>windows-profile</id>
-      <activation>
-        <os>
-          <family>Windows</family>
-        </os>
-      </activation>
-      <properties>
-        <native.target>natives-windows</native.target>
-      </properties>
-    </profile>
-    <profile>
-      <id>linux-profile</id>
-      <activation>
-        <os>
-          <family>Linux</family>
-        </os>
-      </activation>
-      <properties>
-        <native.target>natives-linux</native.target>
-      </properties>
-    </profile>
-    <profile>
-      <id>OSX-profile</id>
-      <activation>
-        <os>
-          <family>mac</family>
-        </os>
-      </activation>
-      <properties>
-        <native.target>natives-macos</native.target>
       </properties>
     </profile>
   </profiles>
@@ -191,48 +157,6 @@
           </execution>
         </executions>
       </plugin>
-      <plugin>
-        <groupId>com.akathist.maven.plugins.launch4j</groupId>
-        <artifactId>launch4j-maven-plugin</artifactId>
-        <version>1.7.25</version>
-        <executions>
-          <execution>
-            <id>build-windows-executable</id>
-            <phase>none</phase>
-            <goals>
-              <goal>launch4j</goal>
-            </goals>
-            <configuration>
-              <headerType>console</headerType>
-              <outfile>target/${executable.name}</outfile>
-              <jar>target/${project.build.finalName}-jar-with-dependencies.jar</jar>
-              <errTitle>${game.name}</errTitle>
-              <stayAlive>${stayAlive}</stayAlive>
-              <icon>src/main/resources/executable/icon.ico</icon>
-              <classPath>
-                <mainClass>com.shepherdjerred.capstone.engine.Main</mainClass>
-                <addDependencies>true</addDependencies>
-                <preCp>anything</preCp>
-              </classPath>
-              <jre>
-                <minVersion>11</minVersion>
-              </jre>
-              <versionInfo>
-                <fileVersion>${executable.version}</fileVersion>
-                <txtFileVersion>${executable.version}</txtFileVersion>
-                <fileDescription>${project.description}</fileDescription>
-                <copyright>GPL-3.0</copyright>
-                <productVersion>${executable.version}</productVersion>
-                <txtProductVersion>${executable.version}</txtProductVersion>
-                <productName>${game.name}</productName>
-                <internalName>${game.name}</internalName>
-                <originalFilename>${executable.name}</originalFilename>
-                <language>ENGLISH_US</language>
-              </versionInfo>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
     </plugins>
   </build>
 
@@ -309,40 +233,108 @@
       <groupId>org.lwjgl</groupId>
       <artifactId>lwjgl</artifactId>
       <version>${lwjgl.version}</version>
-      <classifier>${native.target}</classifier>
+      <classifier>natives-linux</classifier>
       <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>org.lwjgl</groupId>
       <artifactId>lwjgl-glfw</artifactId>
       <version>${lwjgl.version}</version>
-      <classifier>${native.target}</classifier>
+      <classifier>natives-linux</classifier>
       <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>org.lwjgl</groupId>
       <artifactId>lwjgl-opengl</artifactId>
       <version>${lwjgl.version}</version>
-      <classifier>${native.target}</classifier>
+      <classifier>natives-linux</classifier>
       <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>org.lwjgl</groupId>
       <artifactId>lwjgl-stb</artifactId>
       <version>${lwjgl.version}</version>
-      <classifier>${native.target}</classifier>
+      <classifier>natives-linux</classifier>
       <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>org.lwjgl</groupId>
       <artifactId>lwjgl-openal</artifactId>
       <version>${lwjgl.version}</version>
+      <classifier>natives-linux</classifier>
+    </dependency>
+    <dependency>
+      <groupId>org.lwjgl</groupId>
+      <artifactId>lwjgl</artifactId>
+      <version>${lwjgl.version}</version>
+      <classifier>natives-macos</classifier>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.lwjgl</groupId>
+      <artifactId>lwjgl-glfw</artifactId>
+      <version>${lwjgl.version}</version>
+      <classifier>natives-macos</classifier>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.lwjgl</groupId>
+      <artifactId>lwjgl-opengl</artifactId>
+      <version>${lwjgl.version}</version>
+      <classifier>natives-macos</classifier>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.lwjgl</groupId>
+      <artifactId>lwjgl-stb</artifactId>
+      <version>${lwjgl.version}</version>
+      <classifier>natives-macos</classifier>
+      <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>org.lwjgl</groupId>
       <artifactId>lwjgl-openal</artifactId>
       <version>${lwjgl.version}</version>
-      <classifier>${native.target}</classifier>
+      <classifier>natives-macos</classifier>
+    </dependency>
+    <dependency>
+      <groupId>org.lwjgl</groupId>
+      <artifactId>lwjgl</artifactId>
+      <version>${lwjgl.version}</version>
+      <classifier>natives-windows</classifier>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.lwjgl</groupId>
+      <artifactId>lwjgl-glfw</artifactId>
+      <version>${lwjgl.version}</version>
+      <classifier>natives-windows</classifier>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.lwjgl</groupId>
+      <artifactId>lwjgl-opengl</artifactId>
+      <version>${lwjgl.version}</version>
+      <classifier>natives-windows</classifier>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.lwjgl</groupId>
+      <artifactId>lwjgl-stb</artifactId>
+      <version>${lwjgl.version}</version>
+      <classifier>natives-windows</classifier>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.lwjgl</groupId>
+      <artifactId>lwjgl-openal</artifactId>
+      <version>${lwjgl.version}</version>
+      <classifier>natives-windows</classifier>
+    </dependency>
+    <dependency>
+      <groupId>org.lwjgl</groupId>
+      <artifactId>lwjgl-openal</artifactId>
+      <version>${lwjgl.version}</version>
     </dependency>
     <dependency>
       <groupId>org.joml</groupId>
